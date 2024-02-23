@@ -1,4 +1,7 @@
+import 'package:app/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
+import 'widgets/customTextField.dart';
+import 'widgets/gradientbutton.dart';
 
 void main() {
   runApp(LoginScreen());
@@ -10,7 +13,7 @@ class LoginScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor:
-            Color.fromARGB(239, 15, 15, 15), // Set background color to black
+            Color.fromARGB(255, 30, 30, 30), // Set background color to black
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -24,95 +27,45 @@ class LoginScreen extends StatelessWidget {
                     'assets/images/logo.png', // Path to your image
                     height: 100, // Adjust height as needed
                   ),
-                  SizedBox(height: 40),
-                  TextField(
-                    style: TextStyle(
-                        color: Color.fromARGB(
-                            246, 218, 215, 215)), // Set text color to white
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email,
-                          color: Color.fromARGB(
-                              246, 218, 215, 215)), // Set icon color to white
-                      labelText: 'Email',
-                      labelStyle: TextStyle(
-                          color: Color.fromARGB(246, 218, 215,
-                              215)), // Set label text color to white
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
+                  SizedBox(height: 30),
+                  CustomTextField(
+                    controller: TextEditingController(),
+                    text: "Email",
+                    icon: Icons.email,
+                    obscureText: false,
                   ),
                   SizedBox(height: 10.0),
-                  TextField(
-                    style: TextStyle(
-                        color: Color.fromARGB(
-                            246, 218, 215, 215)), // Set text color to white
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock,
-                          color: Color.fromARGB(
-                              246, 218, 215, 215)), // Set icon color to white
-                      labelText: 'Password',
-                      labelStyle: TextStyle(
-                          color: Color.fromARGB(246, 218, 215,
-                              215)), // Set label text color to white
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
+                  CustomTextField(
+                    controller: TextEditingController(),
+                    text: "Password",
+                    icon: Icons.key,
                     obscureText: true,
                   ),
                   SizedBox(height: 16.0),
-                  Container(
-                    height: 50, // Adjust height as needed
-                    width: double.infinity, // Expands to full width
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF95338A), // Start color
-                          Color(0xFF5C2A9D), // End color
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        // Add your login logic here
-                      },
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Colors.white, // White text color
-                          fontSize: 16.0, // Adjust font size as needed
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5.0), // Adjust the spacing between buttons
-                  SizedBox(
-                    height: 40, // Set the height of the button
-                    width: double.infinity, // Expands to full width
-                    child: TextButton(
+                  GradientButton(text: "Login", onPressed: () {}),
+                  SizedBox(height: 10.0), // Adjust the spacing between buttons
+                  CustomTextButton(
+                      text: "Forgot Password?",
                       onPressed: () {},
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 39, 39, 39))),
-                      child: Text('Forgot password?',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 126, 2, 250))),
-                    ),
-                  ),
+                      textColor: Color.fromARGB(255, 145, 40, 250)),
                   SizedBox(height: 20.0),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // Add your onPressed logic here
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.lock),
-                        SizedBox(width: 10.0),
+                        Image.asset(
+                          'assets/images/google.jpg',
+                          height: 20, // Adjust height of the Google logo
+                          width: 20, // Adjust width of the Google logo
+                        ),
+                        SizedBox(
+                            width:
+                                10.0), // Add horizontal space between the icon and the text
                         Text(
-                          'Continue with Google',
+                          'Sign in with Google',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.0,
@@ -122,16 +75,12 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20.0),
-                  TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 39, 39, 39))),
-                    child: Text("I don't have an account",
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 126, 2, 250))),
-                  ),
+
+                  SizedBox(height: 60.0),
+                  CustomTextButton(
+                      text: "I don't have an Account",
+                      onPressed: () {},
+                      textColor: Color.fromARGB(255, 145, 40, 250))
                 ],
               ),
             ),
