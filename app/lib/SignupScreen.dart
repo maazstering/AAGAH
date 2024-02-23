@@ -1,19 +1,17 @@
+import 'package:app/main.dart';
 import 'package:app/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
 import 'widgets/customTextField.dart';
 import 'widgets/gradientbutton.dart';
-import 'SignupScreen.dart';
 
-void main() {
-  runApp(LoginScreen());
-}
 
-class LoginScreen extends StatelessWidget {
+class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 30, 30, 30), // Set background color to black
+        backgroundColor:
+            Color.fromARGB(255, 30, 30, 30), // Set background color to black
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -30,6 +28,13 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 30),
                   CustomTextField(
                     controller: TextEditingController(),
+                    text: "Name",
+                    icon: Icons.person,
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 10),
+                  CustomTextField(
+                    controller: TextEditingController(),
                     text: "Email",
                     icon: Icons.email,
                     obscureText: false,
@@ -44,10 +49,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 16.0),
                   GradientButton(text: "Login", onPressed: () {}),
                   SizedBox(height: 10.0), // Adjust the spacing between buttons
-                  CustomTextButton(
-                      text: "Forgot Password?",
-                      onPressed: () {},
-                      textColor: Color.fromARGB(255, 145, 40, 250)),
+                  GradientButton(text: "Create Account", onPressed: (){}),
                   SizedBox(height: 20.0),
                   TextButton(
                     onPressed: () {
@@ -61,7 +63,9 @@ class LoginScreen extends StatelessWidget {
                           height: 20, // Adjust height of the Google logo
                           width: 20, // Adjust width of the Google logo
                         ),
-                        SizedBox(width: 10.0), // Add horizontal space between the icon and the text
+                        SizedBox(
+                            width:
+                                10.0), // Add horizontal space between the icon and the text
                         Text(
                           'Sign in with Google',
                           style: TextStyle(
@@ -75,20 +79,15 @@ class LoginScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 60.0),
-                  Builder(
-                    builder: (context) => CustomTextButton(
-                      text: "I don't have an Account",
-                      onPressed: () {
-                        Navigator.push(
+                  CustomTextButton(
+                      text: "I already have an Account",
+                      onPressed: () {Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SignupScreen(),
+                            builder: (context) => LoginScreen(),
                           ),
-                        );
-                      },
-                      textColor: Color.fromARGB(255, 145, 40, 250),
-                    ),
-                  ),
+                        );},
+                      textColor: Color.fromARGB(255, 145, 40, 250))
                 ],
               ),
             ),
