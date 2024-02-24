@@ -1,3 +1,4 @@
+import 'package:app/profileScreen.dart';
 import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/googleSignInButton.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +24,13 @@ class LoginScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 124.h),
+                  SizedBox(height: 100.h),
                   Image.asset(
                     'assets/images/logo.png', // Path to your image
                     height: 76.43.h,
                     width: 231.8.w,
                   ),
-                  SizedBox(height: 69.99.h),
+                  SizedBox(height: 50.h),
                   CustomTextField(
                     controller: TextEditingController(),
                     text: "Email",
@@ -44,7 +45,15 @@ class LoginScreen extends StatelessWidget {
                     obscureText: true,
                   ),
                   SizedBox(height: 12.0.h),
-                  GradientButton(text: "Login", onPressed: () {}),
+                  GradientButton(text: "Login", onPressed: () {
+                    print(Text("button pressed"));
+                    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => profilePage(),
+                          ),
+                        );
+                  }),
                   SizedBox(
                       height: 12.0.h), // Adjust the spacing between buttons
                   CustomTextButton(
@@ -56,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                   OrDivider(),
                   SizedBox(height: 24.h),
                   GoogleSignInButton(onPressed: (){}),
-                  SizedBox(height: 112.h),
+                  SizedBox(height: 100.h),
                   Builder(
                     builder: (context) => CustomTextButton(
                       text: "I don't have an Account",

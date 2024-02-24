@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import './appTheme.dart';
 
 // Custom widget for email text field
 class CustomTextField extends StatelessWidget {
@@ -18,21 +19,21 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 60.h,
       width: 315.w,
       child: TextField(
         controller: controller,
         style: const TextStyle(
-            color: Color.fromARGB(230, 94, 92, 92)), // Set text color to grey
+            color: AppTheme.greyColor), // Set text color to grey
         decoration: InputDecoration(
           filled: true, // Fill the background
-          fillColor: const Color.fromARGB(246, 218, 215, 215), // Set the background color to light grey
+          fillColor: AppTheme.lightGreyColor, // Set the background color to light grey
           prefixIcon: Stack(
             alignment: Alignment.center,
             children: [
               Icon(icon,
-                  color: const Color.fromARGB(230, 94, 92, 92)), // Set icon color to grey
+                  color: AppTheme.greyColor), // Set icon color to grey
               Positioned(
                 left: 36.w, // Adjust the position of the line
                 top: 4.h, // Adjust the position of the line
@@ -46,7 +47,7 @@ class CustomTextField extends StatelessWidget {
           ),
           hintText: text,
           labelStyle: const TextStyle(
-              color: Color.fromARGB(230, 94, 92, 92)), // Set label text color to white
+              color: AppTheme.greyColor), 
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0.r),
           ),

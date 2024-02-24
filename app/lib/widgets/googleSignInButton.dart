@@ -9,7 +9,7 @@ class GoogleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 54.h,
       width: 261.w,
       child: TextButton(

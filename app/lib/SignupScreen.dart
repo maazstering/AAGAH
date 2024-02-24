@@ -25,13 +25,13 @@ class SignupScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 124.h),
+                  SizedBox(height: 100.h),
                   Image.asset(
                     'assets/images/logo.png', // Path to your image
                     height: 76.43.h,
                     width: 231.8.w,
                   ),
-                  SizedBox(height: 69.99.h),
+                  SizedBox(height: 50.h),
                   CustomTextField(
                     controller: TextEditingController(),
                     text: "Name",

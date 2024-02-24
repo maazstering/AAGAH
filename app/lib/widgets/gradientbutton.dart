@@ -27,9 +27,7 @@ class GradientButton extends StatelessWidget {
         ),
       ),
       child: TextButton(
-        onPressed: () {
-          // logic to be added
-        },
+        onPressed: onPressed,
         child: Text(
           text,
           style: const TextStyle(
