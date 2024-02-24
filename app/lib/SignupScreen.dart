@@ -1,8 +1,12 @@
 import 'package:app/loginScreen.dart';
 import 'package:app/widgets/custombutton.dart';
+import 'package:app/widgets/googleSignInButton.dart';
 import 'package:flutter/material.dart';
 import 'widgets/customTextField.dart';
 import 'widgets/gradientbutton.dart';
+import './widgets/appTheme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import './widgets/orWidget.dart';
 
 
 class SignupScreen extends StatelessWidget {
@@ -11,74 +15,50 @@ class SignupScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor:
-            Color.fromARGB(255, 30, 30, 30), // Set background color to black
+            AppTheme.bgColor, // Set background color to black
         body: Center(
           child: SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.symmetric(horizontal: 38.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  SizedBox(height: 124.h),
                   Image.asset(
                     'assets/images/logo.png', // Path to your image
-                    height: 100, // Adjust height as needed
+                    height: 76.43.h,
+                    width: 231.8.w,
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 69.99.h),
                   CustomTextField(
                     controller: TextEditingController(),
                     text: "Name",
                     icon: Icons.person,
                     obscureText: false,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   CustomTextField(
                     controller: TextEditingController(),
                     text: "Email",
                     icon: Icons.email,
                     obscureText: false,
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 10.0.h),
                   CustomTextField(
                     controller: TextEditingController(),
                     text: "Password",
                     icon: Icons.key,
                     obscureText: true,
                   ),
-                  SizedBox(height: 16.0),
-                  GradientButton(text: "Login", onPressed: () {}),
-                  SizedBox(height: 10.0), // Adjust the spacing between buttons
+                  SizedBox(height: 14.0.h),
                   GradientButton(text: "Create Account", onPressed: (){}),
-                  SizedBox(height: 20.0),
-                  TextButton(
-                    onPressed: () {
-                      // Add your onPressed logic here
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/google.jpg',
-                          height: 20, // Adjust height of the Google logo
-                          width: 20, // Adjust width of the Google logo
-                        ),
-                        SizedBox(
-                            width:
-                                10.0), // Add horizontal space between the icon and the text
-                        Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 60.0),
+                  SizedBox(height: 34.h),
+                  OrDivider(),
+                  SizedBox(height: 23.h),
+                  GoogleSignInButton(onPressed: (){}),
+                  SizedBox(height: 114.h),
                   CustomTextButton(
                       text: "I already have an Account",
                       onPressed: () {Navigator.push(
@@ -87,7 +67,7 @@ class SignupScreen extends StatelessWidget {
                             builder: (context) => LoginScreen(),
                           ),
                         );},
-                      textColor: Color.fromARGB(255, 145, 40, 250))
+                      textColor: AppTheme.greyButtonColor)
                 ],
               ),
             ),

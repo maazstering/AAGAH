@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import './widgets/splashScreenText.dart';
 import 'loginScreen.dart';
-import './widgets/appColors.dart';
+import 'widgets/appTheme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Navigate to the home screen after a delay
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -24,19 +25,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
+      backgroundColor: AppTheme.bgColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               'assets/images/logo.png',
-              height: 100,
+              height: 76.43.h,
+              width: 231.8.w,
             ),
             //SizedBox(height: 1), // Add some space between the logo and text
-            SplashText(text: "stay informed"),
-            SizedBox(height: 1),
-            SplashText(text: "stay updated"),
+            const SplashText(text: "stay informed"),
+            const SizedBox(height: 1),
+            const SplashText(text: "stay updated"),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Custom widget for email text field
 class CustomTextField extends StatelessWidget {
@@ -17,37 +18,41 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      style: const TextStyle(
-          color: Color.fromARGB(230, 94, 92, 92)), // Set text color to grey
-      decoration: InputDecoration(
-        filled: true, // Fill the background
-        fillColor: Color.fromARGB(246, 218, 215, 215), // Set the background color to light grey
-        prefixIcon: Stack(
-          alignment: Alignment.center,
-          children: [
-            Icon(icon,
-                color: Color.fromARGB(230, 94, 92, 92)), // Set icon color to grey
-            Positioned(
-              left: 36, // Adjust the position of the line
-              top: 4, // Adjust the position of the line
-              bottom: 4, // Adjust the position of the line
-              child: Container(
-                width: 1, // Set the width of the line
-                color: Colors.grey[600], // Set the color of the line
+    return Container(
+      height: 60.h,
+      width: 315.w,
+      child: TextField(
+        controller: controller,
+        style: const TextStyle(
+            color: Color.fromARGB(230, 94, 92, 92)), // Set text color to grey
+        decoration: InputDecoration(
+          filled: true, // Fill the background
+          fillColor: const Color.fromARGB(246, 218, 215, 215), // Set the background color to light grey
+          prefixIcon: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(icon,
+                  color: const Color.fromARGB(230, 94, 92, 92)), // Set icon color to grey
+              Positioned(
+                left: 36.w, // Adjust the position of the line
+                top: 4.h, // Adjust the position of the line
+                bottom: 4.h, // Adjust the position of the line
+                child: Container(
+                  width: 1, // Set the width of the line
+                  color: Colors.grey[600], // Set the color of the line
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          hintText: text,
+          labelStyle: const TextStyle(
+              color: Color.fromARGB(230, 94, 92, 92)), // Set label text color to white
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0.r),
+          ),
         ),
-        hintText: text,
-        labelStyle: const TextStyle(
-            color: Color.fromARGB(230, 94, 92, 92)), // Set label text color to white
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        obscureText: obscureText,
       ),
-      obscureText: obscureText,
     );
   }
 }
