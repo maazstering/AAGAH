@@ -20,15 +20,15 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       style: const TextStyle(
-          color: Color.fromARGB(230, 94, 92, 92)), // Set text color to white
+          color: Color.fromARGB(230, 94, 92, 92)), // Set text color to grey
       decoration: InputDecoration(
         filled: true, // Fill the background
-        fillColor: Color.fromARGB(246, 218, 215, 215), // Set the background color to greyish
+        fillColor: Color.fromARGB(246, 218, 215, 215), // Set the background color to light grey
         prefixIcon: Stack(
           alignment: Alignment.center,
           children: [
             Icon(icon,
-                color: Color.fromARGB(230, 94, 92, 92)), // Set icon color to white
+                color: Color.fromARGB(230, 94, 92, 92)), // Set icon color to grey
             Positioned(
               left: 36, // Adjust the position of the line
               top: 4, // Adjust the position of the line

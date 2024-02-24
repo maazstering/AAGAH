@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'widgets/customTextField.dart';
 import 'widgets/gradientbutton.dart';
 import 'SignupScreen.dart';
+import './widgets/appColors.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 30, 30, 30), // Set background color to black
+        backgroundColor: AppColors.bgColor, // Set background color to black
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -44,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                   CustomTextButton(
                       text: "Forgot Password?",
                       onPressed: () {},
-                      textColor: Color.fromARGB(255, 145, 40, 250)),
+                      textColor: Color.fromARGB(255, 128, 0, 255)), // CHANGE COLOR LATER
                   SizedBox(height: 20.0),
                   TextButton(
                     onPressed: () {

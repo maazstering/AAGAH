@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './widgets/splashScreenText.dart';
 import 'loginScreen.dart';
+import './widgets/appColors.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 30, 30, 30),
+      backgroundColor: AppColors.bgColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
