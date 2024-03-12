@@ -45,15 +45,17 @@ class LoginScreen extends StatelessWidget {
                     obscureText: true,
                   ),
                   SizedBox(height: 12.0.h),
-                  GradientButton(text: "Login", onPressed: () {
-                    print(Text("button pressed"));
-                    Navigator.push(
+                  GradientButton(
+                      text: "Login",
+                      onPressed: () {
+                        print(Text("button pressed"));
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => profilePage(),
+                            builder: (context) => ProfilePage(),
                           ),
                         );
-                  }),
+                      }),
                   SizedBox(
                       height: 12.0.h), // Adjust the spacing between buttons
                   CustomTextButton(
@@ -64,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 31.h),
                   OrDivider(),
                   SizedBox(height: 24.h),
-                  GoogleSignInButton(onPressed: (){}),
+                  GoogleSignInButton(onPressed: () {}),
                   SizedBox(height: 100.h),
                   Builder(
                     builder: (context) => CustomTextButton(
