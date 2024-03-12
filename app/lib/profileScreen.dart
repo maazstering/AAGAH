@@ -1,23 +1,32 @@
-import 'package:app/widgets/custombutton.dart';
+//import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/gradientbutton.dart';
 import 'package:app/widgets/savedRoutesButton.dart';
 import 'package:flutter/material.dart';
 import './widgets/profileField.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './widgets/appTheme.dart';
+import './widgets/datePickerButton.dart';
 
-class profilePage extends StatelessWidget {
+class profilePage extends StatefulWidget {
+  @override
+  State<profilePage> createState() => _profilePageState();
+}
+
+class _profilePageState extends State<profilePage> {
+  DateTime? selectedDate; // Step 1: Define selectedDate variable
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
-        automaticallyImplyLeading: false, // change this later
+        automaticallyImplyLeading: false,
         title: const Center(
-            child: Text(
-          'Profile',
-          style: TextStyle(color: AppTheme.whiteColor),
-        )),
+          child: Text(
+            'Profile',
+            style: TextStyle(color: AppTheme.whiteColor),
+          ),
+        ),
         backgroundColor: AppTheme.bgColor,
       ),
       body: Padding(
@@ -25,19 +34,11 @@ class profilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Icon with space from AppBar
             SizedBox(height: 48.0.h),
             Center(
-              child: Icon(
-                Icons.person_2_outlined, // Replace with your desired icon
-                size: 80.0.h,
-                color: AppTheme.lightGreyColor, // Adjust the size as needed
-              ),
+              child: CircleAvatar(child: Image.asset('assets/images/orange.png'), maxRadius: 20.r,)
             ),
-            SizedBox(
-              height: 99.h,
-            ),
-            // Text Fields
+            SizedBox(height: 99.h),
             Expanded(
               child: Column(
                 children: [
@@ -47,16 +48,22 @@ class profilePage extends StatelessWidget {
                   ),
                   SizedBox(height: 20.0.h),
                   profileField(
-                      text: "Bio", controller: TextEditingController()),
-                  SizedBox(height: 20.0.h),
-                  profileField(
-                    text: "Date of Birth",
+                    text: "Bio",
                     controller: TextEditingController(),
                   ),
                   SizedBox(height: 20.0.h),
+                  DatePickerButton(
+                    selectedDate: selectedDate,
+                    onChanged: (DateTime? date) {
+                      setState(() {
+                        selectedDate = date;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20.0.h),
                   SavedRoutesButton(),
-                  SizedBox(height: 179.h,),
-                  GradientButton(text: "Settings", onPressed: (){})
+                  SizedBox(height: 179.h),
+                  GradientButton(text: "Settings", onPressed: () {}),
                 ],
               ),
             ),
