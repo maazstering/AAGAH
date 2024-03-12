@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './appTheme.dart';
 
-class CustomTextField extends StatelessWidget {
-  final String hintText;
+class profileField extends StatelessWidget {
+  final String text;
   final TextEditingController controller;
 
-  CustomTextField({
-    required this.hintText,
+  profileField({
+    required this.text,
     required this.controller,
 
   });
@@ -19,14 +19,15 @@ class CustomTextField extends StatelessWidget {
       height: 54.h,
       decoration: BoxDecoration(
         color: AppTheme.whiteColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: TextField(
+        style: TextStyle(fontFamily: 'Mulish'),
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+          contentPadding: EdgeInsets.all(16.w),
           border: InputBorder.none,
-          hintText: hintText,
+          hintText: (text)
         ),
       ),
     );

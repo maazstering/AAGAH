@@ -32,13 +32,14 @@ class GoogleSignInButton extends StatelessWidget {
             ),
             SizedBox(width: 15.0.w), // Add horizontal space between the icon and the text
             Container(
+              // TO BE FIXED
               height: 23.h,
               width: 192.w,
               child: Text(
                 'Continue with Google',
                 style: TextStyle(
                   color: AppTheme.greyColor, // Text color
-                  fontSize: 16.0.sp, // Font size
+                  fontSize: 16, // Font size
                   fontWeight: FontWeight.bold, // Font weight
                 ),
               ),

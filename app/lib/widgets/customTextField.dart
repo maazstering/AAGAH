@@ -25,7 +25,8 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         style: const TextStyle(
-            color: AppTheme.greyColor), // Set text color to grey
+            color: AppTheme.greyColor,
+            ), // Set text color to grey
         decoration: InputDecoration(
           filled: true, // Fill the background
           fillColor: AppTheme.lightGreyColor, // Set the background color to light grey
@@ -39,7 +40,7 @@ class CustomTextField extends StatelessWidget {
                 top: 4.h, // Adjust the position of the line
                 bottom: 4.h, // Adjust the position of the line
                 child: Container(
-                  width: 1, // Set the width of the line
+                  width: 1.w, // Set the width of the line
                   color: Colors.grey[600], // Set the color of the line
                 ),
               ),
@@ -47,7 +48,8 @@ class CustomTextField extends StatelessWidget {
           ),
           hintText: text,
           labelStyle: const TextStyle(
-              color: AppTheme.greyColor), 
+              color: AppTheme.greyColor,
+              fontFamily: 'Mulish'),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0.r),
           ),

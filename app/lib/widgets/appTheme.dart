@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static const Color accentColor = Color(0xFF95338A);
@@ -6,7 +7,12 @@ class AppTheme {
   static const Color whiteColor = Color.fromARGB(255, 238, 237, 237);
   static const Color bgColor = Color.fromARGB(255, 30, 30, 30);
   static const Color greyColor = Color.fromARGB(230, 94, 92, 92);
-  static const Color lightGreyColor =  Color.fromARGB(246, 218, 215, 215);
+  static const Color lightGreyColor = Color.fromARGB(246, 218, 215, 215);
+  // static TextStyle roboto = TextStyle(
+  //   fontFamily: GoogleFonts.roboto().fontFamily,
+  // );
+  // static TextStyle mulish = TextStyle(
+  //   fontFamily: GoogleFonts.mulish().fontFamily,
+  // );
 
-  
 }

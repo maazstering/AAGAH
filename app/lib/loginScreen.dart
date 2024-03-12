@@ -2,6 +2,7 @@ import 'package:app/profileScreen.dart';
 import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/googleSignInButton.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'widgets/customTextField.dart';
 import 'widgets/gradientbutton.dart';
@@ -65,9 +66,9 @@ class LoginScreen extends StatelessWidget {
                   OrDivider(),
                   SizedBox(height: 24.h),
                   GoogleSignInButton(onPressed: (){}),
-                  SizedBox(height: 100.h),
-                  Builder(
-                    builder: (context) => CustomTextButton(
+                  SizedBox(height: 80.h), // to be changed
+                  //Expanded(child: const Spacer(flex: 3)),
+                  CustomTextButton(
                       text: "I don't have an Account",
                       onPressed: () {
                         Navigator.push(
@@ -79,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                       },
                       textColor: Color.fromARGB(255, 145, 40, 250),
                     ),
-                  ),
+                    //const Spacer(),
                 ],
               ),
             ),
