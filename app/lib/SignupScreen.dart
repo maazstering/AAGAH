@@ -8,14 +8,12 @@ import './widgets/appTheme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './widgets/orWidget.dart';
 
-
 class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor:
-            AppTheme.bgColor, // Set background color to black
+        backgroundColor: AppTheme.bgColor, // Set background color to black
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -53,21 +51,26 @@ class SignupScreen extends StatelessWidget {
                     obscureText: true,
                   ),
                   SizedBox(height: 14.0.h),
-                  GradientButton(text: "Create Account", onPressed: (){}),
+                  GradientButton(
+                      text: "Create Account",
+                      settings: false,
+                      onPressed: () {}),
                   SizedBox(height: 34.h),
                   OrDivider(),
                   SizedBox(height: 23.h),
-                  GoogleSignInButton(onPressed: (){}),
+                  GoogleSignInButton(onPressed: () {}),
                   SizedBox(height: 114.h),
                   CustomTextButton(
                       text: "I already have an Account",
-                      onPressed: () {Navigator.push(
+                      onPressed: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => LoginScreen(),
                           ),
-                        );},
-                      textColor: AppTheme.greyButtonColor)
+                        );
+                      },
+                      textColor: AppTheme.lavenderColor)
                 ],
               ),
             ),

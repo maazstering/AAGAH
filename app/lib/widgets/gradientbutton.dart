@@ -1,26 +1,30 @@
+import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GradientButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final bool settings; //if this button is to be used for settings page, add an icon
 
   const GradientButton({
     Key? key,
     required this.text,
+    required this.settings,
     required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50, // Adjust height as needed
+      height: 50.h, // Adjust height as needed
       width: double.infinity, // Expands to full width
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.0.r),
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF95338A), // Start color
-            Color(0xFF5C2A9D), // End color
+            AppTheme.magentaColor, // Start color
+            AppTheme.lavenderColor, // End color
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -28,12 +32,24 @@ class GradientButton extends StatelessWidget {
       ),
       child: TextButton(
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white, // White text color
-            fontSize: 16.0, // Adjust font size as needed
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (settings) ...[
+              const Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              SizedBox(width: 8.0.w), // Add some space between the icon and text
+            ],
+            Text(
+              text,
+              style: TextStyle(
+                color: Colors.white, // White text color
+                fontSize: 16.0.sp, // Adjust font size as needed
+              ),
+            ),
+          ],
         ),
       ),
     );
