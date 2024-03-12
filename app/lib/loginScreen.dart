@@ -46,8 +46,7 @@ class LoginScreen extends StatelessWidget {
                     obscureText: true,
                   ),
                   SizedBox(height: 12.0.h),
-                  GradientButton(text: "Login", onPressed: () {
-                    print(Text("button pressed"));
+                  GradientButton(text: "Login", settings: false, onPressed: () {
                     Navigator.push(
                           context,
                           MaterialPageRoute(

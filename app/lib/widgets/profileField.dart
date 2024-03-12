@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './appTheme.dart';
@@ -6,7 +8,7 @@ class profileField extends StatelessWidget {
   final String text;
   final TextEditingController controller;
 
-  profileField({
+  const profileField({
     required this.text,
     required this.controller,
 
@@ -22,7 +24,7 @@ class profileField extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: TextField(
-        style: TextStyle(fontFamily: 'Mulish'),
+        style: const TextStyle(fontFamily: 'Mulish'),
         controller: controller,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(16.w),
