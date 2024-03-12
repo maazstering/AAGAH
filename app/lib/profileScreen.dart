@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ? FileImage(selectedImage!)
                         : null,
                     child: selectedImage == null
-                        ? Image.asset('assets/images/placeholder.png')
+                        ? Image.asset('../assets/images/placeholder.png')
                         : null,
                   ),
                   Positioned(
