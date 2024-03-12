@@ -1,34 +1,52 @@
 import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:flutter_icons/flutter_icons.dart';
+// import 'package:antd_flutter/antd_flutter.dart';
+// Make sure you add this package to your pubspec.yaml
 
 class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Uncomment the following line to add a title
-        // title: Text('Home'),
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        backgroundColor: AppTheme.bgColor,
+        centerTitle: true,
         leading: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.menu),
               onPressed: () {
                 // Handle menu button press
                 print('Menu button pressed');
               },
             ),
-            SizedBox(
-                width: 16), // Adjust the space between the icon and the logo
             Image.asset(
-              '../assets/images/logo.png',
+              'assets/images/logo.png',
               height: 40,
             ),
           ],
         ),
-        backgroundColor: AppTheme.bgColor,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.camera_alt),
+            onPressed: () {
+              // Handle add new post
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.send),
+            onPressed: () {
+              // Handle messages screen
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
-        itemCount: 5, // Replace with actual data length
+        itemCount: 10, // Use actual data length here
         itemBuilder: (context, index) => feedItem(index),
       ),
     );
@@ -36,96 +54,97 @@ class Feed extends StatelessWidget {
 
   Widget feedItem(int index) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
       padding: EdgeInsets.all(16.0),
-      color: Colors.grey[200], // Set background color to light grey
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // User information Row
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage('../assets/images/profile.jpg'),
+                backgroundImage: AssetImage(
+                    'assets/images/profile.jpg'), // Use actual user image
               ),
-              SizedBox(width: 16.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Username $index', // Placeholder for username
-                    style: TextStyle(
-                        color: Colors.black), // Set text color to black
-                  ),
-                  Text(
-                    'Location information',
-                    style: TextStyle(
-                        color: Colors.grey[600]), // Set text color to grey
-                  ),
-                ],
+              SizedBox(width: 10.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Username $index', // Use actual username
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Location information', // Use actual location
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.more_vert),
+                onPressed: () {
+                  // Handle more options
+                },
               ),
             ],
           ),
-
-          // Sample photo with caption
-          Container(
-            margin: EdgeInsets.only(top: 8.0), // Add some margin
+          SizedBox(height: 8.0),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: Image.asset(
+              'assets/images/sample.jpg', // Use actual post image
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    '../assets/images/sample.jpg', // Replace with actual image path
-                    width: 100.0,
-                    height: 100.0,
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.heart,
+                          color: Colors.black), // Updated for null safety
+                      onPressed: () {
+                        // Handle like
+                      },
+                    ),
+                    Text('300 likes', style: TextStyle(color: Colors.black)),
+                  ],
                 ),
-                SizedBox(width: 16.0),
-                Expanded(
-                  child: Text(
-                    'This is a sample caption for the post.',
-                    style: TextStyle(color: Colors.black),
-                  ),
+                IconButton(
+                  icon: Icon(FontAwesomeIcons.comment,
+                      color: Colors.black), // Updated for null safety
+                  onPressed: () {
+                    // Handle comments
+                  },
                 ),
               ],
             ),
           ),
-
-          // Action buttons (like, comment, share)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.favorite, color: Colors.red),
-                    onPressed: () {
-                      // Handle like button press
-                      print('Like button pressed');
-                    },
-                  ),
-                  Text('300'), // Placeholder for like count
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.comment, color: Colors.blue),
-                    onPressed: () {
-                      // Handle comment button press
-                      print('Comment button pressed');
-                    },
-                  ),
-                  Text('10'), // Placeholder for comment count
-                ],
-              ),
-              IconButton(
-                icon: Icon(Icons.share),
-                onPressed: () {
-                  // Handle share button press
-                  print('Share button pressed');
-                },
-              ),
-            ],
+          Text(
+            'View all 10 comments', // Use actual comment count
+            style: TextStyle(color: Colors.grey),
+          ),
+          SizedBox(height: 4.0),
+          Text(
+            '2 hours ago', // Use actual post time
+            style: TextStyle(color: Colors.grey, fontSize: 10.0),
           ),
         ],
       ),
