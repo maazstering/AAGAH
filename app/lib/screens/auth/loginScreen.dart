@@ -1,14 +1,14 @@
-import 'package:app/profileScreen.dart';
+import 'package:app/screens/home/profileScreen.dart';
 import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/googleSignInButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'widgets/customTextField.dart';
-import 'widgets/gradientbutton.dart';
+import '../../widgets/customTextField.dart';
+import '../../widgets/gradientbutton.dart';
 import 'SignupScreen.dart';
-import 'widgets/appTheme.dart';
-import './widgets/orWidget.dart';
+import '../../widgets/appTheme.dart';
+import '../../widgets/orWidget.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -47,9 +47,11 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 12.0.h),
 
-
-                  GradientButton(text: "Login", settings: false, onPressed: () {
-                    Navigator.push(
+                  GradientButton(
+                      text: "Login",
+                      settings: false,
+                      onPressed: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProfilePage(),
@@ -67,22 +69,22 @@ class LoginScreen extends StatelessWidget {
                   OrDivider(),
                   SizedBox(height: 24.h),
 
-                  GoogleSignInButton(onPressed: (){}),
+                  GoogleSignInButton(onPressed: () {}),
                   SizedBox(height: 80.h), // to be changed
                   //Expanded(child: const Spacer(flex: 3)),
                   CustomTextButton(
-                      text: "I don't have an Account",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignupScreen(),
-                          ),
-                        );
-                      },
-                      textColor: Color.fromARGB(255, 145, 40, 250),
-                    ),
-                    //const Spacer(),
+                    text: "I don't have an Account",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignupScreen(),
+                        ),
+                      );
+                    },
+                    textColor: Color.fromARGB(255, 145, 40, 250),
+                  ),
+                  //const Spacer(),
                 ],
               ),
             ),
