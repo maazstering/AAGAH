@@ -2,9 +2,6 @@ import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:flutter_icons/flutter_icons.dart';
-// import 'package:antd_flutter/antd_flutter.dart';
-// Make sure you add this package to your pubspec.yaml
 
 class Feed extends StatelessWidget {
   @override
@@ -18,32 +15,21 @@ class Feed extends StatelessWidget {
           leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  // Handle menu button press
-                  print('Menu button pressed');
-                },
-              ),
-              Image.asset(
-                'assets/images/logo.png',
-                height: 40,
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  height: 40,
+                ),
               ),
             ],
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.camera_alt),
+              icon: Icon(Icons.message_rounded),
               onPressed: () {
-                // Handle add new post
+                // Message
               },
-            ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: () {
-                // Handle messages screen
-              },
-            ),
+            )
           ],
         ),
         body: ListView.builder(

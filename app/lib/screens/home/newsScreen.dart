@@ -11,21 +11,21 @@ class _NewsScreenState extends State<NewsScreen> {
     {
       'title': 'Breaking News',
       'source': 'CNN',
-      'image': 'assets/images/news1.jpg',
+      'image': '../assets/images/sample.jpg',
       'description':
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       'title': 'Sports Update',
       'source': 'ESPN',
-      'image': 'assets/images/news2.jpg',
+      'image': '../assets/images/sample.jpg',
       'description':
           'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     },
     {
       'title': 'Tech Insights',
       'source': 'TechCrunch',
-      'image': 'assets/images/news3.jpg',
+      'image': '../assets/images/sample.jpg',
       'description':
           'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     },
