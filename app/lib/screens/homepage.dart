@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'widgets/appTheme.dart';
+import '../components/appTheme.dart';
 
 class HomePage extends StatelessWidget {
   @override

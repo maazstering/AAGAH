@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './appTheme.dart';
+import 'appTheme.dart';
 
 class profileField extends StatelessWidget {
   final String text;

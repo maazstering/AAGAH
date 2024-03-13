@@ -1,13 +1,13 @@
 //import 'package:app/widgets/custombutton.dart';
-import 'package:app/settingsPage.dart';
-import 'package:app/widgets/gradientbutton.dart';
-import 'package:app/widgets/savedRoutesButton.dart';
+import 'package:app/screens/settingsPage.dart';
+import 'package:app/components/gradientbutton.dart';
+import 'package:app/components/savedRoutesButton.dart';
 import 'package:flutter/material.dart';
-import './widgets/profileField.dart';
+import '../components/profileField.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './widgets/appTheme.dart';
-import './widgets/datePickerButton.dart';
-import './widgets/variables.dart';
+import '../components/appTheme.dart';
+import '../components/datePickerButton.dart';
+import '../components/variables.dart';
 
 class profilePage extends StatefulWidget {
   @override
