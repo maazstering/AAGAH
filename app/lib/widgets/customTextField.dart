@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'appTheme.dart';
+import './appTheme.dart';
 
 // Custom widget for email text field
 class CustomTextField extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'screens/splashScreen.dart';
+import 'splashScreen.dart';
 //import './widgets/splashScreenText.dart';
 
 void main() {
