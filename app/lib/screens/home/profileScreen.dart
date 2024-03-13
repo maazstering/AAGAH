@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'package:app/feed.dart';
-import 'package:app/settingsPage.dart';
+import 'package:app/screens/home/feed.dart';
+import 'package:app/screens/home/settingsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './widgets/appTheme.dart';
-import './widgets/datePickerButton.dart';
-import './widgets/profileField.dart';
-import './widgets/gradientbutton.dart';
-import './widgets/savedRoutesButton.dart';
+import '../../widgets/appTheme.dart';
+import '../../widgets/datePickerButton.dart';
+import '../../widgets/profileField.dart';
+import '../../widgets/gradientbutton.dart';
+import '../../widgets/savedRoutesButton.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:app/screens/home/cameraScreen.dart';
 import 'package:app/screens/home/feed.dart';
-import 'package:app/screens/home/newsScreen.dart'; // Import the news screen file
+import 'package:app/screens/home/newsScreen.dart';
 import 'package:app/screens/home/profileScreen.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';

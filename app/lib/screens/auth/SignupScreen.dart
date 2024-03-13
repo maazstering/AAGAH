@@ -1,12 +1,12 @@
-import 'package:app/loginScreen.dart';
+import 'package:app/screens/auth/loginScreen.dart';
 import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/googleSignInButton.dart';
 import 'package:flutter/material.dart';
-import 'widgets/customTextField.dart';
-import 'widgets/gradientbutton.dart';
-import './widgets/appTheme.dart';
+import '../../widgets/customTextField.dart';
+import '../../widgets/gradientbutton.dart';
+import '../../widgets/appTheme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './widgets/orWidget.dart';
+import '../../widgets/orWidget.dart';
 
 class SignupScreen extends StatelessWidget {
   @override

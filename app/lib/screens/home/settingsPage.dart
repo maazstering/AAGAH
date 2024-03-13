@@ -3,8 +3,8 @@
 import 'package:app/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './widgets/appTheme.dart';
-import './widgets/variables.dart';
+import '../../widgets/appTheme.dart';
+import '../../widgets/variables.dart';
 
 // ignore: camel_case_types
 class settingsPage extends StatelessWidget {
