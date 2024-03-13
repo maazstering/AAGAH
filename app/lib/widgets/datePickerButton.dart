@@ -15,13 +15,19 @@ class DatePickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 54,
-      width: 343,
+      /* width: 343.w,
+      height: 54.h,
+      decoration: BoxDecoration(
+        color: AppTheme.whiteColor,
+        borderRadius: BorderRadius.circular(8.r),*/
+
+      height: 54.h,
+      width: 343.w,
       child: ElevatedButton(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0.r),
+              borderRadius: BorderRadius.circular(8.r),
             ),
           ),
         ),
