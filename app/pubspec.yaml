@@ -40,6 +40,7 @@ dependencies:
   google_fonts: ^6.2.0
   image_picker: ^1.0.7
   font_awesome_flutter: ^10.7.0
+  camera: ^0.10.5+9
 
 dev_dependencies:
   flutter_test:
