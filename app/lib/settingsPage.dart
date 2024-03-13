@@ -26,26 +26,47 @@ class settingsPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 27.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(height: 48.0.h),
-            Center(
-              child: CircleAvatar(maxRadius: 40.r,child: Image.asset('assets/images/orange.png'),)
-            ),
-            SizedBox(height: 10.h,),
-            Center(child: Text(email,style: TextStyle(color: AppTheme.whiteColor,fontSize: 16.sp),)),
-            SizedBox(height: 80.h,),
-            CustomTextButton(text: "Delete Account", onPressed: (){}, textColor: AppTheme.lilacColor),
-            SizedBox(height: 18.h,),
-            CustomTextButton(text: "Change Email", onPressed: (){}, textColor: AppTheme.lilacColor),
-            SizedBox(height: 18.h,),
-            CustomTextButton(text: "Report Bug", onPressed: (){}, textColor: AppTheme.lilacColor),
-          ],
-        )
-      ),
-      
+          padding: EdgeInsets.symmetric(horizontal: 27.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(height: 48.0.h),
+              Center(
+                  child: CircleAvatar(
+                maxRadius: 40.r,
+                child: Image.asset('../assets/images/orange.png'),
+              )),
+              SizedBox(
+                height: 10.h,
+              ),
+              Center(
+                  child: Text(
+                email,
+                style: TextStyle(color: AppTheme.whiteColor, fontSize: 16.sp),
+              )),
+              SizedBox(
+                height: 80.h,
+              ),
+              CustomTextButton(
+                  text: "Delete Account",
+                  onPressed: () {},
+                  textColor: AppTheme.lilacColor),
+              SizedBox(
+                height: 18.h,
+              ),
+              CustomTextButton(
+                  text: "Change Email",
+                  onPressed: () {},
+                  textColor: AppTheme.lilacColor),
+              SizedBox(
+                height: 18.h,
+              ),
+              CustomTextButton(
+                  text: "Report Bug",
+                  onPressed: () {},
+                  textColor: AppTheme.lilacColor),
+            ],
+          )),
     );
   }
 }

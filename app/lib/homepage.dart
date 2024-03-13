@@ -18,9 +18,10 @@ class HomePage extends StatelessWidget {
                 print('Menu button pressed');
               },
             ),
-            SizedBox(width: 16), // Adjust the space between the icon and the logo
+            SizedBox(
+                width: 16), // Adjust the space between the icon and the logo
             Image.asset(
-              'assets/images/logo.png',
+              '../assets/images/logo.png',
               height: 40,
             ),
           ],
