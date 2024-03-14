@@ -1,65 +1,67 @@
+import 'package:app/screens/home/comment.dart';
+import 'package:flutter/material.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:app/widgets/likeButton.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import the CommentPage widget
 
 class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
-          backgroundColor: AppTheme.bgColor,
-          centerTitle: true,
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: 40,
-                ),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        backgroundColor: AppTheme.bgColor,
+        centerTitle: true,
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Image.asset(
+                'assets/images/logo.png',
+                height: 40,
               ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.message_rounded),
-              onPressed: () {
-                // Message
-              },
-            )
+            ),
           ],
         ),
-        body: ListView.builder(
-          itemCount: 10, // Use actual data length here
-          itemBuilder: (context, index) => feedItem(index),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.message_rounded),
+            onPressed: () {
+              // Message
+            },
+          )
+        ],
+      ),
+      body: Container(
+        color: AppTheme.bgColor,
+        child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) =>
+              feedItem(index, context), // Pass context to feedItem
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          currentIndex: 0, // Assuming this is the feed screen
-          onTap: (index) {
-            // Handle navigation to different screens
-            // You may want to use Navigator to push/pop screens here
-          },
-        ));
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) {
+          // Handle navigation to different screens
+        },
+      ),
+    );
   }
 
-  Widget feedItem(int index) {
+  Widget feedItem(int index, BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: AppTheme.whiteColor,
-        borderRadius: BorderRadius.circular(15.0),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.greyColor,
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
+        color: AppTheme.bgColor,
+        borderRadius: BorderRadius.circular(1.0),
+        border: Border.all(
+          color: AppTheme.greyColor,
+          width: 0.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,18 +78,23 @@ class Feed extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Username $index', // Use actual username
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      'Username $index',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.lightGreyColor),
                     ),
                     Text(
-                      'Location information', // Use actual location
-                      style: TextStyle(color: AppTheme.greyColor),
+                      'Location information',
+                      style: TextStyle(color: AppTheme.lightGreyColor),
                     ),
                   ],
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.more_vert),
+                icon: Icon(
+                  Icons.more_vert,
+                  color: AppTheme.lightGreyColor,
+                ),
                 onPressed: () {
                   // Handle more options
                 },
@@ -98,7 +105,7 @@ class Feed extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(15.0),
             child: Image.asset(
-              '../assets/images/sample.jpg', // Use actual post image
+              '../assets/images/sample.jpg',
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -110,35 +117,37 @@ class Feed extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.heart,
-                          color: AppTheme
-                              .periwinkleColor), // Updated for null safety
-                      onPressed: () {
-                        // Handle like
-                      },
-                    ),
-                    Text('300 likes', style: TextStyle(color: Colors.black)),
+                    AnimatedLikeButton(),
+                    Text('300 likes',
+                        style: TextStyle(color: AppTheme.lightGreyColor)),
                   ],
                 ),
-                IconButton(
-                  icon: Icon(FontAwesomeIcons.comment,
-                      color: AppTheme.greyColor), // Updated for null safety
-                  onPressed: () {
-                    // Handle comments
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to CommentPage when tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CommentPage()),
+                    );
                   },
+                  child: Row(
+                    children: [
+                      Icon(FontAwesomeIcons.comment, color: AppTheme.greyColor),
+                      SizedBox(width: 5),
+                      Text(
+                        'View all 10 comments',
+                        style: TextStyle(color: AppTheme.lightGreyColor),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          Text(
-            'View all 10 comments', // Use actual comment count
-            style: TextStyle(color: AppTheme.greyColor),
-          ),
           SizedBox(height: 4.0),
           Text(
-            '2 hours ago', // Use actual post time
-            style: TextStyle(color: AppTheme.greyColor, fontSize: 10.0),
+            '2 hours ago',
+            style: TextStyle(color: AppTheme.lightGreyColor, fontSize: 10.0),
           ),
         ],
       ),
