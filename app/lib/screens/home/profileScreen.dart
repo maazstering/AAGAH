@@ -57,6 +57,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider<Object>? imageProvider;
+    if (selectedImage != null) {
+      imageProvider = FileImage(selectedImage!) as ImageProvider<Object>?;
+    } else {
+      imageProvider = AssetImage('../../assets/images/profile.jpg')
+          as ImageProvider<Object>?;
+    }
     return Scaffold(
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
@@ -77,14 +84,11 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Stack(
                 children: [
                   CircleAvatar(
-                    radius: 40
-                        .r, // Changed from maxRadius to radius for consistency
-                    backgroundImage: selectedImage != null
-                        ? FileImage(selectedImage!)
-                        : null,
-                    child: selectedImage == null
-                        ? Image.asset('../assets/images/placeholder.png')
-                        : null,
+                    radius: 40.r, // Adjust this value as needed
+                    backgroundImage:
+                        imageProvider, // Use the local variable here
+                    backgroundColor: Colors
+                        .transparent, // Ensure any default background is transparent
                   ),
                   Positioned(
                     bottom: 0,
