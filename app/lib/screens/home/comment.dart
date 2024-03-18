@@ -33,8 +33,10 @@ class _CommentPageState extends State<CommentPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
-        title: Text('Comments'),
+        title:
+            Text('Comments', style: TextStyle(color: AppTheme.lightGreyColor)),
         centerTitle: true,
+        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: Column(
         children: [

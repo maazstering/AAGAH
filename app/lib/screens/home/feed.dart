@@ -10,17 +10,24 @@ class Feed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        automaticallyImplyLeading: false, // Disable automatic back button
         backgroundColor: AppTheme.bgColor,
         centerTitle: true,
-        leading: Row(
-          mainAxisSize: MainAxisSize.min,
+        titleSpacing: 0.0, // Removes default horizontal spacing
+        title: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.start, // Aligns the container to the left
           children: [
-            Center(
-              child: Image.asset(
-                'assets/images/logo.png',
-                height: 40,
+            Container(
+              margin: const EdgeInsets.only(left: 12.0), // Adds left margin
+              child: Padding(
+                padding:
+                    const EdgeInsets.all(8.0), // Adds padding around the logo
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  height: AppBar().preferredSize.height -
+                      16.0, // Adjust for padding
+                ),
               ),
             ),
           ],
