@@ -1,4 +1,7 @@
+import 'package:app/widgets/appTheme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class NewsScreen extends StatefulWidget {
   @override
@@ -34,8 +37,11 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
-        title: Text('News'),
+        backgroundColor: AppTheme.bgColor,
+        title: Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
+        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: ListView.builder(
         itemCount: newsData.length,
@@ -55,15 +61,15 @@ class _NewsScreenState extends State<NewsScreen> {
         margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         padding: EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.greyColor,
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            ),
+            // BoxShadow(
+            //   color: AppTheme.lightGreyColor,
+            //   spreadRadius: 2,
+            //   blurRadius: 5,
+            //   offset: Offset(0, 3),
+            // ),
           ],
         ),
         child: Column(
@@ -90,7 +96,7 @@ class _NewsScreenState extends State<NewsScreen> {
             Text(
               'Source: ${newsData[index]['source']}',
               style: TextStyle(
-                color: Colors.grey,
+                color: AppTheme.lightGreyColor,
               ),
             ),
             SizedBox(height: 6.0),
@@ -100,23 +106,19 @@ class _NewsScreenState extends State<NewsScreen> {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 16.0,
+                color: AppTheme.lightGreyColor,
               ),
             ),
             SizedBox(height: 12.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
+                IconButton(
+                  icon: Icon(Icons.share),
+                  color: AppTheme.lightGreyColor,
                   onPressed: () {
                     // Handle share button
                   },
-                  child: Text('Share'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Handle bookmark button
-                  },
-                  child: Text('Bookmark'),
                 ),
               ],
             ),
