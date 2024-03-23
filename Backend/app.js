@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 
 // database connection
-const dbURI = 'mongodb+srv://hasanjawaid:091200@hasan.mg8eu13.mongodb.net/node-authnode?retryWrites=true&w=majority';
+const dbURI = 'mongodb+srv://fullstack:fullstack@cluster0.413sbvx.mongodb.net/Aagah?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
   .then((result) => app.listen(3000, () => {
