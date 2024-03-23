@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialPulse</title>
+    <link rel="stylesheet" href="/socialstyles.css"> <!-- Link to styles.css -->
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">SocialPulse</a>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <div class="container form-container">
+            <form id="createPostForm">
+                <textarea id="content" name="content" placeholder="What's in your mind?" required></textarea>
+                <div class="content error"></div>
+
+                <button type="submit">Post</button>
+            </form>
+        </div>
+        
+        <div class="container posts-container">
+            <% posts.forEach(post => { %>
+                <div class="post">
+                    <p><%= post.content %></p>
+                    <p>Author: <%= post.author.email %></p>
+                    <div>
+                        <!-- Add buttons for update and delete -->
+                        <button onclick="updatePost('<%= post._id %>')">Update</button>
+                        <button onclick="deletePost('<%= post._id %>')">Delete</button>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+                
+        <script>
+            // Function to update a post
+            async function updatePost(postId) {
+                const content = prompt("Enter new content:");
+                if (content !== null) {
+                    try {
+                        const res = await fetch(`/social/${postId}`, {
+                            method: 'PUT',
+                            body: JSON.stringify({ content }),
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        const data = await res.json();
+                        console.log(data);
+                        location.reload();
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+
+            // Function to delete a post
+            async function deletePost(postId) {
+                const confirmDelete = confirm("Are you sure you want to delete this post?");
+                if (confirmDelete) {
+                    try {
+                        const res = await fetch(`/social/${postId}`, {
+                            method: 'DELETE'
+                        });
+                        const data = await res.json();
+                        console.log(data);
+                        location.reload();
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+
+            // Submit form handler for creating a new post
+            const form = document.querySelector('#createPostForm');
+            const contentError = document.querySelector('.content.error');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // reset errors
+                contentError.textContent = '';
+
+                // get the values
+                const content = form.content.value;
+
+                try {
+                    const res = await fetch('/social', {
+                        method: 'POST',
+                        body: JSON.stringify({ content }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const data = await res.json();
+                    console.log(data);
+                    if (data.errors) {
+                        contentError.textContent = data.errors.content;
+                    }
+                    if (data.post) {
+                        console.log('post created');
+                        location.assign('/social');
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            })
+        </script>
+    </div>
+
+</body>
+
+</html>
