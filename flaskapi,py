@@ -1,0 +1,31 @@
+from flask import Flask, request, jsonify
+
+app = Flask(_name_)
+
+@app.route('/process_keywords', methods=['POST'])
+def process_keywords():
+    # Extract dataString from the request and convert it to lowercase
+    data = request.get_json()
+    dataString = data.get('dataString', '').lower()  # Default to empty string if not provided and convert to lowercase
+    if not dataString:
+        return jsonify({'error': 'dataString not provided'}), 400
+    
+    # Check if "karachi" is in the dataString (case-insensitive)
+    if "karachi" not in dataString:
+        return jsonify({'error': '"Karachi" must be present in the dataString'}), 400
+
+    # Define your keywords and convert them to lowercase
+    keyWords = ['bahadurabad', 'malir', 'gulshan', 'defence', 'gulberg', 'liaquatabad', 'nazimabad', 'new karachi', 'north nazimabad', 'faisal cantonment', 'ferozabad', 'gulshan-e-iqbal', 'gulzar-e-hijri', 'jamshed quarters', 'aram bagh', 'civil line', 'clifton cantonment', 'garden', 'karachi cantonment', 'saddar', 'lyari', 'baldia', 'harbour', 'mango pir', 'manora cantonment', 'mauripur', 'mominabad', 'orangi', 'sindh industrial trading estate', 'korangi', 'landhi', 'model colony', 'shah faisal', 'airport', 'bin qasim', 'gadap', 'ibrahim hyderi', 'korangi creek cantonment', 'malir cantonment', 'murad memon', 'shah mureed', 'keamari']
+    
+    found_keywords = []
+
+    # Process each keyword as per your script (case-insensitive)
+    for keyWord in keyWords:
+        if keyWord in dataString:
+            found_keywords.append(keyWord)
+    
+    # Return the found keywords
+    return jsonify({'foundKeywords': found_keywords})
+
+if _name_ == '_main_':
+    app.run(debug=True)
