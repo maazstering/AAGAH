@@ -41,6 +41,7 @@ dependencies:
   image_picker: ^1.0.7
   font_awesome_flutter: ^10.7.0
   camera: ^0.10.5+9
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:

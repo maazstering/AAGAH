@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     age: {
         type: Number,
-        required: [true, 'Please enter an age']
+        required: [false]
     },
     role: {
         type: String,

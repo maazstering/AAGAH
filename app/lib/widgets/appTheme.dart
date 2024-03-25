@@ -16,5 +16,4 @@ class AppTheme {
   // static TextStyle mulish = TextStyle(
   //   fontFamily: GoogleFonts.mulish().fontFamily,
   // );
-
 }
