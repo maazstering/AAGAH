@@ -52,14 +52,12 @@ const userSchema = new mongoose.Schema({
             ref: 'User'
         }
     ],
-    
     isBlocked: { type: Boolean, default: false },
     reports: [{ 
         reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         reason: String,
         createdAt: { type: Date, default: Date.now }
     }]
-    
 });
 
 // Fire a function before doc saved to db

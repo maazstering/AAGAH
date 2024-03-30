@@ -1,9 +1,10 @@
-import 'package:app/screens/home/comment.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:app/widgets/likeButton.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import the CommentPage widget
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'comment.dart'; // Import the CommentPage widget
 
 class Feed extends StatelessWidget {
   @override
@@ -15,18 +16,15 @@ class Feed extends StatelessWidget {
         centerTitle: true,
         titleSpacing: 0.0, // Removes default horizontal spacing
         title: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.start, // Aligns the container to the left
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 12.0), // Adds left margin
+              margin: const EdgeInsets.only(left: 12.0),
               child: Padding(
-                padding:
-                    const EdgeInsets.all(8.0), // Adds padding around the logo
+                padding: const EdgeInsets.all(8.0),
                 child: Image.asset(
                   'assets/images/logo.png',
-                  height: AppBar().preferredSize.height -
-                      16.0, // Adjust for padding
+                  height: AppBar().preferredSize.height - 16.0,
                 ),
               ),
             ),
@@ -43,10 +41,26 @@ class Feed extends StatelessWidget {
       ),
       body: Container(
         color: AppTheme.bgColor,
-        child: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) =>
-              feedItem(index, context), // Pass context to feedItem
+        child: FutureBuilder(
+          future: fetchPosts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return feedItem(index, context, snapshot.data![index]);
+                },
+              );
+            }
+          },
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -58,7 +72,19 @@ class Feed extends StatelessWidget {
     );
   }
 
-  Widget feedItem(int index, BuildContext context) {
+  // Function to fetch posts from backend
+  Future<List<dynamic>> fetchPosts() async {
+    final response =
+        await http.get(Uri.parse('http://192.168.56.1:3000/social'));
+    if (response.statusCode == 200) {
+      // Parse and handle the response data here
+      return []; // Placeholder for parsed data
+    } else {
+      throw Exception('Failed to load posts');
+    }
+  }
+
+  Widget feedItem(int index, BuildContext context, dynamic postData) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
       padding: EdgeInsets.all(16.0),
