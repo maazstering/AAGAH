@@ -23,8 +23,12 @@ class __MapScreenState extends State<MapScreen> {
           title: const Text("Map Screen"),
           titleTextStyle: const TextStyle(color: AppTheme.periwinkleColor),
         ),
-        body: const GoogleMap(
+        body: GoogleMap(
           initialCameraPosition: CameraPosition(target: karachi, zoom: 13),
-        ));
+          markers: {
+            Marker(markerId: MarkerId("_currentLocation"), icon: BitmapDescriptor.defaultMarker, position: karachi)
+          },
+        )
+        );
   }
 }
