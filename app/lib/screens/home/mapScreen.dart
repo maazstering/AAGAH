@@ -19,7 +19,6 @@ class __MapScreenState extends State<MapScreen> {
 
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
-
   static const LatLng karachi = LatLng(25.10720314676199, 67.27599663525518);
   static const LatLng trial = LatLng(37.4223, -122.0848);
   LatLng? _currentP = null;
@@ -63,9 +62,11 @@ class __MapScreenState extends State<MapScreen> {
               ));
   }
 
-  Future<void> _cameraToPos(LatLng pos) async{
+  Future<void> _cameraToPos(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
     CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
+
+    await controller.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
   }
 
   Future<void> getLocationUpdates() async {
@@ -95,7 +96,7 @@ class __MapScreenState extends State<MapScreen> {
           _currentP =
               LatLng(currentLocation.latitude!, currentLocation.longitude!);
         });
-        print(_currentP);
+        _cameraToPos(_currentP!);
       }
     });
   }
