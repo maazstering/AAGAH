@@ -1,0 +1,169 @@
+body{
+    margin: 20px 40px;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    background: #fafafa;
+  }
+  h1, h2, h3, h4, ul, li, a, p, input, label, button, div, footer{
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    color: #444;
+  }
+  ul{
+    list-style-type: none;
+  }
+  a{
+    text-decoration: none;
+  }
+/* Style the form container to resemble Facebook's post creation interface */
+/* styles.css */
+
+/* styles.css */
+
+/* Style the form container to resemble Facebook's post creation interface */
+.form-container {
+    width: 90%; /* Adjust width as needed */
+    margin: 20px; /* Add margin to the left side */
+    margin-right: auto; /* Align the form container to the left */
+    background-color: #fff;
+    border-radius: 10px; /* Curved corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative; /* Position relative for absolute positioning of button */
+  }
+  
+  /* Style the text area inside the form container */
+  .form-container textarea {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px; /* Curved corners */
+    resize: none; /* Prevent resizing */
+    font-size: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Add shadow */
+    font-family: 'Quicksand', sans-serif; /* Change font if needed */
+    color: #666; /* Text color */
+  }
+  
+  /* Style the placeholder text */
+  .form-container textarea::placeholder {
+    color: #ccc; /* Placeholder text color */
+  }
+  
+  /* Style the "Post" button */
+  .form-container button[type="submit"] {
+    background-color: #1877f2;
+    color: #fff;
+    border: none;
+    border-radius: 20px; /* Round button corners */
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif; /* Change font if needed */
+  }
+  
+  /* Hover effect for the "Post" button */
+  .form-container button[type="submit"]:hover {
+    background-color: #166fe5;
+  }
+  .navbar {
+    background: linear-gradient(to right, #6a3093, #a044ff); /* Purple gradient */
+    padding: 10px 20px;
+    box-shadow: 2 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 24px;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .navbar-nav {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-item {
+    margin-right: 20px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: white;
+  }
+  .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    border-radius: 20px;
+  }
+  
+
+  .post-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .post-header img {
+    width: 40px; /* Adjust the size of the profile image */
+    height: 40px;
+    border-radius: 50%; /* Oval shape */
+    margin-right: 10px;
+  }
+  
+  
+  
+  nav ul{
+    display: flex;
+    align-items: center;
+  }
+  nav li{
+    margin-left: 1px;
+  }
+  nav li a{
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.8em;
+    display: block;
+    padding: 10px 16px;
+    letter-spacing: 2px;
+  }
+  .btn{
+    border-radius: 36px;
+    background: linear-gradient(to right, #6a3093, #a044ff);;
+  }
+
+  .container.posts-container {
+    width: 90%; /* Adjust width as needed */
+    /* margin: 20px; Add margin to the left side */
+    /* background-color: #fff; */
+    margin-right: auto; /* Align the form container to the left */
+    border-radius: 10px; /* Curved corners */
+    padding: 20px;
+    position: relative; /* Position relative for absolute positioning of button */
+  }
+  
+  .post {
+    width: 100%; /* Adjust width as needed */
+    /* margin: 20px;  */
+    margin-bottom: 10px; 
+    background-color: #fff;
+    border-radius: 10px; /* Curved corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+  }
+  
+  .post p {
+    margin: 0;
+  }
+  
+  .post p:nth-child(2) {
+    font-style: italic;
+    color: #888;
+  }
+  
