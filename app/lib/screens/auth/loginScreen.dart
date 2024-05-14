@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:app/screens/home/feed.dart';
+import 'package:app/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/screens/home/profileScreen.dart';
@@ -55,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                     settings: false,
                     onPressed: () async {
                       final String apiUrl =
-                          'http://192.168.56.1:3000/login'; // Replace with your actual IP address
+                          Variables.address +('/login'); 
                       String email = emailController.text.trim();
                       String password = passwordController.text.trim();
 

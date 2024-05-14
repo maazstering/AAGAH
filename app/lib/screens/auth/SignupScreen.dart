@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/googleSignInButton.dart';
+import 'package:app/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/screens/home/profileScreen.dart';
@@ -62,7 +63,7 @@ class SignupScreen extends StatelessWidget {
                     text: "Create Account",
                     settings: false,
                     onPressed: () async {
-                      final String apiUrl = 'http://192.168.56.1:3000/signup';
+                      final String apiUrl = Variables.address + ('/signup');
                       String name = nameController.text.trim();
                       String email = emailController.text.trim();
                       String password = passwordController.text.trim();

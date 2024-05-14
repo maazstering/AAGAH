@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:app/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/widgets/appTheme.dart';
@@ -74,15 +77,17 @@ class Feed extends StatelessWidget {
 
   // Function to fetch posts from backend
   Future<List<dynamic>> fetchPosts() async {
-    final response =
-        await http.get(Uri.parse('http://192.168.56.1:3000/social'));
-    if (response.statusCode == 200) {
-      // Parse and handle the response data here
-      return []; // Placeholder for parsed data
-    } else {
-      throw Exception('Failed to load posts');
-    }
+  final response = await http.get(Uri.parse(Variables.address + '/social'));
+  if (response.statusCode == 200) {
+    // Parse and handle the response data here
+    print(response.body); // Add this line before parsing the response
+    final List<dynamic> posts = json.decode(response.body);
+    return posts;
+  } else {
+    throw Exception('Failed to load posts');
   }
+}
+
 
   Widget feedItem(int index, BuildContext context, dynamic postData) {
     return Container(
