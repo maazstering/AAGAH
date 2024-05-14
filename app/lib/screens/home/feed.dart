@@ -1,13 +1,9 @@
-import 'dart:convert';
-
-import 'package:app/widgets/variables.dart';
+import 'package:app/screens/home/comment.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:app/widgets/likeButton.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'comment.dart'; // Import the CommentPage widget
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import the CommentPage widget
 
 class Feed extends StatelessWidget {
   @override
@@ -19,15 +15,18 @@ class Feed extends StatelessWidget {
         centerTitle: true,
         titleSpacing: 0.0, // Removes default horizontal spacing
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment:
+              MainAxisAlignment.start, // Aligns the container to the left
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 12.0),
+              margin: const EdgeInsets.only(left: 12.0), // Adds left margin
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    const EdgeInsets.all(8.0), // Adds padding around the logo
                 child: Image.asset(
                   'assets/images/logo.png',
-                  height: AppBar().preferredSize.height - 16.0,
+                  height: AppBar().preferredSize.height -
+                      16.0, // Adjust for padding
                 ),
               ),
             ),
@@ -44,26 +43,10 @@ class Feed extends StatelessWidget {
       ),
       body: Container(
         color: AppTheme.bgColor,
-        child: FutureBuilder(
-          future: fetchPosts(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return feedItem(index, context, snapshot.data![index]);
-                },
-              );
-            }
-          },
+        child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) =>
+              feedItem(index, context), // Pass context to feedItem
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -75,21 +58,7 @@ class Feed extends StatelessWidget {
     );
   }
 
-  // Function to fetch posts from backend
-  Future<List<dynamic>> fetchPosts() async {
-  final response = await http.get(Uri.parse(Variables.address + '/social'));
-  if (response.statusCode == 200) {
-    // Parse and handle the response data here
-    print(response.body); // Add this line before parsing the response
-    final List<dynamic> posts = json.decode(response.body);
-    return posts;
-  } else {
-    throw Exception('Failed to load posts');
-  }
-}
-
-
-  Widget feedItem(int index, BuildContext context, dynamic postData) {
+  Widget feedItem(int index, BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
       padding: EdgeInsets.all(16.0),
@@ -138,6 +107,17 @@ class Feed extends StatelessWidget {
                 },
               ),
             ],
+
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          // content of the post here
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [Text('Content of the post',
+                      style: TextStyle(color: AppTheme.lightGreyColor),)],
+
           ),
           SizedBox(height: 8.0),
           ClipRRect(
