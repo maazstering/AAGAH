@@ -57,12 +57,19 @@ module.exports.createPost = async (req, res) => {
 
 module.exports.showPosts = async (req, res) => {
     try {
+        const { isJson } = req.query;
         const posts = await Post.find().populate('author');
-        res.render('social', { posts }); 
+        console.log(isJson);
+        if (isJson) {
+            // Return JSON response if requested
+            res.status(200).json(posts);
+        } else {
+            // Render HTML view if accessed directly
+            res.render('social', { posts });
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-    
 };
 
 

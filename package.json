@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "json-server": "^1.0.0-alpha.23"
+    "json-server": "^1.0.0-alpha.23",
+    "nodemon": "^3.1.0"
   }
 }
