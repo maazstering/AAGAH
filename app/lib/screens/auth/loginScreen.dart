@@ -55,8 +55,7 @@ class LoginScreen extends StatelessWidget {
                     text: "Login",
                     settings: false,
                     onPressed: () async {
-                      final String apiUrl =
-                          Variables.address +('/login'); 
+                      final String apiUrl = Variables.address + ('/login');
                       String email = emailController.text.trim();
                       String password = passwordController.text.trim();
 
@@ -72,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Feed(),
+                              builder: (context) => FeedWidget(),
                             ),
                           );
                         } else {

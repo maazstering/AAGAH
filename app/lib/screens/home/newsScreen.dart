@@ -1,7 +1,6 @@
+import 'package:app/screens/home/trafficIncident.dart';
 import 'package:app/widgets/appTheme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NewsScreen extends StatefulWidget {
   @override
@@ -43,11 +42,30 @@ class _NewsScreenState extends State<NewsScreen> {
         title: Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
         iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
       ),
-      body: ListView.builder(
-        itemCount: newsData.length,
-        itemBuilder: (context, index) {
-          return _buildNewsItem(index);
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TrafficIncidentsScreen()),
+                );
+              },
+              child: Text('Get Traffic Incident Data'),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: newsData.length,
+              itemBuilder: (context, index) {
+                return _buildNewsItem(index);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -124,6 +142,55 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TrafficIncidentsScreen extends StatefulWidget {
+  @override
+  _TrafficIncidentsScreenState createState() => _TrafficIncidentsScreenState();
+}
+
+class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
+  late Future<List<TrafficIncident>> futureIncidents;
+
+  @override
+  void initState() {
+    super.initState();
+    futureIncidents = fetchTrafficIncidents();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Traffic Incidents'),
+      ),
+      body: FutureBuilder<List<TrafficIncident>>(
+        future: futureIncidents,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No traffic incidents found.'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final incident = snapshot.data![index];
+                return ListTile(
+                  title: Text(incident.title),
+                  subtitle: Text(incident.description),
+                  leading: Icon(Icons.traffic),
+                  trailing: Text('${incident.latitude}, ${incident.longitude}'),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
