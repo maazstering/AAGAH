@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:app/screens/home/feed.dart';
+import 'package:app/screens/home/mapFeedScreen.dart';
 import 'package:app/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -69,10 +70,19 @@ class LoginScreen extends StatelessWidget {
                         );
 
                         if (response.statusCode == 200) {
+                          print("brrr");
+                          print("brrr");
+                          print("brrr");
+                          print("brrr");
+                          print(response.body);
+                          print("brrr");
+                          print("brrr");
+                          print("brrr");
+                          print("brrr");
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Feed(),
+                              builder: (context) => MapFeedScreen(),
                             ),
                           );
                         } else {

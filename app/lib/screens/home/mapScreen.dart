@@ -1,26 +1,20 @@
 import 'dart:async';
-import 'dart:html';
 
-import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
-
+class MapWidget extends StatefulWidget {
   @override
-  State<MapScreen> createState() => __MapScreenState();
+  _MapWidgetState createState() => _MapWidgetState();
 }
 
-class __MapScreenState extends State<MapScreen> {
-  Location _locationController = new Location();
+class _MapWidgetState extends State<MapWidget> {
+  Location _locationController = Location();
 
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   static const LatLng karachi = LatLng(25.10720314676199, 67.27599663525518);
-  static const LatLng trial = LatLng(37.4223, -122.0848);
   LatLng? _currentP = null;
 
   @override
@@ -31,42 +25,27 @@ class __MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: AppTheme.bgColor,
-          title: const Text("Map Screen"),
-          titleTextStyle: const TextStyle(color: AppTheme.periwinkleColor),
-        ),
-        body: _currentP == null
-            ? const Center(child: Text("Loading..."))
-            : GoogleMap(
-                onMapCreated: ((GoogleMapController controller) =>
-                    _mapController.complete(controller)),
-                initialCameraPosition:
-                    CameraPosition(target: karachi, zoom: 13),
-                markers: {
-                  Marker(
-                      markerId: MarkerId("_currentLocation"),
-                      icon: BitmapDescriptor.defaultMarker,
-                      position: _currentP!),
-                  // Marker(
-                  //     markerId: MarkerId("sourceLocation"),
-                  //     icon: BitmapDescriptor.defaultMarker,
-                  //     position: trial),
-                  const Marker(
-                      markerId: MarkerId("destinationLocation"),
-                      icon: BitmapDescriptor.defaultMarker,
-                      position: karachi)
-                },
-              ));
+    return _currentP == null
+        ? Center(child: Text("Loading..."))
+        : GoogleMap(
+            onMapCreated: ((GoogleMapController controller) =>
+                _mapController.complete(controller)),
+            initialCameraPosition: CameraPosition(target: _currentP!, zoom: 13),
+            markers: {
+              Marker(
+                  markerId: MarkerId("_currentLocation"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: _currentP!),
+            },
+          );
   }
 
   Future<void> _cameraToPos(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
     CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
 
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
   }
 
   Future<void> getLocationUpdates() async {

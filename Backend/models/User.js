@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: [false]
     },
+
+    savedRoutes: [{        
+        name: String,
+        latitude: Number,
+        longitude: Number
+    }],
     role: {
         type: String,
         enum: ['user', 'admin', 'moderator'],

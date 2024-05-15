@@ -8,12 +8,12 @@ import 'package:app/widgets/likeButton.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:app/screens/home/comment.dart';
 
-class Feed extends StatefulWidget {
+class FeedWidget extends StatefulWidget {
   @override
-  _FeedState createState() => _FeedState();
+  _FeedWidgetState createState() => _FeedWidgetState();
 }
 
-class _FeedState extends State<Feed> {
+class _FeedWidgetState extends State<FeedWidget> {
   List<Post> posts = [];
 
   @override
@@ -22,91 +22,34 @@ class _FeedState extends State<Feed> {
     fetchData();
   }
 
-// Future<void> fetchData() async {
-//   try {
-//     final response = await http.get(Uri.parse(Variables.address+'/social'));
-//     if (response.statusCode == 200) {
-//       setState(() {
-//         posts = (json.decode(response.body) as List)
-//             .map((data) => Post.fromJson(data))
-//             .toList();
-//       });
-//     } else {
-//       throw Exception('Failed to load posts: ${response.statusCode}');
-//     }
-//   } catch (e) {
-//     print('Error fetching data: $e');
-//     // Handle error, e.g., display error message to the user
-//   }
-// }
-void fetchData() async {
-  try {
-    final uri = Uri.parse('${Variables.address}/social?isJson=true');
-    final response = await http.get(uri);
-    
-    // Print the response headers
-    print('Response Headers: ${response.headers}');
-    
-    // Check the Content-Type header
-    final contentType = response.headers['content-type'];
-    if (contentType != null && contentType.contains('application/json')) {
-      // Response is JSON, parse it
-      final jsonData = json.decode(response.body);
-      // Process the JSON data
-    } else {
-      // Response is not JSON, handle accordingly
-      print('Response is not JSON');
+  void fetchData() async {
+    try {
+      final uri = Uri.parse('${Variables.address}/social?isJson=true');
+      final response = await http.get(uri);
+
+      final contentType = response.headers['content-type'];
+      if (contentType != null && contentType.contains('application/json')) {
+        final jsonData = json.decode(response.body);
+        setState(() {
+          posts = (jsonData as List)
+              .map((data) => Post.fromJson(data))
+              .toList();
+        });
+      } else {
+        print('Response is not JSON');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
     }
-  } catch (e) {
-    print('Error fetching data: $e');
-    // Handle error, e.g., display error message to the user
   }
-}
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: AppTheme.bgColor,
-        centerTitle: true,
-        titleSpacing: 0.0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 12.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: AppBar().preferredSize.height - 16.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.message_rounded),
-            onPressed: () {
-              // Message
-            },
-          )
-        ],
-      ),
-      body: Container(
-        color: AppTheme.bgColor,
-        child: ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) => feedItem(index, context),
-        ),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation to different screens
-        },
+    return Container(
+      color: AppTheme.bgColor,
+      child: ListView.builder(
+        itemCount: posts.length,
+        itemBuilder: (context, index) => feedItem(index, context),
       ),
     );
   }

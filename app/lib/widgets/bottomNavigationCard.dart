@@ -1,7 +1,7 @@
 import 'package:app/screens/home/cameraScreen.dart';
-import 'package:app/screens/home/feed.dart';
 import 'package:app/screens/home/newsScreen.dart';
 import 'package:app/screens/home/profileScreen.dart';
+import 'package:app/screens/home/mapFeedScreen.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -55,7 +55,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Feed(),
+                  builder: (context) => MapFeedScreen(),
                 ),
               );
             },

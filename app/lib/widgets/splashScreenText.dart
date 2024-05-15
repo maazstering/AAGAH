@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashText extends StatelessWidget {
   final String text;
@@ -7,12 +8,12 @@ class SplashText extends StatelessWidget {
   final double fontSize;
 
   const SplashText({
-    Key? key,
+    super.key,
     required this.text,
     this.textColor = const Color(0xFFCCCCCC),
     this.fontFamily = 'Newsreader',
     this.fontSize = 20.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
