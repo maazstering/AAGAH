@@ -7,8 +7,11 @@ const postController = require('../controller/postController');
 const commentController = require('../controller/commentController');
 
 // Routes for creating, retrieving, updating, and deleting posts
-router.get('/social', requireAuth, postController.showPosts);
-router.post('/social', requireAuth, postController.createPost);
+//removing auth in show post for now: 
+//router.get('/social', requireAuth, postController.showPosts);
+//removed require auth for now 
+router.get('/social', postController.showPosts);
+router.post('/social', postController.createPost);
 router.put('/social/:id', requireAuth, postController.updatePost);
 router.delete('/social/:id', requireAuth, postController.deletePost);
 

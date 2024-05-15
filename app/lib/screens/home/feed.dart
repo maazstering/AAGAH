@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'package:app/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:app/widgets/variables.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:app/widgets/likeButton.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:app/screens/home/comment.dart';
 
 class FeedWidget extends StatefulWidget {
@@ -24,19 +24,14 @@ class _FeedWidgetState extends State<FeedWidget> {
 
   void fetchData() async {
     try {
-      final uri = Uri.parse('${Variables.address}/social?isJson=true');
+      final uri = Uri.parse('${Variables.address}/social');
       final response = await http.get(uri);
-
-      final contentType = response.headers['content-type'];
-      if (contentType != null && contentType.contains('application/json')) {
-        final jsonData = json.decode(response.body);
-        setState(() {
-          posts =
-              (jsonData as List).map((data) => Post.fromJson(data)).toList();
-        });
-      } else {
-        print('Response is not JSON');
-      }
+      final jsonData = json.decode(response.body);
+      setState(() {
+        posts = (jsonData['posts'] as List)
+            .map((data) => Post.fromJson(data))
+            .toList();
+      });
     } catch (e) {
       print('Error fetching data: $e');
     }
@@ -44,11 +39,20 @@ class _FeedWidgetState extends State<FeedWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTheme.bgColor,
-      child: ListView.builder(
-        itemCount: posts.length,
-        itemBuilder: (context, index) => feedItem(index, context),
+    return Scaffold(
+      backgroundColor: AppTheme.bgColor,
+      body: Container(
+        color: AppTheme.bgColor,
+        child: ListView.builder(
+          itemCount: posts.length,
+          itemBuilder: (context, index) => feedItem(index, context),
+        ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) {
+          // Handle navigation to different screens
+        },
       ),
     );
   }
@@ -72,7 +76,8 @@ class _FeedWidgetState extends State<FeedWidget> {
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage(post.userImage),
+                backgroundImage: AssetImage(
+                    'assets/images/user_placeholder.png'), // Use a placeholder or handle image loading appropriately
               ),
               SizedBox(width: 10.0),
               Expanded(
@@ -80,14 +85,15 @@ class _FeedWidgetState extends State<FeedWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      post.username,
+                      post.author.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.lightGreyColor,
                       ),
                     ),
                     Text(
-                      post.location,
+                      post.author
+                          .email, // Assuming location is not available in your data
                       style: TextStyle(color: AppTheme.lightGreyColor),
                     ),
                   ],
@@ -112,14 +118,15 @@ class _FeedWidgetState extends State<FeedWidget> {
             style: TextStyle(color: AppTheme.lightGreyColor),
           ),
           SizedBox(height: 8.0),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: Image.network(
-              post.imageUrl,
-              fit: BoxFit.cover,
-              width: double.infinity,
+          if (post.images.isNotEmpty)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.network(
+                post.images[0], // Assuming the first image URL
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
             ),
-          ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             child: Row(
@@ -129,7 +136,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                   children: [
                     AnimatedLikeButton(),
                     Text(
-                      '${post.likes} likes',
+                      '${post.likes.length} likes',
                       style: TextStyle(color: AppTheme.lightGreyColor),
                     ),
                   ],
@@ -147,7 +154,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                       Icon(FontAwesomeIcons.comment, color: AppTheme.greyColor),
                       SizedBox(width: 5),
                       Text(
-                        'View all ${post.comments} comments',
+                        'View all ${post.comments.length} comments',
                         style: TextStyle(color: AppTheme.lightGreyColor),
                       ),
                     ],
@@ -158,7 +165,7 @@ class _FeedWidgetState extends State<FeedWidget> {
           ),
           SizedBox(height: 4.0),
           Text(
-            post.timeAgo,
+            post.createdAt, // You might want to format this date appropriately
             style: TextStyle(color: AppTheme.lightGreyColor, fontSize: 10.0),
           ),
         ],
@@ -168,36 +175,59 @@ class _FeedWidgetState extends State<FeedWidget> {
 }
 
 class Post {
-  final String userImage;
-  final String username;
-  final String location;
+  final String id;
   final String content;
-  final String imageUrl;
-  final int likes;
-  final int comments;
-  final String timeAgo;
+  final Author author;
+  final List<dynamic> comments;
+  final List<dynamic> likes;
+  final List<dynamic> shares;
+  final List<dynamic> images;
+  final String createdAt;
 
   Post({
-    required this.userImage,
-    required this.username,
-    required this.location,
+    required this.id,
     required this.content,
-    required this.imageUrl,
-    required this.likes,
+    required this.author,
     required this.comments,
-    required this.timeAgo,
+    required this.likes,
+    required this.shares,
+    required this.images,
+    required this.createdAt,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      userImage: json['userImage'],
-      username: json['username'],
-      location: json['location'],
+      id: json['_id'],
       content: json['content'],
-      imageUrl: json['imageUrl'],
-      likes: json['likes'],
+      author: Author.fromJson(json['author']),
       comments: json['comments'],
-      timeAgo: json['timeAgo'],
+      likes: json['likes'],
+      shares: json['shares'],
+      images: json['images'],
+      createdAt: json['createdAt'],
+    );
+  }
+}
+
+class Author {
+  final String id;
+  final String email;
+  final String name;
+  final String role;
+
+  Author({
+    required this.id,
+    required this.email,
+    required this.name,
+    required this.role,
+  });
+
+  factory Author.fromJson(Map<String, dynamic> json) {
+    return Author(
+      id: json['_id'],
+      email: json['email'],
+      name: json['name'],
+      role: json['role'],
     );
   }
 }
