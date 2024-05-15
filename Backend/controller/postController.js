@@ -3,6 +3,21 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const multer = require('multer');
 
+// Define multer storage and upload middleware
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, 'public/uploads/'); 
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, Date.now() + '-' + file.originalname);
+//     }
+// });
+// const upload = multer({ storage: storage });
+
+// // Apply multer upload middleware to the post creation route
+// router.post('/social', requireAuth, upload.single('image'), postController.createPost);
+
+
 module.exports.createPost = async (req, res) => {
     const token = req.cookies.jwt;
     console.log('Token', token);
@@ -57,19 +72,12 @@ module.exports.createPost = async (req, res) => {
 
 module.exports.showPosts = async (req, res) => {
     try {
-        const { isJson } = req.query;
         const posts = await Post.find().populate('author');
-        console.log(isJson);
-        if (isJson) {
-            // Return JSON response if requested
-            res.status(200).json(posts);
-        } else {
-            // Render HTML view if accessed directly
-            res.render('social', { posts });
-        }
+        res.render('social', { posts }); 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+    
 };
 
 

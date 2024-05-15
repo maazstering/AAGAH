@@ -55,7 +55,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Feed(),
+                  builder: (context) => FeedWidget(),
                 ),
               );
             },

@@ -160,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Feed()),
+                        MaterialPageRoute(builder: (context) => (FeedWidget())),
                       );
                     })
               ],
