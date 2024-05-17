@@ -11,6 +11,8 @@ import '../../widgets/gradientbutton.dart';
 import '../../widgets/savedRoutesButton.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -61,16 +63,16 @@ class _ProfilePageState extends State<ProfilePage> {
     if (selectedImage != null) {
       imageProvider = FileImage(selectedImage!) as ImageProvider<Object>?;
     } else {
-      imageProvider = AssetImage('../../assets/images/profile.jpg')
+      imageProvider = const AssetImage('../../assets/images/profile.jpg')
           as ImageProvider<Object>?;
     }
     return Scaffold(
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
         title:
-            Text('Profile', style: TextStyle(color: AppTheme.lightGreyColor)),
+            const Text('Profile', style: TextStyle(color: AppTheme.lightGreyColor)),
         backgroundColor: AppTheme.bgColor,
         centerTitle: true,
       ),
@@ -96,12 +98,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: InkWell(
                       onTap: _pickImage,
                       child: Container(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: AppTheme.lightGreyColor,
                           borderRadius: BorderRadius.circular(40),
                         ),
-                        child: Icon(Icons.edit),
+                        child: const Icon(Icons.edit),
                       ),
                     ),
                   ),
@@ -132,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
                 SizedBox(height: 20.0.h),
-                SavedRoutesButton(),
+                const SavedRoutesButton(),
                 SizedBox(height: 150.h),
                 if (showSettingsButton)
                   GradientButton(
@@ -160,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => (FeedWidget())),
+                        MaterialPageRoute(builder: (context) => (const FeedWidget())),
                       );
                     })
               ],

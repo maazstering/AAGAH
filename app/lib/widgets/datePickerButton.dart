@@ -7,14 +7,14 @@ class DatePickerButton extends StatelessWidget {
   final ValueChanged<DateTime?> onChanged;
 
   const DatePickerButton({
-    Key? key,
+    super.key,
     required this.selectedDate,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       /* width: 343.w,
       height: 54.h,
       decoration: BoxDecoration(
@@ -25,7 +25,7 @@ class DatePickerButton extends StatelessWidget {
       width: 343.w,
       child: ElevatedButton(
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.r),
             ),

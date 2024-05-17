@@ -7,8 +7,6 @@ const friendRoutes = require('./routes/friendRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cors = require('cors'); 
-
-
 const cookieParser = require('cookie-parser');
 const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
@@ -28,11 +26,6 @@ app.use(cookieParser());
 // };
 // app.use(cors(corsOptions));
 
-
-
-// view engine
-app.set('view engine', 'ejs');
-
 // database connection
 const dbURI = 'mongodb+srv://fullstack:fullstack@cluster0.413sbvx.mongodb.net/Aagah?retryWrites=true&w=majority&appName=Cluster0';
 
@@ -47,7 +40,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCr
 
 // routes
 app.get('*', checkUser);
-app.get('/', (req, res) => res.render('home'));
+app.get('/', (req, res) => res.json({ message: 'API is running' })); // Change this to send a JSON response
 
 app.use('/users', userRoutes);
 app.use(postRoutes);
@@ -55,5 +48,3 @@ app.use(authRoutes);
 app.use(profileRoutes);
 app.use(friendRoutes);
 app.use(groupRoutes);
-
-

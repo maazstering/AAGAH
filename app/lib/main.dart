@@ -5,18 +5,21 @@ import './screens/home/mapScreen.dart';
 //import './widgets/splashScreenText.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, child) => MaterialApp(
-        home: MapScreen(), // Set SplashScreen as the initial route
+      builder: (_, child) => const MaterialApp(
+        home: SplashScreen(), // Set SplashScreen as the initial route
+
       ),
     );
   }

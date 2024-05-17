@@ -1,18 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/gradientButton.dart';
+import 'package:app/widgets/variables.dart';
 
 class PostingScreen extends StatefulWidget {
+  const PostingScreen({super.key});
+
   @override
   _PostingScreenState createState() => _PostingScreenState();
 }
 
 class _PostingScreenState extends State<PostingScreen> {
-  TextEditingController _captionController = TextEditingController();
+  final TextEditingController _captionController = TextEditingController();
   bool _captionPopulated = false;
   bool _isUploading = false;
   File? _image;
@@ -35,23 +37,24 @@ class _PostingScreenState extends State<PostingScreen> {
       setState(() {
         _isUploading = true;
       });
-      final url = 'http://192.168.56.1:3000/social';
-      var response = await http.post(
-        Uri.parse(url),
-        headers: {
-          "Content-Type": "application/json",
-          // Include authorization header if you switch to using headers for token
-          //"Authorization": "Bearer hasnusecret",
-        },
-        body: json.encode({
-          'content': _captionController.text,
-        }),
-      );
+      final uri = Uri.parse('${Variables.address}/social');
+      var request = http.MultipartRequest('POST', uri);
+      request.fields['content'] = _captionController.text;
 
+      // Include authorization header if needed
+      // request.headers['Authorization'] = 'Bearer hasnusecret';
+
+      if (_image != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', _image!.path));
+      }
+
+      var response = await request.send();
       if (response.statusCode == 200) {
         print('Post created successfully');
         setState(() {
           _captionController.clear();
+          _image = null;
         });
       } else {
         print('Error creating post: ${response.statusCode}');
@@ -69,7 +72,7 @@ class _PostingScreenState extends State<PostingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a New Post',
+        title: const Text('Create a New Post',
             style: TextStyle(color: AppTheme.whiteColor)),
         backgroundColor: AppTheme.bgColor,
       ),
@@ -85,21 +88,33 @@ class _PostingScreenState extends State<PostingScreen> {
                     _captionPopulated = value.isNotEmpty;
                   });
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Write a caption...',
+                  hintStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
                 maxLines: 3,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
-            SizedBox(height: 20),
-            if (_image != null) Image.file(_image!),
+            const SizedBox(height: 20),
+            if (_image != null)
+              Image.file(_image!)
+            else
+              Image.asset(
+                  'assets/images/user_placeholder.png'), // Use a placeholder if no image is selected
             GradientButton(
               text: 'Select Image',
               onPressed: _pickImage,
               settings: false,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             GradientButton(
               text: 'Create Post',
               onPressed: () {
@@ -108,7 +123,7 @@ class _PostingScreenState extends State<PostingScreen> {
                 }
               },
               settings:
-                  true, // Adjust based on your GradientButton implementation. This parameter might need to be changed or removed according to your actual widget definition.
+                  true, // Adjust based on your GradientButton implementation.
             ),
           ],
         ),

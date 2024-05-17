@@ -1,8 +1,11 @@
 import 'package:app/screens/home/trafficIncident.dart';
-import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:app/widgets/appTheme.dart';
 
 class NewsScreen extends StatefulWidget {
+  const NewsScreen({super.key});
+
   @override
   _NewsScreenState createState() => _NewsScreenState();
 }
@@ -39,8 +42,8 @@ class _NewsScreenState extends State<NewsScreen> {
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
-        title: Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        title: const Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
+        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: Column(
         children: [
@@ -51,10 +54,10 @@ class _NewsScreenState extends State<NewsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TrafficIncidentsScreen()),
+                      builder: (context) => const TrafficIncidentsScreen()),
                 );
               },
-              child: Text('Get Traffic Incident Data'),
+              child: const Text('Get Traffic Incident Data'),
             ),
           ),
           Expanded(
@@ -76,12 +79,12 @@ class _NewsScreenState extends State<NewsScreen> {
         // Handle news item tap
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        padding: EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: AppTheme.greyColor,
           borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
+          boxShadow: const [
             // BoxShadow(
             //   color: AppTheme.lightGreyColor,
             //   spreadRadius: 2,
@@ -102,37 +105,38 @@ class _NewsScreenState extends State<NewsScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Text(
               newsData[index]['title'],
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
+                color: AppTheme.whiteColor,
               ),
             ),
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             Text(
               'Source: ${newsData[index]['source']}',
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 color: AppTheme.lightGreyColor,
               ),
             ),
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             Text(
               newsData[index]['description'],
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 fontSize: 16.0,
                 color: AppTheme.lightGreyColor,
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: Icon(Icons.share),
+                  icon: const Icon(Icons.share),
                   color: AppTheme.lightGreyColor,
                   onPressed: () {
                     // Handle share button
@@ -142,55 +146,6 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TrafficIncidentsScreen extends StatefulWidget {
-  @override
-  _TrafficIncidentsScreenState createState() => _TrafficIncidentsScreenState();
-}
-
-class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
-  late Future<List<TrafficIncident>> futureIncidents;
-
-  @override
-  void initState() {
-    super.initState();
-    futureIncidents = fetchTrafficIncidents();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Traffic Incidents'),
-      ),
-      body: FutureBuilder<List<TrafficIncident>>(
-        future: futureIncidents,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No traffic incidents found.'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final incident = snapshot.data![index];
-                return ListTile(
-                  title: Text(incident.title),
-                  subtitle: Text(incident.description),
-                  leading: Icon(Icons.traffic),
-                  trailing: Text('${incident.latitude}, ${incident.longitude}'),
-                );
-              },
-            );
-          }
-        },
       ),
     );
   }

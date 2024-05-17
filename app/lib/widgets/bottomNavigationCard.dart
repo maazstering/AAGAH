@@ -10,7 +10,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  CustomBottomNavigationBar({
+  const CustomBottomNavigationBar({super.key, 
     required this.currentIndex,
     required this.onTap,
   });
@@ -29,7 +29,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
   }
 
@@ -55,7 +55,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FeedWidget(),
+                  builder: (context) => const FeedWidget(),
                 ),
               );
             },
@@ -75,7 +75,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PostingScreen(),
+                  builder: (context) => const PostingScreen(),
                 ),
               );
             },
@@ -95,7 +95,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NewsScreen(), // Navigate to NewsScreen
+                  builder: (context) => const NewsScreen(), // Navigate to NewsScreen
                 ),
               );
             },
@@ -115,7 +115,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfilePage(),
+                  builder: (context) => const ProfilePage(),
                 ),
               );
             },

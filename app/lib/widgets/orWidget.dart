@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'appTheme.dart';
 
 class OrDivider extends StatelessWidget {
@@ -7,12 +6,12 @@ class OrDivider extends StatelessWidget {
   final Color color;
   final double spaceBetweenLines;
 
-  OrDivider({
-    Key? key,
+  const OrDivider({
+    super.key,
     this.thickness = 0,
     this.color = AppTheme.greyColor,
     this.spaceBetweenLines = 18,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class GoogleSignInButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  GoogleSignInButton({required this.onPressed});
+  const GoogleSignInButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,8 @@ class GoogleSignInButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(AppTheme.whiteColor),
-          shape: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(AppTheme.whiteColor),
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0.r), // Adjust the border radius for square corners
             ),
@@ -31,11 +31,11 @@ class GoogleSignInButton extends StatelessWidget {
               width: 23.w, // Adjust width of the Google icon
             ),
             SizedBox(width: 15.0.w), // Add horizontal space between the icon and the text
-            Container(
+            SizedBox(
               // TO BE FIXED
               height: 23.h,
               width: 192.w,
-              child: Text(
+              child: const Text(
                 'Continue with Google',
                 style: TextStyle(
                   color: AppTheme.greyColor, // Text color

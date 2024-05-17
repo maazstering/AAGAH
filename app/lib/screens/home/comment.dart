@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:app/widgets/appTheme.dart';
 
 class CommentPage extends StatefulWidget {
+  const CommentPage({super.key});
+
   @override
   _CommentPageState createState() => _CommentPageState();
 }
 
 class _CommentPageState extends State<CommentPage> {
-  TextEditingController _commentController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
   bool _isCommentEmpty = true;
 
   @override
@@ -34,9 +36,9 @@ class _CommentPageState extends State<CommentPage> {
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
         title:
-            Text('Comments', style: TextStyle(color: AppTheme.lightGreyColor)),
+            const Text('Comments', style: TextStyle(color: AppTheme.lightGreyColor)),
         centerTitle: true,
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: Column(
         children: [
@@ -47,8 +49,8 @@ class _CommentPageState extends State<CommentPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            decoration: const BoxDecoration(
               color: AppTheme.bgColor,
               border: Border(
                 top: BorderSide(color: AppTheme.greyColor, width: 0.5),
@@ -59,16 +61,16 @@ class _CommentPageState extends State<CommentPage> {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Add a comment...',
                       hintStyle: TextStyle(color: AppTheme.lightGreyColor),
                       border: InputBorder.none,
                     ),
                   ),
                 ),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: _isCommentEmpty ? null : _postComment,
                   color: _isCommentEmpty
                       ? AppTheme.greyColor
@@ -94,8 +96,8 @@ class _CommentPageState extends State<CommentPage> {
 
   Widget commentItem(int index) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: const BoxDecoration(
         color: AppTheme.bgColor,
         border: Border(
           bottom: BorderSide(color: AppTheme.greyColor, width: 0.5),
@@ -104,19 +106,19 @@ class _CommentPageState extends State<CommentPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             backgroundImage: AssetImage(
                 '../assets/images/profile.jpg'), // Use actual user image
           ),
           Text(
             'Username $index', // Replace with actual username
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.bold, color: AppTheme.lightGreyColor),
           ),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           Text(
             'This is a comment by user $index.', // Replace with actual comment
-            style: TextStyle(color: AppTheme.lightGreyColor),
+            style: const TextStyle(color: AppTheme.lightGreyColor),
           ),
         ],
       ),
