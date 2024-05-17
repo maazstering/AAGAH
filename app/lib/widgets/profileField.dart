@@ -8,10 +8,10 @@ class profileField extends StatelessWidget {
   final String text;
   final TextEditingController controller;
 
-  const profileField({super.key, 
+  const profileField({
+    super.key,
     required this.text,
     required this.controller,
-
   });
 
   @override
@@ -27,10 +27,9 @@ class profileField extends StatelessWidget {
         style: const TextStyle(fontFamily: 'Mulish'),
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(16.w),
-          border: InputBorder.none,
-          hintText: (text)
-        ),
+            contentPadding: EdgeInsets.all(16.w),
+            border: InputBorder.none,
+            hintText: (text)),
       ),
     );
   }

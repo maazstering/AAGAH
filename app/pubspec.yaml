@@ -46,6 +46,7 @@ dependencies:
   location: ^5.0.0
   http: ^1.2.1
   xml: ^6.5.0
+  shared_preferences: ^2.0.9
 
 dev_dependencies:
   flutter_test:

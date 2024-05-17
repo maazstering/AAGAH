@@ -19,6 +19,8 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 
+require('dotenv').config();
+
 // If you want to allow only specific origins, replace the above app.use(cors()); with the following:
 // const corsOptions = {
 //   origin: 'http://localhost:53460', // Replace with the URL your Flutter app is served from

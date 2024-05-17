@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:app/widgets/variables.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:app/widgets/likeButton.dart';
 import 'package:app/screens/home/comment.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 
 class FeedWidget extends StatefulWidget {
   const FeedWidget({super.key});
@@ -17,39 +21,123 @@ class FeedWidget extends StatefulWidget {
 
 class _FeedWidgetState extends State<FeedWidget> {
   List<Post> posts = [];
+  Location _locationController = Location();
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
+  LatLng? _currentP;
 
   @override
   void initState() {
     super.initState();
     fetchData();
+    getLocationUpdates();
   }
 
-  void fetchData() async {
+  Future<void> fetchData() async {
     try {
-      final uri = Uri.parse('${Variables.address}/social');
-      final response = await http.get(uri);
-      final jsonData = json.decode(response.body);
-      setState(() {
-        posts = (jsonData['posts'] as List)
-            .map((data) => Post.fromJson(data))
-            .toList();
-      });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token != null) {
+        final uri = Uri.parse('${Variables.address}/social');
+        final response = await http.get(
+          uri,
+          headers: {'Authorization': 'Bearer $token'},
+        );
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        final jsonData = json.decode(response.body);
+        setState(() {
+          posts = (jsonData['posts'] as List)
+              .map((data) => Post.fromJson(data))
+              .toList();
+        });
+      } else {
+        print('Token is null');
+        // Handle the case where the token is null (e.g., navigate to login)
+      }
     } catch (e) {
       print('Error fetching data: $e');
     }
   }
 
+  Future<void> getLocationUpdates() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await _locationController.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await _locationController.requestService();
+      if (!_serviceEnabled) return;
+    }
+
+    _permissionGranted = await _locationController.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await _locationController.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) return;
+    }
+
+    _locationController.onLocationChanged
+        .listen((LocationData currentLocation) {
+      if (currentLocation.latitude != null &&
+          currentLocation.longitude != null) {
+        setState(() {
+          _currentP =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.bgColor,
-      body: Container(
-        color: AppTheme.bgColor,
-        child: ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) => feedItem(index, context),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: AppTheme.bgColor,
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.png', height: 30),
+            const SizedBox(width: 8)
+          ],
         ),
       ),
+      backgroundColor: AppTheme.bgColor,
+      body: _currentP == null
+          ? const Center(child: CircularProgressIndicator())
+          : CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 300.0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: GoogleMap(
+                      onMapCreated: (GoogleMapController controller) =>
+                          _mapController.complete(controller),
+                      initialCameraPosition:
+                          CameraPosition(target: _currentP!, zoom: 13),
+                      markers: {
+                        Marker(
+                          markerId: const MarkerId('_currentLocation'),
+                          icon: BitmapDescriptor.defaultMarker,
+                          position: _currentP!,
+                        ),
+                      },
+                    ),
+                  ),
+                ),
+                SliverFillRemaining(
+                  child: Container(
+                    color: AppTheme.bgColor,
+                    child: ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) => feedItem(index, context),
+                    ),
+                  ),
+                ),
+              ],
+            ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 0,
         onTap: (index) {
@@ -94,8 +182,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                       ),
                     ),
                     Text(
-                      post.author
-                          .email, // Assuming location is not available in your data
+                      post.author.email,
                       style: const TextStyle(color: AppTheme.lightGreyColor),
                     ),
                   ],
@@ -124,7 +211,7 @@ class _FeedWidgetState extends State<FeedWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: Image.network(
-                post.images[0], // Assuming the first image URL
+                post.images[0],
                 fit: BoxFit.cover,
                 width: double.infinity,
               ),
@@ -145,15 +232,16 @@ class _FeedWidgetState extends State<FeedWidget> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigate to CommentPage when tapped
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const CommentPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const CommentPage()),
                     );
                   },
                   child: Row(
                     children: [
-                      const Icon(FontAwesomeIcons.comment, color: AppTheme.greyColor),
+                      const Icon(FontAwesomeIcons.comment,
+                          color: AppTheme.greyColor),
                       const SizedBox(width: 5),
                       Text(
                         'View all ${post.comments.length} comments',
@@ -167,8 +255,9 @@ class _FeedWidgetState extends State<FeedWidget> {
           ),
           const SizedBox(height: 4.0),
           Text(
-            post.createdAt, // You might want to format this date appropriately
-            style: const TextStyle(color: AppTheme.lightGreyColor, fontSize: 10.0),
+            post.createdAt,
+            style:
+                const TextStyle(color: AppTheme.lightGreyColor, fontSize: 10.0),
           ),
         ],
       ),
