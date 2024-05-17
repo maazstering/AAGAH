@@ -17,6 +17,8 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  SignupScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -84,7 +86,7 @@ class SignupScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(),
+                              builder: (context) => const ProfilePage(),
                             ),
                           );
                         } else {
@@ -96,14 +98,14 @@ class SignupScreen extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Signup Failed'),
+                              title: const Text('Signup Failed'),
                               content: Text(errorMessage),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                               ],
                             ),
@@ -114,14 +116,14 @@ class SignupScreen extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Network Error'),
+                            title: const Text('Network Error'),
                             content: Text(e.toString()),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text('OK'),
+                                child: const Text('OK'),
                               ),
                             ],
                           ),
@@ -130,7 +132,7 @@ class SignupScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 34.h),
-                  OrDivider(),
+                  const OrDivider(),
                   SizedBox(height: 23.h),
                   GoogleSignInButton(onPressed: () {}),
                   SizedBox(height: 114.h),

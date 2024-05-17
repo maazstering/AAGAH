@@ -8,11 +8,11 @@ class GradientButton extends StatelessWidget {
   final bool settings; //if this button is to be used for settings page, add an icon
 
   const GradientButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.settings,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

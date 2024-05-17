@@ -3,7 +3,6 @@ import 'package:app/screens/home/feed.dart';
 import 'package:app/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:app/screens/home/profileScreen.dart';
 import 'package:app/widgets/custombutton.dart';
 import 'package:app/widgets/googleSignInButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +15,8 @@ import '../../widgets/appTheme.dart';
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FeedWidget(),
+                              builder: (context) => const FeedWidget(),
                             ),
                           );
                         } else {
@@ -80,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Login Failed'),
+                              title: const Text('Login Failed'),
                               content: Text(responseData['message'] ??
                                   'Invalid email or password. Please try again.'),
                               actions: [
@@ -88,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                               ],
                             ),
@@ -99,14 +100,14 @@ class LoginScreen extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Network Error'),
+                            title: const Text('Network Error'),
                             content: Text(e.toString()),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text('OK'),
+                                child: const Text('OK'),
                               ),
                             ],
                           ),
@@ -121,7 +122,7 @@ class LoginScreen extends StatelessWidget {
                     textColor: const Color.fromARGB(255, 128, 0, 255),
                   ),
                   SizedBox(height: 31.h),
-                  OrDivider(),
+                  const OrDivider(),
                   SizedBox(height: 24.h),
                   GoogleSignInButton(onPressed: () {}),
                   SizedBox(height: 80.h),
@@ -135,7 +136,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    textColor: Color.fromARGB(255, 145, 40, 250),
+                    textColor: const Color.fromARGB(255, 145, 40, 250),
                   ),
                 ],
               ),

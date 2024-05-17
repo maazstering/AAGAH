@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AnimatedLikeButton extends StatefulWidget {
+  const AnimatedLikeButton({super.key});
+
   @override
   _AnimatedLikeButtonState createState() => _AnimatedLikeButtonState();
 }
@@ -19,7 +21,7 @@ class _AnimatedLikeButtonState extends State<AnimatedLikeButton>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
 
     _animation = Tween<double>(

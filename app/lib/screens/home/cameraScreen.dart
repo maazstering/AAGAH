@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,12 +7,14 @@ import 'package:app/widgets/gradientButton.dart';
 import 'package:app/widgets/variables.dart';
 
 class PostingScreen extends StatefulWidget {
+  const PostingScreen({super.key});
+
   @override
   _PostingScreenState createState() => _PostingScreenState();
 }
 
 class _PostingScreenState extends State<PostingScreen> {
-  TextEditingController _captionController = TextEditingController();
+  final TextEditingController _captionController = TextEditingController();
   bool _captionPopulated = false;
   bool _isUploading = false;
   File? _image;
@@ -71,7 +72,7 @@ class _PostingScreenState extends State<PostingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a New Post',
+        title: const Text('Create a New Post',
             style: TextStyle(color: AppTheme.whiteColor)),
         backgroundColor: AppTheme.bgColor,
       ),
@@ -87,7 +88,7 @@ class _PostingScreenState extends State<PostingScreen> {
                     _captionPopulated = value.isNotEmpty;
                   });
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Write a caption...',
                   hintStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder(),
@@ -99,10 +100,10 @@ class _PostingScreenState extends State<PostingScreen> {
                   ),
                 ),
                 maxLines: 3,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_image != null)
               Image.file(_image!)
             else
@@ -113,7 +114,7 @@ class _PostingScreenState extends State<PostingScreen> {
               onPressed: _pickImage,
               settings: false,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             GradientButton(
               text: 'Create Post',
               onPressed: () {

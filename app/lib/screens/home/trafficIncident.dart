@@ -36,9 +36,13 @@ class TrafficIncident {
   }
 }
 
-Future<List<TrafficIncident>> fetchTrafficIncidents() async {
+Future<List<TrafficIncident>> fetchTrafficIncidents(
+    {int? severity, List<int>? types}) async {
+  String typeParam = types != null ? '&type=${types.join(",")}' : '';
+  String severityParam = severity != null ? '&severity=$severity' : '';
+
   final url =
-      'http://dev.virtualearth.net/REST/v1/Traffic/Incidents/23.6345,60.8728,37.0841,77.8375/?key=AllxjOXEteY0lXaDlpoROLvE5I7A1V0nvZTHoCljqPsCTFCP9KL6-BzokOYK_NH8';
+      'http://dev.virtualearth.net/REST/v1/Traffic/Incidents/23.6345,60.8728,37.0841,77.8375/?key=AllxjOXEteY0lXaDlpoROLvE5I7A1V0nvZTHoCljqPsCTFCP9KL6-BzokOYK_NH8$typeParam$severityParam';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -53,6 +57,8 @@ Future<List<TrafficIncident>> fetchTrafficIncidents() async {
 }
 
 class TrafficIncidentsScreen extends StatefulWidget {
+  const TrafficIncidentsScreen({super.key});
+
   @override
   _TrafficIncidentsScreenState createState() => _TrafficIncidentsScreenState();
 }
@@ -61,6 +67,7 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
   late Future<List<TrafficIncident>> futureIncidents;
   List<TrafficIncident> filteredIncidents = [];
   int selectedSeverity = 0;
+  List<int> selectedTypes = [];
 
   @override
   void initState() {
@@ -73,24 +80,18 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
     });
   }
 
-  void filterIncidents(int severity) {
+  void filterIncidents(int severity, List<int> types) {
     setState(() {
       selectedSeverity = severity;
-      if (severity == 0) {
-        futureIncidents.then((incidents) {
-          setState(() {
-            filteredIncidents = incidents;
-          });
+      selectedTypes = types;
+      futureIncidents = fetchTrafficIncidents(
+          severity: severity == 0 ? null : severity,
+          types: types.isEmpty ? null : types);
+      futureIncidents.then((incidents) {
+        setState(() {
+          filteredIncidents = incidents;
         });
-      } else {
-        futureIncidents.then((incidents) {
-          setState(() {
-            filteredIncidents = incidents
-                .where((incident) => incident.severity == severity)
-                .toList();
-          });
-        });
-      }
+      });
     });
   }
 
@@ -100,45 +101,208 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
-        title: Text('Traffic Incidents',
+        title: const Text('Traffic Incidents',
             style: TextStyle(color: AppTheme.lightGreyColor)),
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<int>(
-              value: selectedSeverity,
-              dropdownColor: AppTheme.bgColor,
-              onChanged: (int? newValue) {
-                filterIncidents(newValue!);
-              },
-              items: [
-                DropdownMenuItem<int>(
-                  value: 0,
-                  child: Text('All',
-                      style: TextStyle(color: AppTheme.lightGreyColor)),
+            child: Column(
+              children: [
+                DropdownButton<int>(
+                  value: selectedSeverity,
+                  dropdownColor: AppTheme.bgColor,
+                  onChanged: (int? newValue) {
+                    filterIncidents(newValue!, selectedTypes);
+                  },
+                  items: const [
+                    DropdownMenuItem<int>(
+                      value: 0,
+                      child: Text('All Severities',
+                          style: TextStyle(color: AppTheme.lightGreyColor)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 1,
+                      child: Text('LowImpact',
+                          style: TextStyle(color: AppTheme.lightGreyColor)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 2,
+                      child: Text('Minor',
+                          style: TextStyle(color: AppTheme.lightGreyColor)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 3,
+                      child: Text('Moderate',
+                          style: TextStyle(color: AppTheme.lightGreyColor)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 4,
+                      child: Text('Serious',
+                          style: TextStyle(color: AppTheme.lightGreyColor)),
+                    ),
+                  ],
                 ),
-                DropdownMenuItem<int>(
-                  value: 1,
-                  child: Text('LowImpact',
-                      style: TextStyle(color: AppTheme.lightGreyColor)),
-                ),
-                DropdownMenuItem<int>(
-                  value: 2,
-                  child: Text('Minor',
-                      style: TextStyle(color: AppTheme.lightGreyColor)),
-                ),
-                DropdownMenuItem<int>(
-                  value: 3,
-                  child: Text('Moderate',
-                      style: TextStyle(color: AppTheme.lightGreyColor)),
-                ),
-                DropdownMenuItem<int>(
-                  value: 4,
-                  child: Text('Serious',
-                      style: TextStyle(color: AppTheme.lightGreyColor)),
+                Wrap(
+                  spacing: 8.0,
+                  children: [
+                    FilterChip(
+                      label: const Text('Accident'),
+                      selected: selectedTypes.contains(1),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(1);
+                          } else {
+                            selectedTypes.remove(1);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('Congestion'),
+                      selected: selectedTypes.contains(2),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(2);
+                          } else {
+                            selectedTypes.remove(2);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('DisabledVehicle'),
+                      selected: selectedTypes.contains(3),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(3);
+                          } else {
+                            selectedTypes.remove(3);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('MassTransit'),
+                      selected: selectedTypes.contains(4),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(4);
+                          } else {
+                            selectedTypes.remove(4);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('Miscellaneous'),
+                      selected: selectedTypes.contains(5),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(5);
+                          } else {
+                            selectedTypes.remove(5);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('OtherNews'),
+                      selected: selectedTypes.contains(6),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(6);
+                          } else {
+                            selectedTypes.remove(6);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('PlannedEvent'),
+                      selected: selectedTypes.contains(7),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(7);
+                          } else {
+                            selectedTypes.remove(7);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('RoadHazard'),
+                      selected: selectedTypes.contains(8),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(8);
+                          } else {
+                            selectedTypes.remove(8);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('Construction'),
+                      selected: selectedTypes.contains(9),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(9);
+                          } else {
+                            selectedTypes.remove(9);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('Alert'),
+                      selected: selectedTypes.contains(10),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(10);
+                          } else {
+                            selectedTypes.remove(10);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                    FilterChip(
+                      label: const Text('Weather'),
+                      selected: selectedTypes.contains(11),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            selectedTypes.add(11);
+                          } else {
+                            selectedTypes.remove(11);
+                          }
+                          filterIncidents(selectedSeverity, selectedTypes);
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -148,13 +312,13 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
               future: futureIncidents,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(
                       child: Text('Error: ${snapshot.error}',
-                          style: TextStyle(color: AppTheme.lightGreyColor)));
+                          style: const TextStyle(color: AppTheme.lightGreyColor)));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(
+                  return const Center(
                       child: Text('No traffic incidents found.',
                           style: TextStyle(color: AppTheme.lightGreyColor)));
                 } else {
@@ -180,12 +344,12 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
         // Handle incident item tap
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        padding: EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: AppTheme.greyColor,
           borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
+          boxShadow: const [
             // BoxShadow(
             //   color: AppTheme.lightGreyColor,
             //   spreadRadius: 2,
@@ -205,14 +369,14 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
                 color: AppTheme.whiteColor,
               ),
             ),
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             Text(
               'Location: ${incident.latitude}, ${incident.longitude}',
               style: GoogleFonts.roboto(
                 color: AppTheme.lightGreyColor,
               ),
             ),
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             Text(
               incident.description,
               maxLines: 3,
@@ -222,11 +386,11 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
                 color: AppTheme.lightGreyColor,
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.traffic, color: AppTheme.lightGreyColor),
+                const Icon(Icons.traffic, color: AppTheme.lightGreyColor),
                 Text(
                   'Severity: ${incident.severity}',
                   style: GoogleFonts.roboto(

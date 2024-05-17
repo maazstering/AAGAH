@@ -9,13 +9,13 @@ class CustomTextField extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
 
-  CustomTextField({
-    Key? key,
+  const CustomTextField({
+    super.key,
     required this.controller,
     required this.text,
     required this.icon,
     required this.obscureText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

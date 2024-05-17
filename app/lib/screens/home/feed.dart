@@ -9,6 +9,8 @@ import 'package:app/widgets/likeButton.dart';
 import 'package:app/screens/home/comment.dart';
 
 class FeedWidget extends StatefulWidget {
+  const FeedWidget({super.key});
+
   @override
   _FeedWidgetState createState() => _FeedWidgetState();
 }
@@ -60,8 +62,8 @@ class _FeedWidgetState extends State<FeedWidget> {
   Widget feedItem(int index, BuildContext context) {
     final post = posts[index];
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppTheme.bgColor,
         borderRadius: BorderRadius.circular(1.0),
@@ -75,18 +77,18 @@ class _FeedWidgetState extends State<FeedWidget> {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                backgroundImage: AssetImage(
-                    'assets/images/user_placeholder.png'), // Use a placeholder or handle image loading appropriately
+              const CircleAvatar(
+                backgroundImage:
+                    AssetImage('assets/images/user_placeholder.png'),
               ),
-              SizedBox(width: 10.0),
+              const SizedBox(width: 10.0),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       post.author.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppTheme.lightGreyColor,
                       ),
@@ -94,13 +96,13 @@ class _FeedWidgetState extends State<FeedWidget> {
                     Text(
                       post.author
                           .email, // Assuming location is not available in your data
-                      style: TextStyle(color: AppTheme.lightGreyColor),
+                      style: const TextStyle(color: AppTheme.lightGreyColor),
                     ),
                   ],
                 ),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                   color: AppTheme.lightGreyColor,
                 ),
@@ -110,14 +112,14 @@ class _FeedWidgetState extends State<FeedWidget> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
             post.content,
-            style: TextStyle(color: AppTheme.lightGreyColor),
+            style: const TextStyle(color: AppTheme.lightGreyColor),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           if (post.images.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
@@ -128,16 +130,16 @@ class _FeedWidgetState extends State<FeedWidget> {
               ),
             ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    AnimatedLikeButton(),
+                    const AnimatedLikeButton(),
                     Text(
                       '${post.likes.length} likes',
-                      style: TextStyle(color: AppTheme.lightGreyColor),
+                      style: const TextStyle(color: AppTheme.lightGreyColor),
                     ),
                   ],
                 ),
@@ -146,16 +148,16 @@ class _FeedWidgetState extends State<FeedWidget> {
                     // Navigate to CommentPage when tapped
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CommentPage()),
+                      MaterialPageRoute(builder: (context) => const CommentPage()),
                     );
                   },
                   child: Row(
                     children: [
-                      Icon(FontAwesomeIcons.comment, color: AppTheme.greyColor),
-                      SizedBox(width: 5),
+                      const Icon(FontAwesomeIcons.comment, color: AppTheme.greyColor),
+                      const SizedBox(width: 5),
                       Text(
                         'View all ${post.comments.length} comments',
-                        style: TextStyle(color: AppTheme.lightGreyColor),
+                        style: const TextStyle(color: AppTheme.lightGreyColor),
                       ),
                     ],
                   ),
@@ -163,10 +165,10 @@ class _FeedWidgetState extends State<FeedWidget> {
               ],
             ),
           ),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           Text(
             post.createdAt, // You might want to format this date appropriately
-            style: TextStyle(color: AppTheme.lightGreyColor, fontSize: 10.0),
+            style: const TextStyle(color: AppTheme.lightGreyColor, fontSize: 10.0),
           ),
         ],
       ),

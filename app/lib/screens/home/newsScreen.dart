@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:app/widgets/appTheme.dart';
 
 class NewsScreen extends StatefulWidget {
+  const NewsScreen({super.key});
+
   @override
   _NewsScreenState createState() => _NewsScreenState();
 }
@@ -40,8 +42,8 @@ class _NewsScreenState extends State<NewsScreen> {
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
-        title: Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
+        title: const Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
+        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: Column(
         children: [
@@ -52,10 +54,10 @@ class _NewsScreenState extends State<NewsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TrafficIncidentsScreen()),
+                      builder: (context) => const TrafficIncidentsScreen()),
                 );
               },
-              child: Text('Get Traffic Incident Data'),
+              child: const Text('Get Traffic Incident Data'),
             ),
           ),
           Expanded(
@@ -77,12 +79,12 @@ class _NewsScreenState extends State<NewsScreen> {
         // Handle news item tap
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        padding: EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: AppTheme.greyColor,
           borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
+          boxShadow: const [
             // BoxShadow(
             //   color: AppTheme.lightGreyColor,
             //   spreadRadius: 2,
@@ -103,7 +105,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Text(
               newsData[index]['title'],
               style: GoogleFonts.roboto(
@@ -112,14 +114,14 @@ class _NewsScreenState extends State<NewsScreen> {
                 color: AppTheme.whiteColor,
               ),
             ),
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             Text(
               'Source: ${newsData[index]['source']}',
               style: GoogleFonts.roboto(
                 color: AppTheme.lightGreyColor,
               ),
             ),
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             Text(
               newsData[index]['description'],
               maxLines: 3,
@@ -129,12 +131,12 @@ class _NewsScreenState extends State<NewsScreen> {
                 color: AppTheme.lightGreyColor,
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: Icon(Icons.share),
+                  icon: const Icon(Icons.share),
                   color: AppTheme.lightGreyColor,
                   onPressed: () {
                     // Handle share button
