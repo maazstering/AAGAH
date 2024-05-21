@@ -21,8 +21,8 @@ class CustomTextButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 36, 35, 35)),
-          shape: WidgetStateProperty.all(
+          backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 36, 35, 35)),
+          shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0.r), // Adjust the border radius for square corners
             ),

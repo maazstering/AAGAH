@@ -15,8 +15,8 @@ class GoogleSignInButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(AppTheme.whiteColor),
-          shape: WidgetStateProperty.all(
+          backgroundColor: MaterialStateProperty.all(AppTheme.whiteColor),
+          shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0.r), // Adjust the border radius for square corners
             ),
