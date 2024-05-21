@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:app/widgets/custombutton.dart';
+import 'package:app/widgets/logoutButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/appTheme.dart';
@@ -65,6 +66,11 @@ class settingsPage extends StatelessWidget {
                   text: "Report Bug",
                   onPressed: () {},
                   textColor: AppTheme.lilacColor),
+
+            SizedBox(
+                height: 200.h,
+              ),
+            LogOutButton(onPressed: (){})
             ],
           )),
     );
