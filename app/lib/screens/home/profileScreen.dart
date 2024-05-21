@@ -194,11 +194,11 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 10.h),
             Center(
               child: Text(
-                email,
+                email, // change this to, actual user email to be used
                 style: TextStyle(color: AppTheme.whiteColor, fontSize: 16.sp),
               ),
             ),
-            SizedBox(height: 89.h),
+            SizedBox(height: 60.h),
             Column(
               children: [
                 profileField(text: "Name", controller: nameController),
@@ -212,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 20.0.h),
                 const SavedRoutesButton(),
-                SizedBox(height: 150.h),
+                SizedBox(height: 100.h),
                 if (showSettingsButton)
                   GradientButton(
                     text: "Settings",
