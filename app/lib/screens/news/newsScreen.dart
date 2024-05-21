@@ -1,4 +1,5 @@
-import 'package:app/screens/home/trafficIncident.dart';
+import 'package:app/screens/news/trafficIncident.dart';
+import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app/widgets/appTheme.dart';
@@ -42,7 +43,8 @@ class _NewsScreenState extends State<NewsScreen> {
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
-        title: const Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
+        title: const Text('News',
+            style: TextStyle(color: AppTheme.lightGreyColor)),
         iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
       ),
       body: Column(
@@ -69,6 +71,12 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 3,
+        onTap: (index) {
+          // Handle navigation to different screens
+        },
       ),
     );
   }

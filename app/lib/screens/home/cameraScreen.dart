@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/gradientButton.dart';
 import 'package:app/widgets/variables.dart';
+import 'package:app/widgets/bottomNavigationCard.dart';
 
 class PostingScreen extends StatefulWidget {
   const PostingScreen({super.key});
@@ -116,7 +117,7 @@ class _PostingScreenState extends State<PostingScreen> {
             ),
             const SizedBox(height: 20),
             GradientButton(
-              text: 'Create Post',
+              text: _isUploading ? 'Uploading...' : 'Create Post',
               onPressed: () {
                 if (_captionPopulated && !_isUploading) {
                   _createPost();
@@ -129,6 +130,12 @@ class _PostingScreenState extends State<PostingScreen> {
         ),
       ),
       backgroundColor: AppTheme.bgColor,
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 1,
+        onTap: (index) {
+          // Handle navigation to different screens
+        },
+      ),
     );
   }
 }

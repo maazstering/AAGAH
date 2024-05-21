@@ -1,6 +1,6 @@
 import 'package:app/screens/home/cameraScreen.dart';
 import 'package:app/screens/home/feed.dart';
-import 'package:app/screens/home/newsScreen.dart';
+import 'package:app/screens/news/newsScreen.dart';
 import 'package:app/screens/home/profileScreen.dart';
 import 'package:app/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,8 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const CustomBottomNavigationBar({super.key, 
+  const CustomBottomNavigationBar({
+    super.key,
     required this.currentIndex,
     required this.onTap,
   });
@@ -95,7 +96,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NewsScreen(), // Navigate to NewsScreen
+                  builder: (context) =>
+                      const NewsScreen(), // Navigate to NewsScreen
                 ),
               );
             },

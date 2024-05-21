@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final String text;
   final IconData icon;
   final bool obscureText;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     required this.text,
     required this.icon,
     required this.obscureText,
+    this.validator,
   });
 
   @override
@@ -22,19 +24,19 @@ class CustomTextField extends StatelessWidget {
     return SizedBox(
       height: 60.h,
       width: 315.w,
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         style: const TextStyle(
-            color: AppTheme.greyColor,
-            ), // Set text color to grey
+          color: AppTheme.greyColor,
+        ), // Set text color to grey
         decoration: InputDecoration(
           filled: true, // Fill the background
-          fillColor: AppTheme.lightGreyColor, // Set the background color to light grey
+          fillColor:
+              AppTheme.lightGreyColor, // Set the background color to light grey
           prefixIcon: Stack(
             alignment: Alignment.center,
             children: [
-              Icon(icon,
-                  color: AppTheme.greyColor), // Set icon color to grey
+              Icon(icon, color: AppTheme.greyColor), // Set icon color to grey
               Positioned(
                 left: 36.w, // Adjust the position of the line
                 top: 4.h, // Adjust the position of the line
@@ -48,13 +50,15 @@ class CustomTextField extends StatelessWidget {
           ),
           hintText: text,
           labelStyle: const TextStyle(
-              color: AppTheme.greyColor,
-              fontFamily: 'Mulish'),
+            color: AppTheme.greyColor,
+            fontFamily: 'Mulish',
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0.r),
           ),
         ),
         obscureText: obscureText,
+        validator: validator,
       ),
     );
   }

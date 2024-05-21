@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'admin', 'moderator'],
         default: 'user'
     },
+    bio: {
+        type: String,
+        required: [false]
+    }
+        ,
     posts: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -57,7 +62,8 @@ const userSchema = new mongoose.Schema({
         reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         reason: String,
         createdAt: { type: Date, default: Date.now }
-    }]
+    },
+    ]
 });
 
 // Fire a function before doc saved to db

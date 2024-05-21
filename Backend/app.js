@@ -11,13 +11,18 @@ const cookieParser = require('cookie-parser');
 const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
 
+
 const app = express();
+app.set('view engine', 'ejs')
 
 // middleware
 app.use(cors()); 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
+
+
+require('dotenv').config();
 
 // If you want to allow only specific origins, replace the above app.use(cors()); with the following:
 // const corsOptions = {

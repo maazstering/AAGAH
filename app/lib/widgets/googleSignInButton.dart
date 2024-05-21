@@ -18,9 +18,10 @@ class GoogleSignInButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(AppTheme.whiteColor),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0.r), // Adjust the border radius for square corners
+              borderRadius: BorderRadius.circular(
+                  8.0.r), // Adjust the border radius for square corners
             ),
-          ), // Background color of the button
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -30,9 +31,10 @@ class GoogleSignInButton extends StatelessWidget {
               height: 23.h, // Adjust height of the Google icon
               width: 23.w, // Adjust width of the Google icon
             ),
-            SizedBox(width: 15.0.w), // Add horizontal space between the icon and the text
             SizedBox(
-              // TO BE FIXED
+                width: 15.0
+                    .w), // Add horizontal space between the icon and the text
+            SizedBox(
               height: 23.h,
               width: 192.w,
               child: const Text(
