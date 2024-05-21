@@ -3,6 +3,7 @@ const { requireAuth, requireAdmin } = require('../middleware/authmiddleware');
 
 const router = Router();
 
+
 const postController = require('../controller/postController');
 const commentController = require('../controller/commentController');
 
