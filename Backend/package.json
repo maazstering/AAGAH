@@ -22,15 +22,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iamshaunjp/node-express-jwt-auth.git"
+    "url": ""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iamshaunjp/node-express-jwt-auth/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/iamshaunjp/node-express-jwt-auth#readme",
+  "homepage": "",
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.0"

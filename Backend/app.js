@@ -1,3 +1,4 @@
+console.log('We are starting your application!');
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
