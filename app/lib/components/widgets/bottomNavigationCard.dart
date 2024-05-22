@@ -1,4 +1,4 @@
-import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/themes/appTheme.dart';
 import 'package:app/screens/home/cameraScreen.dart';
 import 'package:app/screens/home/feed.dart';
 import 'package:app/screens/news/newsScreen.dart';

@@ -1,4 +1,4 @@
-import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/themes/appTheme.dart';
 import 'package:flutter/material.dart';
 
 class CommentPage extends StatefulWidget {

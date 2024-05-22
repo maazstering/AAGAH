@@ -1,8 +1,8 @@
 // ignore_for_file: camel_case_types
 
+import 'package:app/components/themes/appTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './appTheme.dart';
 
 class profileField extends StatelessWidget {
   final String text;

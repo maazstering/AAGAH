@@ -1,9 +1,9 @@
-import 'package:app/apis/place_autocomplete_api.dart';
+
+import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/locationSearchField.dart';
 import 'package:app/models/autocomplete_prediction.dart';
 import 'package:app/apis/network_utitlity.dart';
 import 'package:app/models/place_autocomplete.dart';
-import 'package:app/components/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,7 +22,6 @@ class SearchLocationScreen extends StatefulWidget {
 class _SearchLocationScreenState extends State<SearchLocationScreen> {
   List<AutocompletePrediction> placePredictions = [];
 
-  AutocompleteService service = AutocompleteService();
 
   Future<void> placeAutocomplete(String query) async {
     Uri uri = Uri.https(

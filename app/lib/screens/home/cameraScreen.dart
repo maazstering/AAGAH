@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/gradientbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:app/components/widgets/appTheme.dart';
-import 'package:app/components/widgets/variables.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
 
 class PostingScreen extends StatefulWidget {

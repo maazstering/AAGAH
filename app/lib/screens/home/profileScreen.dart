@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:app/components/widgets/gradientbutton.dart';
+import 'package:app/components/widgets/locationSearchField.dart';
 import 'package:app/components/widgets/profileField.dart';
 import 'package:app/components/widgets/savedRoutesButton.dart';
-import 'package:app/components/widgets/variables.dart';
 import 'package:app/screens/home/feed.dart';
 import 'package:app/screens/home/settingsPage.dart';
 import 'package:flutter/material.dart';
@@ -210,6 +211,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextEditingController(text: age?.toString() ?? ''),
                 ),
                 SizedBox(height: 20.0.h),
+                //for testing purposes
+                //LocationSearchWidget(),
                 const SavedRoutesButton(),
                 SizedBox(height: 100.h),
                 if (showSettingsButton)

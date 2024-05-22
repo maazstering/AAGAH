@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) => const MaterialApp(
-        home: SearchLocationScreen(), // Set SplashScreen as the initial route
+        home: SplashScreen(), // Set SplashScreen as the initial route
       ),
     );
   }

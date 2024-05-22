@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
-import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/custombutton.dart';
 import 'package:app/components/widgets/logoutButton.dart';
-import 'package:app/components/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -1,28 +1,23 @@
-import 'package:app/models/autocomplete_prediction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/models/autocomplete_prediction.dart';
 import 'package:app/apis/network_utitlity.dart';
 import 'package:app/models/place_autocomplete.dart';
-import 'package:app/components/widgets/variables.dart';
+import 'package:app/screens/home/constants.dart';
+import 'package:app/components/widgets/locationListTile.dart';
 
-class LocationSearchField extends StatefulWidget {
-  const LocationSearchField({super.key});
+class LocationSearchWidget extends StatefulWidget {
+  const LocationSearchWidget({Key? key}) : super(key: key);
 
   @override
-  _LocationSearchFieldState createState() => _LocationSearchFieldState();
+  State<LocationSearchWidget> createState() => _LocationSearchWidgetState();
 }
 
-class _LocationSearchFieldState extends State<LocationSearchField> {
+class _LocationSearchWidgetState extends State<LocationSearchWidget> {
   List<AutocompletePrediction> placePredictions = [];
 
   Future<void> placeAutocomplete(String query) async {
-    if (query.isEmpty) {
-      setState(() {
-        placePredictions = [];
-      });
-      return;
-    }
-
     Uri uri = Uri.https(
       "maps.googleapis.com",
       'maps/api/place/autocomplete/json',
@@ -46,7 +41,8 @@ class _LocationSearchFieldState extends State<LocationSearchField> {
 
   @override
   Widget build(BuildContext context) {
-    return 
+    return Column(
+      children: [
         TextFormField(
           onChanged: (value) {
             placeAutocomplete(value);
@@ -58,10 +54,26 @@ class _LocationSearchFieldState extends State<LocationSearchField> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: SvgPicture.asset(
                 "assets/images/location_pin.svg",
-                // color: secondaryColor40LightTheme,
+                color: secondaryColor40LightTheme,
               ),
             ),
           ),
-        );
+        ),
+        const Divider(
+          height: 4,
+          thickness: 4,
+          color: secondaryColor5LightTheme,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: placePredictions.length,
+            itemBuilder: (context, index) => LocationListTile(
+              press: () {},
+              location: placePredictions[index].description!,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

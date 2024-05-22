@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:app/components/themes/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:app/components/widgets/variables.dart';
-import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:app/components/widgets/likeButton.dart';
 import 'package:app/screens/home/comment.dart';

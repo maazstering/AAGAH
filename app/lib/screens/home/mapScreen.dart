@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/themes/appTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -52,14 +52,6 @@ class __MapScreenState extends State<MapScreen> {
                       markerId: MarkerId("_currentLocation"),
                       icon: BitmapDescriptor.defaultMarker,
                       position: _currentP!),
-                  // Marker(
-                  //     markerId: MarkerId("sourceLocation"),
-                  //     icon: BitmapDescriptor.defaultMarker,
-                  //     position: trial),
-                  // const Marker(
-                  //     markerId: MarkerId("destinationLocation"),
-                  //     icon: BitmapDescriptor.defaultMarker,
-                  //     position: karachi)
                 },
               ));
   }
