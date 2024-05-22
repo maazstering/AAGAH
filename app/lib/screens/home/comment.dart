@@ -1,5 +1,5 @@
+import 'package:app/components/widgets/appTheme.dart';
 import 'package:flutter/material.dart';
-import 'package:app/widgets/appTheme.dart';
 
 class CommentPage extends StatefulWidget {
   const CommentPage({super.key});

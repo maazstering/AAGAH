@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:app/widgets/custombutton.dart';
-import 'package:app/widgets/googleSignInButton.dart';
-import 'package:app/widgets/variables.dart';
+import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/widgets/customTextField.dart';
+import 'package:app/components/widgets/custombutton.dart';
+import 'package:app/components/widgets/googleSignInButton.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
+import 'package:app/components/widgets/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/customTextField.dart';
-import '../../widgets/gradientbutton.dart';
-import '../../widgets/orWidget.dart';
+import '../../components/widgets/orWidget.dart';
 import 'signupScreen.dart';
-import '../../widgets/appTheme.dart';
 import '../home/feed.dart'; // Ensure the correct path
 
 class LoginScreen extends StatelessWidget {

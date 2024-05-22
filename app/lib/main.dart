@@ -1,3 +1,4 @@
+import 'package:app/screens/home/location_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'splashScreen.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) => const MaterialApp(
-        home: SplashScreen(), // Set SplashScreen as the initial route
+        home: SearchLocationScreen(), // Set SplashScreen as the initial route
       ),
     );
   }

@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/components/widgets/appTheme.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
+import 'package:app/components/widgets/profileField.dart';
+import 'package:app/components/widgets/savedRoutesButton.dart';
+import 'package:app/components/widgets/variables.dart';
 import 'package:app/screens/home/feed.dart';
 import 'package:app/screens/home/settingsPage.dart';
-import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import '../../widgets/appTheme.dart';
-import '../../widgets/datePickerButton.dart';
-import '../../widgets/profileField.dart';
-import '../../widgets/gradientbutton.dart';
-import '../../widgets/savedRoutesButton.dart';
-import 'package:app/widgets/variables.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
