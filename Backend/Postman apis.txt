@@ -1,0 +1,52 @@
+For Login
+
+http://localhost:3000/login
+
+{
+	"email" : "abc@gmail.com"
+	"password" : "123456"
+}
+
+For Signup
+
+http://localhost:3000/signup
+
+{
+	"email" : "abc@gmail.com"
+	"password" : "123456"
+}
+
+
+For Social media Post Creation 
+
+POST : http://localhost:3000/social
+
+{
+    "content" : "Hello World"
+}
+
+
+For Posts Update
+
+PUT : http://localhost:3000/social/65d3a2f1d60e6a3838bf8906 --> user id
+
+{
+    	"postID" : "65d3a2f1d60e6a75432bf8906"
+	"content" : "Hello World"
+}
+
+For Posts Delete
+
+DELETE : http://localhost:3000/social/65d3a2f1d60e6a3838bf8906 --> user id
+
+{
+    	"postID" : "65d3a2f1d60e6a75432bf8906"
+	"content" : "Hello World"
+}
+
+
+
+
+
+
+

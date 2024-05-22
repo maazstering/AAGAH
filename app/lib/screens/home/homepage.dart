@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../widgets/appTheme.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,13 +12,13 @@ class HomePage extends StatelessWidget {
         leading: Row(
           children: [
             IconButton(
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               onPressed: () {
                 // Handle menu button press
                 print('Menu button pressed');
               },
             ),
-            SizedBox(
+            const SizedBox(
                 width: 16), // Adjust the space between the icon and the logo
             Image.asset(
               '../assets/images/logo.png',
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Home Page Content'),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -35,21 +35,21 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              icon: Icon(Icons.home),
+              icon: const Icon(Icons.home),
               onPressed: () {
                 // Handle Home button press
                 print('Home button pressed');
               },
             ),
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               onPressed: () {
                 // Handle Add button press
                 print('Add button pressed');
               },
             ),
             IconButton(
-              icon: Icon(Icons.rss_feed),
+              icon: const Icon(Icons.rss_feed),
               // Add your desired color for the RSS feed icon
               // color: Colors.red, // Example color
               onPressed: () {

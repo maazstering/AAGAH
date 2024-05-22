@@ -1,10 +1,12 @@
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/widgets/splashScreenText.dart';
 import 'package:flutter/material.dart';
-import './widgets/splashScreenText.dart';
 import 'screens/auth/loginScreen.dart';
-import 'widgets/appTheme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }

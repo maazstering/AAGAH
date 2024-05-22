@@ -1,0 +1,220 @@
+/* google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+body {
+  margin: 20px 40px;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  background: #fafafa;
+}
+
+h1, h2, h3, h4, ul, li, a, p, input, label, button, div, footer {
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  color: #444;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.navbar {
+  background: linear-gradient(to right, #6a3093, #a044ff); /* Purple gradient */
+  padding: 10px 20px;
+  box-shadow: 2 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 24px;
+  text-decoration: none;
+  color: white;
+}
+
+.navbar-nav {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  margin-right: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+  border-radius: 20px;
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+}
+
+nav li {
+  margin-left: 1px;
+}
+
+nav li a {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+.btn {
+  border-radius: 36px;
+  background: linear-gradient(to right, #6a3093, #a044ff);
+}
+
+.btn,
+.signup-button {
+  border-radius: 36px;
+  background: #a044ff;
+  border: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  color: #fafafa;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+form h2 {
+  font-size: 2.4em;
+  font-weight: 900;
+  margin-bottom: 40px;
+}
+
+form {
+  width: 80%; /* Adjust width as needed */
+  max-width: 400px; /* Limit width to maintain readability */
+  margin: 50px auto; /* Center the form */
+  background-color: #fff;
+  border-radius: 10px; /* Curved corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: relative;
+}
+
+input {
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  width: 100%;
+}
+
+label {
+  display: block;
+  margin: 20px 0 10px;
+}
+
+button {
+  margin-top: 30px;
+}
+
+.error {
+  color: #ff0099;
+  margin: 10px 2px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+header {
+  display: flex;
+  align-items: center;
+}
+
+header img {
+  width: 250px;
+  margin-right: 40px;
+}
+
+header h2 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+header h3 {
+  font-size: 1.6em;
+  margin-bottom: 10px;
+  margin-left: 2px;
+  color: #999;
+}
+
+header .btn {
+  margin-top: 20px;
+  padding: 12px 18px;
+}
+
+.recipes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 30px;
+  row-gap: 80px;
+  margin: 80px auto;
+  max-width: 1200px;
+}
+
+.recipe {
+  display: inline-block;
+  border-radius: 20px;
+  background: white;
+  position: relative;
+  text-align: center;
+  padding: 0 20px 30px 20px;
+}
+
+.recipe img {
+  width: 100px;
+  margin: -30px auto 20px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 120px;
+  color: #aaa;
+}
+
+
+button{
+  margin-top: 30px;
+  border-radius: 36px;
+  background: #a044ff;
+  border:0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  color: #fafafa;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+
+
+.btn{
+  border-radius: 36px;
+  background: linear-gradient(to right, #6a3093, #a044ff);;
+}
+
+
+.btn{
+  border-radius: 36px;
+  background: #a044ff;
+}

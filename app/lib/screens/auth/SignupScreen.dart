@@ -1,19 +1,29 @@
-import 'package:app/screens/auth/loginScreen.dart';
-import 'package:app/widgets/custombutton.dart';
-import 'package:app/widgets/googleSignInButton.dart';
+import 'dart:convert';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/customTextField.dart';
+import 'package:app/components/widgets/custombutton.dart';
+import 'package:app/components/widgets/googleSignInButton.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
+import 'package:app/components/widgets/orWidget.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/customTextField.dart';
-import '../../widgets/gradientbutton.dart';
-import '../../widgets/appTheme.dart';
+import 'package:http/http.dart' as http;
+import 'package:app/screens/home/profileScreen.dart';
+import 'package:app/screens/auth/loginScreen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../widgets/orWidget.dart';
 
 class SignupScreen extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  SignupScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: AppTheme.bgColor, // Set background color to black
+        backgroundColor: AppTheme.bgColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -25,52 +35,119 @@ class SignupScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 100.h),
                   Image.asset(
-                    'assets/images/logo.png', // Path to your image
+                    'assets/images/logo.png',
                     height: 76.43.h,
                     width: 231.8.w,
                   ),
                   SizedBox(height: 50.h),
                   CustomTextField(
-                    controller: TextEditingController(),
+                    controller: nameController,
                     text: "Name",
                     icon: Icons.person,
                     obscureText: false,
                   ),
                   SizedBox(height: 10.h),
                   CustomTextField(
-                    controller: TextEditingController(),
+                    controller: emailController,
                     text: "Email",
                     icon: Icons.email,
                     obscureText: false,
                   ),
                   SizedBox(height: 10.0.h),
                   CustomTextField(
-                    controller: TextEditingController(),
+                    controller: passwordController,
                     text: "Password",
                     icon: Icons.key,
                     obscureText: true,
                   ),
                   SizedBox(height: 14.0.h),
                   GradientButton(
-                      text: "Create Account",
-                      settings: false,
-                      onPressed: () {}),
+                    text: "Create Account",
+                    settings: false,
+                    onPressed: () async {
+                      final String apiUrl = Variables.address + ('/signup');
+                      String name = nameController.text.trim();
+                      String email = emailController.text.trim();
+                      String password = passwordController.text.trim();
+
+                      try {
+                        final response = await http.post(
+                          Uri.parse(apiUrl),
+                          body: jsonEncode({
+                            'name': name,
+                            'email': email,
+                            'password': password
+                          }),
+                          headers: {'Content-Type': 'application/json'},
+                        );
+
+                        if (response.statusCode == 201) {
+                          // Account created successfully
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfilePage(),
+                            ),
+                          );
+                        } else {
+                          // Error occurred
+                          final responseData = json.decode(response.body);
+                          String errorMessage = responseData['errors']
+                                  ['email'] ??
+                              'Failed to create account. Please try again.';
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Signup Failed'),
+                              content: Text(errorMessage),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        // Network error
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Network Error'),
+                            content: Text(e.toString()),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
                   SizedBox(height: 34.h),
-                  OrDivider(),
+                  const OrDivider(),
                   SizedBox(height: 23.h),
                   GoogleSignInButton(onPressed: () {}),
                   SizedBox(height: 114.h),
                   CustomTextButton(
-                      text: "I already have an Account",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
-                      textColor: AppTheme.lavenderColor)
+                    text: "I already have an Account",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    },
+                    textColor: AppTheme.lavenderColor,
+                  ),
                 ],
               ),
             ),

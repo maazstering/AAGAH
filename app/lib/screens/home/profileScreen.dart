@@ -1,23 +1,32 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
+import 'package:app/components/widgets/locationSearchField.dart';
+import 'package:app/components/widgets/profileField.dart';
+import 'package:app/components/widgets/savedRoutesButton.dart';
 import 'package:app/screens/home/feed.dart';
 import 'package:app/screens/home/settingsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../widgets/appTheme.dart';
-import '../../widgets/datePickerButton.dart';
-import '../../widgets/profileField.dart';
-import '../../widgets/gradientbutton.dart';
-import '../../widgets/savedRoutesButton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  DateTime? selectedDate;
-  String email = 'user@example.com'; // Replace with actual email
+  int? age;
+  String email = '';
+  String name = '';
+  String bio = '';
   bool showSettingsButton = true;
 
   TextEditingController nameController = TextEditingController();
@@ -30,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     nameController.addListener(_onFieldChanged);
     bioController.addListener(_onFieldChanged);
+    fetchProfile();
   }
 
   void _onFieldChanged() {
@@ -55,22 +65,95 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> fetchProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+
+    if (token != null) {
+      final uri = Uri.parse('${Variables.address}/profile/selfProfile');
+      try {
+        final response = await http.get(
+          uri,
+          headers: {'Authorization': 'Bearer $token'},
+        );
+
+        if (response.statusCode == 200) {
+          final responseData = json.decode(response.body);
+          setState(() {
+            email = responseData['email'] ?? 'No Email';
+            name = responseData['name'] ?? 'No Name';
+            bio = responseData['bio'] ?? 'No Bio';
+            age = responseData['age'];
+            nameController.text = name;
+            bioController.text = bio;
+          });
+        } else {
+          print('Failed to load profile: ${response.statusCode}');
+          print('Response body: ${response.body}');
+        }
+      } catch (e) {
+        print('Error fetching profile: $e');
+      }
+    } else {
+      print('Token is null');
+      // Handle the case where the token is null (e.g., navigate to login)
+    }
+  }
+
+  Future<void> updateProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+
+    if (token != null) {
+      final uri = Uri.parse('${Variables.address}/profile/selfProfile');
+      var request = http.MultipartRequest('PUT', uri);
+      request.headers['Authorization'] = 'Bearer $token';
+
+      if (selectedImage != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('image', selectedImage!.path));
+      }
+      request.fields['name'] = nameController.text;
+      request.fields['bio'] = bioController.text;
+      if (age != null) {
+        request.fields['age'] = age.toString();
+      }
+
+      try {
+        final response = await request.send();
+
+        if (response.statusCode == 200) {
+          print('Profile updated successfully');
+          setState(() {
+            showSettingsButton = true;
+          });
+        } else {
+          print('Failed to update profile: ${response.statusCode}');
+          final responseBody = await response.stream.bytesToString();
+          print('Response body: $responseBody');
+        }
+      } catch (e) {
+        print('Error updating profile: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ImageProvider<Object>? imageProvider;
     if (selectedImage != null) {
       imageProvider = FileImage(selectedImage!) as ImageProvider<Object>?;
     } else {
-      imageProvider = AssetImage('../../assets/images/profile.jpg')
+      imageProvider = const AssetImage('assets/images/profile.jpg')
           as ImageProvider<Object>?;
     }
     return Scaffold(
       backgroundColor: AppTheme.bgColor,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: AppTheme.lightGreyColor),
-        title:
-            Text('Profile', style: TextStyle(color: AppTheme.lightGreyColor)),
+        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
+        title: const Text('Profile',
+            style: TextStyle(color: AppTheme.lightGreyColor)),
         backgroundColor: AppTheme.bgColor,
         centerTitle: true,
       ),
@@ -96,12 +179,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: InkWell(
                       onTap: _pickImage,
                       child: Container(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: AppTheme.lightGreyColor,
                           borderRadius: BorderRadius.circular(40),
                         ),
-                        child: Icon(Icons.edit),
+                        child: const Icon(Icons.edit),
                       ),
                     ),
                   ),
@@ -111,29 +194,27 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 10.h),
             Center(
               child: Text(
-                email,
+                email, // change this to, actual user email to be used
                 style: TextStyle(color: AppTheme.whiteColor, fontSize: 16.sp),
               ),
             ),
-            SizedBox(height: 89.h),
+            SizedBox(height: 60.h),
             Column(
               children: [
                 profileField(text: "Name", controller: nameController),
                 SizedBox(height: 20.0.h),
                 profileField(text: "Bio", controller: bioController),
                 SizedBox(height: 20.0.h),
-                DatePickerButton(
-                  selectedDate: selectedDate,
-                  onChanged: (DateTime? date) {
-                    setState(() {
-                      selectedDate = date;
-                    });
-                    _onFieldChanged();
-                  },
+                profileField(
+                  text: "Age",
+                  controller:
+                      TextEditingController(text: age?.toString() ?? ''),
                 ),
                 SizedBox(height: 20.0.h),
-                SavedRoutesButton(),
-                SizedBox(height: 150.h),
+                //for testing purposes
+                //LocationSearchWidget(),
+                const SavedRoutesButton(),
+                SizedBox(height: 100.h),
                 if (showSettingsButton)
                   GradientButton(
                     text: "Settings",
@@ -149,9 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   GradientButton(
                     settings: false,
                     text: "Update",
-                    onPressed: () {
-                      // Implement
-                    },
+                    onPressed: updateProfile,
                   ),
                 SizedBox(height: 20.0.h),
                 GradientButton(
@@ -160,13 +239,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Feed()),
+                        MaterialPageRoute(
+                            builder: (context) => (const FeedWidget())),
                       );
                     })
               ],
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 2,
+        onTap: (index) {
+          // Handle navigation to different screens
+        },
       ),
     );
   }
