@@ -10,6 +10,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
+const savedRoutes = require('./routes/trafficRoutes')
 
 
 const app = express();
@@ -53,3 +54,4 @@ app.use(authRoutes);
 app.use(profileRoutes);
 app.use(friendRoutes);
 app.use(groupRoutes);
+app.use(savedRoutes)

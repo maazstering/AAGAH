@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
+const { formatDate } = require('../utils/helper')
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -19,9 +20,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter a name']
     },
-    age: {
-        type: Number,
-        required: [false]
+    birthDate: {
+        type: Date,
+        required: false
     },
     role: {
         type: String,
@@ -91,6 +92,13 @@ userSchema.statics.login = async function (email, password) {
     }
     throw Error('Incorrect email');
 };
+
+userSchema.virtual('formattedBirthDate').get(function() {
+    return formatDate(this.birthDate);
+});
+
+userSchema.set('toJSON', { virtuals: true });
+userSchema.set('toObject', { virtuals: true });
 
 const User = mongoose.model('User', userSchema);
 
