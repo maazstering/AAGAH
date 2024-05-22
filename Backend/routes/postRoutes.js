@@ -13,6 +13,8 @@ router.use((req, res, next) => {
 });
 
 // Routes for creating, retrieving, updating, and deleting posts
+
+//removing auth from now 
 router.get('/social', requireAuth, postController.showPosts);
 router.post('/social', requireAuth, postController.createPost);
 router.put('/social/:id', requireAuth, postController.updatePost);

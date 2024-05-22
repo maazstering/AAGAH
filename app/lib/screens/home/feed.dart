@@ -11,6 +11,7 @@ import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:app/widgets/likeButton.dart';
 import 'package:app/screens/home/comment.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class FeedWidget extends StatefulWidget {
   const FeedWidget({super.key});
@@ -33,27 +34,48 @@ class _FeedWidgetState extends State<FeedWidget> {
     getLocationUpdates();
   }
 
+  void decodeToken(String token) {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    print('Decoded Token: $decodedToken');
+    bool isTokenExpired = JwtDecoder.isExpired(token);
+    print('Is Token Expired: $isTokenExpired');
+  }
+
   Future<void> fetchData() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('jwt_token');
 
       if (token != null) {
+        print('Token retrieved from SharedPreferences: $token');
+
+        // Decode and print token
+        decodeToken(token);
+
         final uri = Uri.parse('${Variables.address}/social');
         final response = await http.get(
           uri,
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
         );
 
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
 
-        final jsonData = json.decode(response.body);
-        setState(() {
-          posts = (jsonData['posts'] as List)
-              .map((data) => Post.fromJson(data))
-              .toList();
-        });
+        if (response.statusCode == 200) {
+          final jsonData = json.decode(response.body);
+          setState(() {
+            posts = (jsonData['posts'] as List)
+                .map((data) => Post.fromJson(data))
+                .toList();
+          });
+        } else if (response.statusCode == 401) {
+          print('Unauthorized: Token may be invalid or expired');
+          // Handle token expiration, e.g., navigate to login or refresh token
+        } else {
+          print('Failed to load data: ${response.statusCode}');
+        }
       } else {
         print('Token is null');
         // Handle the case where the token is null (e.g., navigate to login)

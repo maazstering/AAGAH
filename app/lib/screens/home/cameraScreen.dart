@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +7,8 @@ import 'package:app/widgets/appTheme.dart';
 import 'package:app/widgets/gradientButton.dart';
 import 'package:app/widgets/variables.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class PostingScreen extends StatefulWidget {
   const PostingScreen({super.key});
@@ -32,33 +35,63 @@ class _PostingScreenState extends State<PostingScreen> {
     }
   }
 
+  // Function to decode and print token details
+  void decodeToken(String token) {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    print('Decoded Token: $decodedToken');
+    bool isTokenExpired = JwtDecoder.isExpired(token);
+    print('Is Token Expired: $isTokenExpired');
+  }
+
   // Function to send post request to backend
   Future<void> _createPost() async {
     try {
       setState(() {
         _isUploading = true;
       });
-      final uri = Uri.parse('${Variables.address}/social');
-      var request = http.MultipartRequest('POST', uri);
-      request.fields['content'] = _captionController.text;
 
-      // Include authorization header if needed
-      // request.headers['Authorization'] = 'Bearer hasnusecret';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
 
-      if (_image != null) {
-        request.files
-            .add(await http.MultipartFile.fromPath('image', _image!.path));
-      }
+      if (token != null) {
+        print('Token retrieved from SharedPreferences: $token');
 
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Post created successfully');
-        setState(() {
-          _captionController.clear();
-          _image = null;
-        });
+        // Decode and print token
+        decodeToken(token);
+
+        final uri = Uri.parse('${Variables.address}/social');
+
+        final request = http.MultipartRequest('POST', uri);
+        request.fields['content'] = _captionController.text;
+        request.headers['Authorization'] = 'Bearer $token';
+
+        if (_image != null) {
+          request.files
+              .add(await http.MultipartFile.fromPath('image', _image!.path));
+        }
+
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          print('Post created successfully');
+          setState(() {
+            _captionController.clear();
+            _image = null;
+          });
+        } else if (response.statusCode == 401) {
+          print('Unauthorized: Token may be invalid or expired');
+          // Handle token expiration, e.g., navigate to login or refresh token
+        } else {
+          print('Error creating post: ${response.statusCode}');
+          print('Response body: ${response.body}');
+        }
       } else {
-        print('Error creating post: ${response.statusCode}');
+        print('Token is null');
+        // Handle the case where the token is null (e.g., navigate to login)
       }
     } catch (e) {
       print('Error creating post: $e');
