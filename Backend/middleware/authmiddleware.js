@@ -10,10 +10,13 @@ const requireAdmin = (req, res, next) => {
 
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt || req.headers.authorization?.split(' ')[1];
+    console.log(token);
     if (token) {
         jwt.verify(token, 'hasan secret', (err, decodedToken) => {
+            
             if (err) {
                 console.log(err.message);
+                
                 return res.status(401).json({ message: 'Unauthorized' });
             } else {
                 req.user = decodedToken;

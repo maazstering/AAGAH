@@ -15,9 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 module.exports.createPost = async (req, res) => {
-    const token = req.cookies.jwt;
-    console.log('Token', token);
-
+    const token = req.cookies.jwt || req.headers.authorization?.split(' ')[1];    console.log('Token', token);
     if (token) {
         jwt.verify(token, 'hasan secret', async (err, decodedToken) => {
             if (err) {
@@ -34,14 +32,18 @@ module.exports.createPost = async (req, res) => {
                 try {
                     const author = decodedToken.id;
                     console.log('User Current', decodedToken.id);
+                    
+                    console.log(req.body);
+                    //console.log(req);
                     const { content } = req.body;
-                    console.log('Content', content, ' Author', author);
+                    console.log('content', content, ' Author', author);
                     const newPost = await Post.create({ content, author });
                     
                     console.log('New Post', newPost);
                     return res.status(201).json({ message: 'Post created successfully', post: newPost });
                 } catch (error) {
                     return res.status(400).json({ message: error.message });
+
                 }
             }
         });

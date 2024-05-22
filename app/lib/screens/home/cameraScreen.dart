@@ -9,6 +9,7 @@ import 'package:app/widgets/variables.dart';
 import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:http_parser/http_parser.dart'; // Add this import for MediaType
 
 class PostingScreen extends StatefulWidget {
   const PostingScreen({super.key});
@@ -59,24 +60,26 @@ class _PostingScreenState extends State<PostingScreen> {
         // Decode and print token
         decodeToken(token);
 
-        final uri = Uri.parse('${Variables.address}/social');
+        final url = Uri.parse('${Variables.address}/social');
 
-        final request = http.MultipartRequest('POST', uri);
-        request.fields['content'] = _captionController.text;
-        request.headers['Authorization'] = 'Bearer $token';
+        String content = _captionController.text;
+        print('Content: $content'); // Debug print
 
-        if (_image != null) {
-          request.files
-              .add(await http.MultipartFile.fromPath('image', _image!.path));
-        }
-
-        final streamedResponse = await request.send();
-        final response = await http.Response.fromStream(streamedResponse);
+        final response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(<String, String>{
+            'content': content,
+          }),
+        );
 
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
           print('Post created successfully');
           setState(() {
             _captionController.clear();
