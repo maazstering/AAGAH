@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
   Future<void> loginUser(BuildContext context) async {
-    final String apiUrl = Variables.address + ('/login');
+    final String apiUrl = Variables.address + '/login';
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -37,12 +37,14 @@ class LoginScreen extends StatelessWidget {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
-        if (responseData['user'] != null) {
-          final token = responseData['user'];
+        if (responseData['token'] != null) {
+          final token =
+              responseData['token']; // Corrected to use the actual token
 
           // Save the token
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('jwt_token', token);
+          print('Token saved: $token'); // Debugging line
 
           // Navigate to FeedWidget
           Navigator.pushReplacement(
