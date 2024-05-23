@@ -33,9 +33,9 @@ const postSchema = new mongoose.Schema({
         type: String
     }
     ,
-    images: [{ 
-        type: String // Assuming images are stored as URLs
-    }],
+    imageUrl: {
+        type: String,
+    }
 });
 
 

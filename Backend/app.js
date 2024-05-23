@@ -11,15 +11,22 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
-const savedRoutes = require('./routes/trafficRoutes')
+const savedRoutes = require('./routes/trafficRoutes');
+const path = require('path');
+
 
 const app = express();
+
+
+
 
 // middleware
 app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
+// Serve the uploaded images statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 require('dotenv').config();
 
