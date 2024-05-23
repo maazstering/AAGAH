@@ -17,6 +17,7 @@ module.exports.createPost = async (req, res) => {
           author: req.user.id,
           content,
           imageUrl: image && `/uploads/${image.filename}`,
+
         });
     
         // Save the post to the database

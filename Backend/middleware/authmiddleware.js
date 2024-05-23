@@ -1,8 +1,5 @@
-
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
 
 const requireAdmin = (req, res, next) => {
     if (!res.locals.user || res.locals.user.role !== 'admin') {
@@ -12,32 +9,35 @@ const requireAdmin = (req, res, next) => {
 };
 
 const requireAuth = (req, res, next) => {
-    const token = req.cookies.jwt;
-    if(token){
+    const token = req.cookies.jwt || req.headers.authorization?.split(' ')[1];
+    console.log(token);
+    if (token) {
         jwt.verify(token, 'hasan secret', (err, decodedToken) => {
-            if(err){
+            
+            if (err) {
                 console.log(err.message);
-                res.redirect('/login');
-            }else{
-                console.log(decodedToken);
+                
+                return res.status(401).json({ message: 'Unauthorized' });
+            } else {
                 req.user = decodedToken;
                 next();
             }
         });
-    }else{
-        res.redirect('/login');
+    } else {
+        res.status(401).json({ message: 'Unauthorized' });
     }
-}
+};
+
 
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt;
-    if(token){
+    if (token) {
         jwt.verify(token, 'hasan secret', async (err, decodedToken) => {
-            if(err){
+            if (err) {
                 console.log(err.message);
                 res.locals.user = null;
                 next();
-            }else{
+            } else {
                 let user = await User.findById(decodedToken.id);
                 res.locals.user = {
                     id: user.id,
@@ -47,13 +47,10 @@ const checkUser = (req, res, next) => {
                 next();
             }
         });
-    }
-    else{
+    } else {
         res.locals.user = null;
         next();
     }
 }
 
-
-module.exports = { requireAuth, checkUser,requireAdmin };
-// module.exports = { requireAuth };
+module.exports = { requireAuth, checkUser, requireAdmin };

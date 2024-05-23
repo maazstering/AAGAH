@@ -1,5 +1,5 @@
+import 'package:app/components/themes/appTheme.dart';
 import 'package:flutter/material.dart';
-import 'appTheme.dart';
 
 class OrDivider extends StatelessWidget {
   final double thickness;
