@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:app/widgets/variables.dart';
-import 'package:app/widgets/appTheme.dart';
-import 'package:app/widgets/bottomNavigationCard.dart';
-import 'package:app/widgets/likeButton.dart';
 import 'package:app/screens/home/comment.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class FeedWidget extends StatefulWidget {
   const FeedWidget({super.key});
@@ -33,27 +33,48 @@ class _FeedWidgetState extends State<FeedWidget> {
     getLocationUpdates();
   }
 
+  void decodeToken(String token) {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    print('Decoded Token: $decodedToken');
+    bool isTokenExpired = JwtDecoder.isExpired(token);
+    print('Is Token Expired: $isTokenExpired');
+  }
+
   Future<void> fetchData() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('jwt_token');
 
       if (token != null) {
+        print('Token retrieved from SharedPreferences: $token');
+
+        // Decode and print token
+        decodeToken(token);
+
         final uri = Uri.parse('${Variables.address}/social');
         final response = await http.get(
           uri,
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
         );
 
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
 
-        final jsonData = json.decode(response.body);
-        setState(() {
-          posts = (jsonData['posts'] as List)
-              .map((data) => Post.fromJson(data))
-              .toList();
-        });
+        if (response.statusCode == 200) {
+          final jsonData = json.decode(response.body);
+          setState(() {
+            posts = (jsonData['posts'] as List)
+                .map((data) => Post.fromJson(data))
+                .toList();
+          });
+        } else if (response.statusCode == 401) {
+          print('Unauthorized: Token may be invalid or expired');
+          // Handle token expiration, e.g., navigate to login or refresh token
+        } else {
+          print('Failed to load data: ${response.statusCode}');
+        }
       } else {
         print('Token is null');
         // Handle the case where the token is null (e.g., navigate to login)
@@ -89,6 +110,42 @@ class _FeedWidgetState extends State<FeedWidget> {
         });
       }
     });
+  }
+
+  Future<void> toggleLike(Post post) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+
+    if (token != null) {
+      final likeUri = Uri.parse('${Variables.address}/social/${post.id}/like');
+
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      try {
+        http.Response response;
+        if (post.isLikedByUser) {
+          response = await http.delete(likeUri, headers: headers);
+        } else {
+          response = await http.post(likeUri, headers: headers);
+        }
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          setState(() {
+            post.toggleLike();
+          });
+        } else {
+          print('Failed to like/unlike post: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error liking/unliking post: $e');
+      }
+    } else {
+      print('Token is null');
+      // Handle the case where the token is null (e.g., navigate to login)
+    }
   }
 
   @override
@@ -223,7 +280,19 @@ class _FeedWidgetState extends State<FeedWidget> {
               children: [
                 Row(
                   children: [
-                    const AnimatedLikeButton(),
+                    IconButton(
+                      icon: Icon(
+                        post.isLikedByUser
+                            ? FontAwesomeIcons.solidHeart
+                            : FontAwesomeIcons.heart,
+                        color: post.isLikedByUser
+                            ? Colors.red
+                            : AppTheme.greyColor,
+                      ),
+                      onPressed: () {
+                        toggleLike(post);
+                      },
+                    ),
                     Text(
                       '${post.likes.length} likes',
                       style: const TextStyle(color: AppTheme.lightGreyColor),
@@ -235,7 +304,9 @@ class _FeedWidgetState extends State<FeedWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CommentPage()),
+                          builder: (context) => const CommentPage(
+                                postId: '',
+                              )),
                     );
                   },
                   child: Row(
@@ -270,10 +341,11 @@ class Post {
   final String content;
   final Author author;
   final List<dynamic> comments;
-  final List<dynamic> likes;
+  List<dynamic> likes;
   final List<dynamic> shares;
   final List<dynamic> images;
   final String createdAt;
+  bool isLikedByUser;
 
   Post({
     required this.id,
@@ -284,6 +356,7 @@ class Post {
     required this.shares,
     required this.images,
     required this.createdAt,
+    required this.isLikedByUser,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -296,7 +369,18 @@ class Post {
       shares: json['shares'],
       images: json['images'],
       createdAt: json['createdAt'],
+      isLikedByUser: json['isLikedByUser'] ?? false,
     );
+  }
+
+  void toggleLike() {
+    isLikedByUser = !isLikedByUser;
+    if (isLikedByUser) {
+      likes.add(
+          "new_like"); // Replace "new_like" with actual like data if available
+    } else {
+      likes.removeWhere((like) => like == "new_like");
+    }
   }
 }
 

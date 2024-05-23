@@ -1,8 +1,9 @@
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:app/screens/news/trafficIncident.dart';
-import 'package:app/widgets/bottomNavigationCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:app/widgets/appTheme.dart';
+
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});

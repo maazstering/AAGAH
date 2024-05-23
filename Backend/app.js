@@ -1,3 +1,4 @@
+console.log('We are starting your application!');
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
@@ -6,37 +7,34 @@ const profileRoutes = require('./routes/profileRoutes');
 const friendRoutes = require('./routes/friendRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const userRoutes = require('./routes/userRoutes');
-const cors = require('cors'); 
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
+const savedRoutes = require('./routes/trafficRoutes');
+const path = require('path');
 
 
 const app = express();
-app.set('view engine', 'ejs')
+
+
+
 
 // middleware
-app.use(cors()); 
+app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
-
+// Serve the uploaded images statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 require('dotenv').config();
-
-// If you want to allow only specific origins, replace the above app.use(cors()); with the following:
-// const corsOptions = {
-//   origin: 'http://localhost:53460', // Replace with the URL your Flutter app is served from
-//   optionsSuccessStatus: 200
-// };
-// app.use(cors(corsOptions));
 
 // database connection
 const dbURI = 'mongodb+srv://fullstack:fullstack@cluster0.413sbvx.mongodb.net/Aagah?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then((result) => {
-    // Listen on all available network interfaces
     app.listen(3000, '0.0.0.0', () => {
       console.log('Server is listening on port 3000');
     });
@@ -45,11 +43,19 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCr
 
 // routes
 app.get('*', checkUser);
-app.get('/', (req, res) => res.json({ message: 'API is running' })); // Change this to send a JSON response
 
+// API routes
 app.use('/users', userRoutes);
 app.use(postRoutes);
 app.use(authRoutes);
 app.use(profileRoutes);
 app.use(friendRoutes);
 app.use(groupRoutes);
+
+// Remove or comment out view routes if not needed
+// app.get('/social', (req, res) => {
+//   res.render('social'); // Ensure this is only for rendering the view
+// });
+// app.get('/login', (req, res) => {
+//   res.render('login'); // Render login view
+// });

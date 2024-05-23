@@ -86,13 +86,13 @@ const profileController = {
     update_profile: async (req, res) => {
         try {
             const userId = req.user.id;
-            const { name, age } = req.body;
+            const { name, birthDate } = req.body;
 
-            if (!name || !age) {
+            if (!name || !birthDate) {
                 return res.status(400).json({ error: "Name and age are required" });
             }
 
-            const updatedProfile = await User.findByIdAndUpdate(userId, { name, age }, { new: true });
+            const updatedProfile = await User.findByIdAndUpdate(userId, { name, birthDate: new Date(birthDate) }, { new: true });
 
             res.status(200).json(updatedProfile);
         } catch (err) {
@@ -136,9 +136,9 @@ const profileController = {
     updateSelfProfile: async (req, res) => {
         try {
             const userId = req.user.id;
-            const { name, age, email } = req.body;
+            const { name, email, birthDate } = req.body;
     
-            if (!name || !age) {
+            if (!name || !birthDate) {
                 return res.status(400).json({ error: "Name and age are required" });
             }
     
@@ -151,7 +151,7 @@ const profileController = {
             // Update user information, including the image URL if available
             const updatedProfile = await User.findByIdAndUpdate(
                 userId,
-                { name, age, email, imageUrl }, // Include imageUrl in the update
+                { name, age, email, imageUrl, birthDate: new Date(birthDate) }, // Include imageUrl in the update
                 { new: true }
             );
     

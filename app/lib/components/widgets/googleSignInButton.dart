@@ -1,5 +1,5 @@
+import 'package:app/components/themes/appTheme.dart';
 import 'package:flutter/material.dart';
-import 'appTheme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GoogleSignInButton extends StatelessWidget {

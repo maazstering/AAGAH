@@ -1,59 +1,55 @@
 const jwt = require('jsonwebtoken');
 const Post = require('../models/Post');
 const User = require('../models/User');
-const multer = require('multer');
-
-// Define multer storage and upload middleware
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'public/uploads/');
-    },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-const upload = multer({ storage: storage });
+const path = require('path');
+const fs = require('fs');
 
 module.exports.createPost = async (req, res) => {
     const token = req.cookies.jwt;
     console.log('Token', token);
 
-    if (token) {
-        jwt.verify(token, 'hasan secret', async (err, decodedToken) => {
-            if (err) {
-                console.log(err.message);
-                return res.status(401).json({ message: 'Unauthorized' });
-            } else {
-                console.log(decodedToken);
-                let user = await User.findById(decodedToken.id);
-                res.locals.user = {
-                    id: user.id,
-                    email: user.email,
-                    role: user.role
-                };
-                try {
-                    const author = decodedToken.id;
-                    console.log('User Current', decodedToken.id);
-                    const { content } = req.body;
-                    console.log('Content', content, ' Author', author);
-                    const newPost = await Post.create({ content, author });
-                    
-                    console.log('New Post', newPost);
-                    return res.status(201).json({ message: 'Post created successfully', post: newPost });
-                } catch (error) {
-                    return res.status(400).json({ message: error.message });
-                }
-            }
+    try {
+        const { content } = req.body;
+        const image = req.file;
+    
+        // Create a new post instance
+        const post = new Post({
+          author: req.user.id,
+          content,
+          imageUrl: image && `/uploads/${image.filename}`,
+
         });
-    } else {
-        return res.status(401).json({ message: 'Unauthorized' });
+    
+        // Save the post to the database
+        await post.save();
+    
+        res.status(201).json({
+          message: 'Post created successfully',
+          post,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 module.exports.showPosts = async (req, res) => {
     try {
-        const posts = await Post.find().populate('author');
-        return res.status(200).json({ posts });
+        const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+        const limit = parseInt(req.query.limit) || 10; // Default to 10 posts per page if not provided
+        const skip = (page - 1) * limit;
+
+        const totalPosts = await Post.countDocuments();
+
+        const posts = await Post.find().populate('author').sort({ createdAt: -1 }).skip(skip).limit(limit);
+        
+        res.status(200).json({
+            totalPosts,
+            totalPages: Math.ceil(totalPosts / limit),
+            currentPage: page,
+            posts,
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -63,6 +59,7 @@ module.exports.updatePost = async (req, res) => {
     try {
         const postId = req.params.id;
         const { content } = req.body;
+        const image = req.file;
 
         const post = await Post.findById(postId);
 
@@ -74,9 +71,22 @@ module.exports.updatePost = async (req, res) => {
             return res.status(403).json({ message: "You are not authorized to update this post" });
         }
 
-        const updatedPost = await Post.findByIdAndUpdate(postId, { content }, { new: true });
+        post.content = content || post.content;
 
-        return res.status(200).json({ message: "Post updated successfully", post: updatedPost });
+        if (image) {
+            // Optionally, delete the old image file
+            if (post.imageUrl) {
+              const oldImagePath = path.join(__dirname, post.imageUrl);
+              fs.unlink(oldImagePath, (err) => {
+                if (err) console.error('Failed to delete old image', err);
+              });
+            }
+            post.imageUrl = `/uploads/${image.filename}`;
+        }
+      
+        await post.save();
+        res.status(200).json({message: "Post updated successfully", post});
+
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
@@ -94,6 +104,13 @@ module.exports.deletePost = async (req, res) => {
 
         if (post.author.toString() !== req.user.id) {
             return res.status(403).json({ message: "You are not authorized to delete this post" });
+        }
+
+        if (post.imageUrl) {
+            const imagePath = path.join(__dirname, post.imageUrl);
+            fs.unlink(imagePath, (err) => {
+              if (err) console.error('Failed to delete image', err);
+            });
         }
 
         await Post.findByIdAndDelete(postId);

@@ -1,11 +1,10 @@
 // ignore_for_file: file_names
-
-import 'package:app/widgets/custombutton.dart';
-import 'package:app/widgets/logoutButton.dart';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/custombutton.dart';
+import 'package:app/components/widgets/logoutButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../widgets/appTheme.dart';
-import '../../widgets/variables.dart';
 
 // ignore: camel_case_types
 class settingsPage extends StatelessWidget {

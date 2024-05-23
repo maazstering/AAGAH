@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:app/widgets/custombutton.dart';
-import 'package:app/widgets/googleSignInButton.dart';
-import 'package:app/widgets/variables.dart';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/customTextField.dart';
+import 'package:app/components/widgets/custombutton.dart';
+import 'package:app/components/widgets/googleSignInButton.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/customTextField.dart';
-import '../../widgets/gradientbutton.dart';
-import '../../widgets/orWidget.dart';
+import '../../components/widgets/orWidget.dart';
 import 'signupScreen.dart';
-import '../../widgets/appTheme.dart';
 import '../home/feed.dart'; // Ensure the correct path
 
 class LoginScreen extends StatelessWidget {
@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
   Future<void> loginUser(BuildContext context) async {
-    final String apiUrl = Variables.address + ('/login');
+    final String apiUrl = Variables.address + '/login';
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -37,12 +37,14 @@ class LoginScreen extends StatelessWidget {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
-        if (responseData['user'] != null) {
-          final token = responseData['user'];
+        if (responseData['token'] != null) {
+          final token =
+              responseData['token']; // Corrected to use the actual token
 
           // Save the token
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('jwt_token', token);
+          print('Token saved: $token'); // Debugging line
 
           // Navigate to FeedWidget
           Navigator.pushReplacement(

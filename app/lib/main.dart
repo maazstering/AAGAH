@@ -1,3 +1,4 @@
+import 'package:app/screens/home/location_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'splashScreen.dart';
