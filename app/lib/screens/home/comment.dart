@@ -313,10 +313,13 @@ class Comment {
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
+    print('Parsing comment from JSON: $json');
     return Comment(
       id: json['_id'],
       content: json['content'],
-      author: Author.fromJson(json['author']),
+      author: json['author'] is String
+          ? Author(id: json['author'], email: '', name: 'Unknown')
+          : Author.fromJson(json['author']),
       isOwnComment: json['isOwnComment'] ?? false,
       createdAt: json['createdAt'],
     );
@@ -335,6 +338,7 @@ class Author {
   });
 
   factory Author.fromJson(Map<String, dynamic> json) {
+    print('Parsing author from JSON: $json');
     return Author(
       id: json['_id'],
       email: json['email'],
