@@ -82,6 +82,18 @@ const profileController = {
             res.status(500).json({ message: 'Internal server error' });
         }
     },
+    
+    getUserByid: async (req, res) => {
+        try {
+            const userId = req.params.id;
+            const user = await User.find({_id: userId})
+            if (!user) res.status(404).end()
+            res.status(200).json(user)
+        }
+        catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
 
     update_profile: async (req, res) => {
         try {
