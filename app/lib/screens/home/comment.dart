@@ -44,7 +44,7 @@ class _CommentPageState extends State<CommentPage> {
 
     if (token != null) {
       final uri =
-          Uri.parse('${Variables.address}/social/${widget.postId}comments');
+          Uri.parse('${Variables.address}/social/${widget.postId}/comments');
       final response = await http.get(
         uri,
         headers: {
@@ -73,7 +73,7 @@ class _CommentPageState extends State<CommentPage> {
 
     if (token != null) {
       final uri =
-          Uri.parse('${Variables.address}/social/${widget.postId}comments');
+          Uri.parse('${Variables.address}/social/${widget.postId}/comments');
       final response = await http.post(
         uri,
         headers: {

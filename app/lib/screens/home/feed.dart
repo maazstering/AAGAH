@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:app/screens/home/comment.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class FeedWidget extends StatefulWidget {
@@ -21,6 +21,11 @@ class FeedWidget extends StatefulWidget {
 
 class _FeedWidgetState extends State<FeedWidget> {
   List<Post> posts = [];
+  int currentPage = 1;
+  int totalPages = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+
   Location _locationController = Location();
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
@@ -40,7 +45,13 @@ class _FeedWidgetState extends State<FeedWidget> {
     print('Is Token Expired: $isTokenExpired');
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetchData({int page = 1}) async {
+    if (isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('jwt_token');
@@ -51,7 +62,7 @@ class _FeedWidgetState extends State<FeedWidget> {
         // Decode and print token
         decodeToken(token);
 
-        final uri = Uri.parse('${Variables.address}/social');
+        final uri = Uri.parse('${Variables.address}/social?page=$page');
         final response = await http.get(
           uri,
           headers: {
@@ -64,10 +75,17 @@ class _FeedWidgetState extends State<FeedWidget> {
 
         if (response.statusCode == 200) {
           final jsonData = json.decode(response.body);
+
+          final List<Post> fetchedPosts = (jsonData['posts'] as List)
+              .map((data) => Post.fromJson(data))
+              .toList();
+
           setState(() {
-            posts = (jsonData['posts'] as List)
-                .map((data) => Post.fromJson(data))
-                .toList();
+            currentPage = jsonData['currentPage'];
+            totalPages = jsonData['totalPages'];
+            hasMore = currentPage < totalPages;
+            posts.addAll(fetchedPosts);
+            isLoading = false;
           });
         } else if (response.statusCode == 401) {
           print('Unauthorized: Token may be invalid or expired');
@@ -81,6 +99,9 @@ class _FeedWidgetState extends State<FeedWidget> {
       }
     } catch (e) {
       print('Error fetching data: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -164,36 +185,51 @@ class _FeedWidgetState extends State<FeedWidget> {
       backgroundColor: AppTheme.bgColor,
       body: _currentP == null
           ? const Center(child: CircularProgressIndicator())
-          : CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  expandedHeight: 300.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: GoogleMap(
-                      onMapCreated: (GoogleMapController controller) =>
-                          _mapController.complete(controller),
-                      initialCameraPosition:
-                          CameraPosition(target: _currentP!, zoom: 13),
-                      markers: {
-                        Marker(
-                          markerId: const MarkerId('_currentLocation'),
-                          icon: BitmapDescriptor.defaultMarker,
-                          position: _currentP!,
-                        ),
-                      },
+          : NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.maxScrollExtent &&
+                    hasMore) {
+                  fetchData(page: currentPage + 1);
+                }
+                return false;
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: 300.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: GoogleMap(
+                        onMapCreated: (GoogleMapController controller) =>
+                            _mapController.complete(controller),
+                        initialCameraPosition:
+                            CameraPosition(target: _currentP!, zoom: 13),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId('_currentLocation'),
+                            icon: BitmapDescriptor.defaultMarker,
+                            position: _currentP!,
+                          ),
+                        },
+                      ),
                     ),
                   ),
-                ),
-                SliverFillRemaining(
-                  child: Container(
-                    color: AppTheme.bgColor,
-                    child: ListView.builder(
-                      itemCount: posts.length,
-                      itemBuilder: (context, index) => feedItem(index, context),
+                  SliverFillRemaining(
+                    child: Container(
+                      color: AppTheme.bgColor,
+                      child: ListView.builder(
+                        itemCount: posts.length + (hasMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == posts.length) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          return feedItem(index, context);
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 0,
@@ -304,9 +340,8 @@ class _FeedWidgetState extends State<FeedWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CommentPage(
-                                postId: '',
-                              )),
+                        builder: (context) => CommentPage(postId: post.id),
+                      ),
                     );
                   },
                   child: Row(
@@ -364,10 +399,10 @@ class Post {
       id: json['_id'],
       content: json['content'],
       author: Author.fromJson(json['author']),
-      comments: json['comments'],
-      likes: json['likes'],
-      shares: json['shares'],
-      images: json['images'],
+      comments: json['comments'] ?? [],
+      likes: json['likes'] ?? [],
+      shares: json['shares'] ?? [],
+      images: json['images'] ?? [],
       createdAt: json['createdAt'],
       isLikedByUser: json['isLikedByUser'] ?? false,
     );
