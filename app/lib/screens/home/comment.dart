@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/themes/variables.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -8,7 +8,7 @@ import 'dart:convert';
 class CommentPage extends StatefulWidget {
   final String postId;
 
-  const CommentPage({super.key, required this.postId});
+  const CommentPage({Key? key, required this.postId}) : super(key: key);
 
   @override
   _CommentPageState createState() => _CommentPageState();
@@ -86,8 +86,11 @@ class _CommentPageState extends State<CommentPage> {
       );
 
       if (response.statusCode == 201) {
-        _commentController.clear();
-        fetchComments();
+        final jsonResponse = json.decode(response.body);
+        setState(() {
+          comments.add(Comment.fromJson(jsonResponse['comment']));
+          _commentController.clear();
+        });
       } else {
         print('Failed to post comment: ${response.statusCode}');
       }
@@ -101,7 +104,7 @@ class _CommentPageState extends State<CommentPage> {
     String? token = prefs.getString('jwt_token');
 
     if (token != null) {
-      final uri = Uri.parse('${Variables.address}/social/comments$commentId');
+      final uri = Uri.parse('${Variables.address}/social/comments/$commentId');
       final response = await http.put(
         uri,
         headers: {
@@ -128,7 +131,7 @@ class _CommentPageState extends State<CommentPage> {
     String? token = prefs.getString('jwt_token');
 
     if (token != null) {
-      final uri = Uri.parse('${Variables.address}/social/comments$commentId');
+      final uri = Uri.parse('${Variables.address}/social/comments/$commentId');
       final response = await http.delete(
         uri,
         headers: {
@@ -152,10 +155,11 @@ class _CommentPageState extends State<CommentPage> {
       appBar: AppBar(
         backgroundColor: AppTheme.bgColor,
         title: const Text('Comments',
-            style: TextStyle(color: AppTheme.lightGreyColor)),
+            style: TextStyle(color: AppTheme.whiteColor)),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
+        iconTheme: const IconThemeData(color: AppTheme.whiteColor),
       ),
+      backgroundColor: AppTheme.bgColor,
       body: Column(
         children: [
           Expanded(
@@ -180,9 +184,10 @@ class _CommentPageState extends State<CommentPage> {
                     controller: _commentController,
                     decoration: const InputDecoration(
                       hintText: 'Add a comment...',
-                      hintStyle: TextStyle(color: AppTheme.lightGreyColor),
+                      hintStyle: TextStyle(color: AppTheme.greyColor),
                       border: InputBorder.none,
                     ),
+                    style: const TextStyle(color: AppTheme.whiteColor),
                   ),
                 ),
                 const SizedBox(width: 8.0),
@@ -218,24 +223,24 @@ class _CommentPageState extends State<CommentPage> {
             children: [
               const CircleAvatar(
                 backgroundImage: AssetImage(
-                    '../assets/images/profile.jpg'), // Use actual user image
+                    'assets/images/profile.jpg'), // Use actual user image
               ),
               const SizedBox(width: 10.0),
               Text(
-                comment.author.name, // Replace with actual username
+                comment.author.name,
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.lightGreyColor),
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.whiteColor,
+                ),
               ),
-              Spacer(),
+              const Spacer(),
               if (comment.isOwnComment) ...[
                 IconButton(
-                  icon: const Icon(Icons.edit, color: AppTheme.lightGreyColor),
+                  icon: const Icon(Icons.edit, color: AppTheme.whiteColor),
                   onPressed: () => _showEditCommentDialog(comment),
                 ),
                 IconButton(
-                  icon:
-                      const Icon(Icons.delete, color: AppTheme.lightGreyColor),
+                  icon: const Icon(Icons.delete, color: AppTheme.whiteColor),
                   onPressed: () => _deleteComment(comment.id),
                 ),
               ],
@@ -243,8 +248,13 @@ class _CommentPageState extends State<CommentPage> {
           ),
           const SizedBox(height: 4.0),
           Text(
-            comment.content, // Replace with actual comment
-            style: const TextStyle(color: AppTheme.lightGreyColor),
+            comment.content,
+            style: const TextStyle(color: AppTheme.whiteColor),
+          ),
+          const SizedBox(height: 4.0),
+          Text(
+            comment.createdAt,
+            style: const TextStyle(color: AppTheme.greyColor, fontSize: 10.0),
           ),
         ],
       ),
@@ -264,6 +274,7 @@ class _CommentPageState extends State<CommentPage> {
             decoration: const InputDecoration(
               hintText: 'Edit your comment',
             ),
+            style: const TextStyle(color: AppTheme.bgColor),
           ),
           actions: [
             TextButton(
@@ -291,12 +302,14 @@ class Comment {
   final String content;
   final Author author;
   final bool isOwnComment;
+  final String createdAt;
 
   Comment({
     required this.id,
     required this.content,
     required this.author,
     required this.isOwnComment,
+    required this.createdAt,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
@@ -305,6 +318,7 @@ class Comment {
       content: json['content'],
       author: Author.fromJson(json['author']),
       isOwnComment: json['isOwnComment'] ?? false,
+      createdAt: json['createdAt'],
     );
   }
 }

@@ -85,6 +85,7 @@ class _PostingScreenState extends State<PostingScreen> {
             _captionController.clear();
             _image = null;
           });
+          _showSuccessDialog(); // Show success dialog
         } else if (response.statusCode == 401) {
           print('Unauthorized: Token may be invalid or expired');
           // Handle token expiration, e.g., navigate to login or refresh token
@@ -103,6 +104,27 @@ class _PostingScreenState extends State<PostingScreen> {
         _isUploading = false;
       });
     }
+  }
+
+  // Function to show success dialog
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Your post has been created successfully.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -144,8 +166,7 @@ class _PostingScreenState extends State<PostingScreen> {
             if (_image != null)
               Image.file(_image!)
             else
-              Image.asset(
-                  'assets/images/user_placeholder.png'), // Use a placeholder if no image is selected
+              const SizedBox(), // Removed placeholder image
             GradientButton(
               text: 'Select Image',
               onPressed: _pickImage,

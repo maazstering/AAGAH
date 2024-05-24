@@ -11,6 +11,9 @@ import 'package:location/location.dart';
 import 'package:app/screens/home/comment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter/foundation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 class FeedWidget extends StatefulWidget {
   const FeedWidget({super.key});
@@ -30,12 +33,21 @@ class _FeedWidgetState extends State<FeedWidget> {
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   LatLng? _currentP;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     fetchData();
     getLocationUpdates();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          hasMore &&
+          !isLoading) {
+        fetchData(page: currentPage + 1);
+      }
+    });
   }
 
   void decodeToken(String token) {
@@ -43,6 +55,17 @@ class _FeedWidgetState extends State<FeedWidget> {
     print('Decoded Token: $decodedToken');
     bool isTokenExpired = JwtDecoder.isExpired(token);
     print('Is Token Expired: $isTokenExpired');
+  }
+
+  Future<List<Post>> parsePostsInBackground(String responseBody) async {
+    return compute(parsePosts, responseBody);
+  }
+
+  List<Post> parsePosts(String responseBody) {
+    final parsed = json.decode(responseBody);
+    return (parsed['posts'] as List)
+        .map<Post>((json) => Post.fromJson(json))
+        .toList();
   }
 
   Future<void> fetchData({int page = 1}) async {
@@ -74,15 +97,12 @@ class _FeedWidgetState extends State<FeedWidget> {
         print('Response body: ${response.body}');
 
         if (response.statusCode == 200) {
-          final jsonData = json.decode(response.body);
-
-          final List<Post> fetchedPosts = (jsonData['posts'] as List)
-              .map((data) => Post.fromJson(data))
-              .toList();
+          final List<Post> fetchedPosts =
+              await parsePostsInBackground(response.body);
 
           setState(() {
-            currentPage = jsonData['currentPage'];
-            totalPages = jsonData['totalPages'];
+            currentPage = json.decode(response.body)['currentPage'];
+            totalPages = json.decode(response.body)['totalPages'];
             hasMore = currentPage < totalPages;
             posts.addAll(fetchedPosts);
             isLoading = false;
@@ -195,6 +215,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                 return false;
               },
               child: CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   SliverAppBar(
                     expandedHeight: 300.0,
@@ -218,10 +239,34 @@ class _FeedWidgetState extends State<FeedWidget> {
                     child: Container(
                       color: AppTheme.bgColor,
                       child: ListView.builder(
+                        controller: _scrollController,
                         itemCount: posts.length + (hasMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == posts.length) {
-                            return Center(child: CircularProgressIndicator());
+                            return ListView.builder(
+                              itemCount: 10,
+                              itemBuilder: (context, index) => ListTile(
+                                leading: SkeletonAnimation(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey[300],
+                                  ),
+                                ),
+                                title: SkeletonAnimation(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.grey[300],
+                                  ),
+                                ),
+                                subtitle: SkeletonAnimation(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.grey[300],
+                                  ),
+                                ),
+                              ),
+                            );
                           }
                           return feedItem(index, context);
                         },
@@ -303,10 +348,15 @@ class _FeedWidgetState extends State<FeedWidget> {
           if (post.images.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
-              child: Image.network(
-                post.images[0],
+              child: CachedNetworkImage(
+                imageUrl: post.images[0],
                 fit: BoxFit.cover,
                 width: double.infinity,
+                placeholder: (context, url) => Container(
+                  height: 200,
+                  color: Colors.grey[300],
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           Padding(

@@ -30,7 +30,14 @@ module.exports.getCommentsByPostId = async (req, res) => {
     try {
         const postId = req.params.postId;
 
-        const post = await Post.findById(postId).populate('comments');
+        const post = await Post.findById(postId).populate({
+            path: 'comments',
+            populate: {
+              path: 'author',
+              model: 'User'
+            }
+          });
+        
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
         }
@@ -38,8 +45,8 @@ module.exports.getCommentsByPostId = async (req, res) => {
         res.status(200).json({ comments: post.comments });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
+        res.status(500).json({ message: "Internal server error" });
+    }
 };
 
 module.exports.updateComment = async (req, res) => {
