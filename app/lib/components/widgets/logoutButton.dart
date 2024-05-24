@@ -19,8 +19,13 @@ class LogOutButton extends StatelessWidget {
     return SizedBox(
       height: 46.h, // Set the height of the button
       width: 100.w,
-      child: TextButton(
+      child: TextButton.icon(
         onPressed: onPressed,
+        icon: Icon(
+          Icons.logout,
+          color: textColor,
+          size: 24.h,
+        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(AppTheme.magentaColor),
           shape: MaterialStateProperty.all(
@@ -28,10 +33,8 @@ class LogOutButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0.r), // Adjust the border radius for square corners
             ),
           ),
-          maximumSize: MaterialStateProperty.all(Size(100.w, 100.h)), // gotta change these later
         ),
-        
-        child: Text(
+        label: Text(
           text,
           style: TextStyle(color: textColor),
         ),
@@ -39,3 +42,4 @@ class LogOutButton extends StatelessWidget {
     );
   }
 }
+
