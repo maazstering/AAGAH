@@ -5,6 +5,7 @@ import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:app/components/widgets/gradientbutton.dart';
 import 'package:app/components/widgets/locationSearchField.dart';
+import 'package:app/components/widgets/logoutButton.dart';
 import 'package:app/components/widgets/profileField.dart';
 import 'package:app/components/widgets/savedRoutesButton.dart';
 import 'package:app/screens/home/feed.dart';
@@ -14,6 +15,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+import '../../splashScreen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -64,7 +67,30 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
+  Future<void> _handleLogout(BuildContext context) async {
+    final response = await http.get(
+      Uri.parse('http://localhost:3000/logout'), 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
+    if (response.statusCode == 200) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const SplashScreen(),
+        ),
+        (route) => false,
+      );
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Logout failed. Please try again.'),
+        ),
+      );
+    }
+  }
   Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('jwt_token');
@@ -234,15 +260,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 SizedBox(height: 20.0.h),
                 GradientButton(
-                    text: "Aagah",
-                    settings: false,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => (const FeedWidget())),
-                      );
-                    })
+                  settings: false,
+                  text: 'Logout',
+                                 onPressed: () => _handleLogout(context),
+)
               ],
             ),
           ],
@@ -257,3 +278,5 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+ 
