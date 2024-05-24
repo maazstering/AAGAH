@@ -9,6 +9,7 @@ class AppTheme {
   static const Color bgColor = Color.fromARGB(255, 30, 30, 30);
   static const Color greyColor = Color.fromARGB(230, 94, 92, 92);
   static const Color lightGreyColor = Color.fromARGB(246, 218, 215, 215);
+  static const Color mediumGreyColor = Color.fromARGB(255, 65, 62, 62);
   // static TextStyle roboto = TextStyle(
   //   fontFamily: GoogleFonts.roboto().fontFamily,
   // );
