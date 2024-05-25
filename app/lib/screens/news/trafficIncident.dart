@@ -316,7 +316,8 @@ class _TrafficIncidentsScreenState extends State<TrafficIncidentsScreen> {
                 } else if (snapshot.hasError) {
                   return Center(
                       child: Text('Error: ${snapshot.error}',
-                          style: const TextStyle(color: AppTheme.lightGreyColor)));
+                          style:
+                              const TextStyle(color: AppTheme.lightGreyColor)));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(
                       child: Text('No traffic incidents found.',
