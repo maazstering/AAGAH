@@ -40,18 +40,18 @@ dependencies:
   google_fonts: ^6.2.0
   image_picker: ^1.0.7
   font_awesome_flutter: ^10.7.0
-  camera: ^0.10.5+9
+  camera: ^0.11.0
   google_maps_flutter: ^2.6.0
   google_maps_flutter_web: ^0.5.6+2
   google_places_flutter: ^2.0.8
   flutter_polyline_points: ^2.0.0
-  location: ^5.0.0
+  location: ^6.0.2
   http: ^1.2.1
   xml: ^6.5.0
   shared_preferences: ^2.0.9
   jwt_decoder: ^2.0.1
   skeleton_loader: ^2.0.0+4 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   flutter_svg: ^2.0.10+1
   cached_network_image: ^3.3.1
   skeleton_text: ^3.0.1
