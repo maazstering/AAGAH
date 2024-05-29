@@ -38,7 +38,7 @@ class CustomTextField extends StatelessWidget {
             children: [
               Icon(icon, color: AppTheme.greyColor), // Set icon color to grey
               Positioned(
-                left: 36.w, // Adjust the position of the line
+                left: 42.w, // Adjust the position of the line
                 top: 4.h, // Adjust the position of the line
                 bottom: 4.h, // Adjust the position of the line
                 child: Container(

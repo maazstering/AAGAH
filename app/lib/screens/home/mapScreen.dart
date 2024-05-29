@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/themes/variables.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +25,15 @@ class __MapScreenState extends State<MapScreen> {
 
   //static const LatLng karachi = LatLng(25.10720314676199, 67.27599663525518);
   //static const LatLng trial = LatLng(37.4223, -122.0848);
-  LatLng? _currentP = null;
+  LatLng? _currentP;
+
+  Map<PolylineId, Polyline> polylines = {};
 
   @override
   void initState() {
     super.initState();
-    getLocationUpdates();
+    getLocationUpdates().then(
+        (_) => getpolylinePoints().then((coordinates) => generatePolyLinefromPoints(coordinates)));
   }
 
   @override
@@ -52,16 +54,19 @@ class __MapScreenState extends State<MapScreen> {
                     CameraPosition(target: _currentP!, zoom: 13),
                 markers: {
                   Marker(
-                      markerId: MarkerId("_currentLocation"),
+                      markerId: const MarkerId("_currentLocation"),
                       icon: BitmapDescriptor.defaultMarker,
                       position: _currentP!),
                 },
+                polylines: Set<Polyline>.of(polylines.values),
               ));
   }
 
   Future<void> _cameraToPos(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
     CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
   }
 
   Future<void> getLocationUpdates() async {
@@ -90,8 +95,8 @@ class __MapScreenState extends State<MapScreen> {
         setState(() {
           _currentP =
               LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _cameraToPos(_currentP!);
         });
-        print(_currentP);
       }
     });
   }
@@ -111,14 +116,26 @@ class __MapScreenState extends State<MapScreen> {
         optimizeWaypoints: true);
 
     if (result.points.isNotEmpty) {
+      print("Not empty");
       result.points.forEach((PointLatLng point) {
         polylinecoordinates.add(LatLng(point.latitude, point.longitude));
       });
-    }
-    else{
-      print (result.errorMessage);
+    } else {
+      print(result.errorMessage);
     }
 
     return polylinecoordinates;
+  }
+
+  void generatePolyLinefromPoints(List<LatLng> polylineCoordinates) async {
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: Colors.red,
+        points: polylineCoordinates,
+        width: 8);
+        setState(() {
+          polylines[id] = polyline;
+        });
   }
 }
