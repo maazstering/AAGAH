@@ -30,7 +30,14 @@ module.exports.getCommentsByPostId = async (req, res) => {
     try {
         const postId = req.params.postId;
 
-        const post = await Post.findById(postId).populate('comments');
+        const post = await Post.findById(postId).populate({
+            path: 'comments',
+            populate: {
+              path: 'author',
+              model: 'User'
+            }
+          });
+        
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
         }

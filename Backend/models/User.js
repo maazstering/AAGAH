@@ -64,7 +64,9 @@ const userSchema = new mongoose.Schema({
         reason: String,
         createdAt: { type: Date, default: Date.now }
     },
-    ]
+    ],
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
 });
 
 // Fire a function before doc saved to db

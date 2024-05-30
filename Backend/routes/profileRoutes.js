@@ -39,4 +39,6 @@ router.put('/selfProfile', upload.single('image'), requireAuth, profileControlle
 
 router.put('/selfProfile/:id', requireAuth, profileController.update_profile);
 
+router.get('/users/:id', requireAuth, profileController.getUserByid)
+
 module.exports = router;

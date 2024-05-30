@@ -12,6 +12,7 @@ const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
 const savedRoutes = require('./routes/trafficRoutes');
 const path = require('path');
+const forgotPasswordRoutes = require('./controller/forgetPassword');
 
 
 
@@ -56,6 +57,7 @@ app.get('*', checkUser);
 app.get('/', (req, res) => res.json({ message: 'API is running' })); // Change this to send a JSON response
 
 app.use('/users', userRoutes);
+app.use('/api', forgotPasswordRoutes);
 app.use(postRoutes);
 app.use(authRoutes);
 app.use(profileRoutes);
