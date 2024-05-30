@@ -8,8 +8,8 @@ Content-Type: application/json
 
 {"content":"Your content goes here"}
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="image"; filename="image.jpg"
+Content-Disposition: form-data; name="image"; filename="certificate-fullstack.png"
 Content-Type: image/jpeg
 
-< C:\Users\Shehzad\Desktop\certificate-fullstack
+< C:/Users/Shehzad/Desktop/certificate-fullstack.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
