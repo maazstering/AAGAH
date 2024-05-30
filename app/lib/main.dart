@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'splashScreen.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(390, 844),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, child) => const MaterialApp(
+      builder: (_, child) => MaterialApp(
         home: SplashScreen(), // Set SplashScreen as the initial route
       ),
     );

@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
+import 'package:app/components/widgets/likeButton.dart';
+import 'package:app/screens/home/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:app/widgets/variables.dart';
-import 'package:app/widgets/appTheme.dart';
-import 'package:app/widgets/bottomNavigationCard.dart';
-import 'package:app/widgets/likeButton.dart';
-import 'package:app/screens/home/comment.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter/foundation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 class FeedWidget extends StatefulWidget {
   const FeedWidget({super.key});
@@ -21,45 +25,106 @@ class FeedWidget extends StatefulWidget {
 
 class _FeedWidgetState extends State<FeedWidget> {
   List<Post> posts = [];
+  int currentPage = 1;
+  int totalPages = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+
   Location _locationController = Location();
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   LatLng? _currentP;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     fetchData();
     getLocationUpdates();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          hasMore &&
+          !isLoading) {
+        fetchData(page: currentPage + 1);
+      }
+    });
   }
 
-  Future<void> fetchData() async {
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void decodeToken(String token) {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    print('Decoded Token: $decodedToken');
+    bool isTokenExpired = JwtDecoder.isExpired(token);
+    print('Is Token Expired: $isTokenExpired');
+  }
+
+  Future<List<Post>> parsePostsInBackground(String responseBody) async {
+    return compute(parsePosts, responseBody);
+  }
+
+  List<Post> parsePosts(String responseBody) {
+    final parsed = json.decode(responseBody);
+    return (parsed['posts'] as List)
+        .map<Post>((json) => Post.fromJson(json))
+        .toList();
+  }
+
+  Future<void> fetchData({int page = 1}) async {
+    if (isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('jwt_token');
 
       if (token != null) {
-        final uri = Uri.parse('${Variables.address}/social');
-        final response = await http.get(
-          uri,
-          headers: {'Authorization': 'Bearer $token'},
-        );
+        print('Token retrieved from SharedPreferences: $token');
+
+        // Decode and print token
+        decodeToken(token);
+
+        final uri = Uri.parse('${Variables.address}/social?page=$page');
+        final response =
+            await http.get(uri, headers: {'Authorization': 'Bearer $token'});
 
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
 
-        final jsonData = json.decode(response.body);
-        setState(() {
-          posts = (jsonData['posts'] as List)
-              .map((data) => Post.fromJson(data))
-              .toList();
-        });
+        if (response.statusCode == 200) {
+          final List<Post> fetchedPosts =
+              await parsePostsInBackground(response.body);
+
+          setState(() {
+            currentPage = json.decode(response.body)['currentPage'];
+            totalPages = json.decode(response.body)['totalPages'];
+            hasMore = currentPage < totalPages;
+            posts.addAll(fetchedPosts);
+            isLoading = false;
+          });
+        } else if (response.statusCode == 401) {
+          print('Unauthorized: Token may be invalid or expired');
+          // Handle token expiration, e.g., navigate to login or refresh token
+        } else {
+          print('Failed to load data: ${response.statusCode}');
+        }
       } else {
         print('Token is null');
         // Handle the case where the token is null (e.g., navigate to login)
       }
     } catch (e) {
       print('Error fetching data: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -91,6 +156,42 @@ class _FeedWidgetState extends State<FeedWidget> {
     });
   }
 
+  Future<void> toggleLike(Post post) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+
+    if (token != null) {
+      final likeUri = Uri.parse('${Variables.address}/social/${post.id}/like');
+
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      try {
+        http.Response response;
+        if (post.isLikedByUser) {
+          response = await http.delete(likeUri, headers: headers);
+        } else {
+          response = await http.post(likeUri, headers: headers);
+        }
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          setState(() {
+            post.toggleLike();
+          });
+        } else {
+          print('Failed to like/unlike post: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error liking/unliking post: $e');
+      }
+    } else {
+      print('Token is null');
+      // Handle the case where the token is null (e.g., navigate to login)
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,36 +208,77 @@ class _FeedWidgetState extends State<FeedWidget> {
       backgroundColor: AppTheme.bgColor,
       body: _currentP == null
           ? const Center(child: CircularProgressIndicator())
-          : CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  expandedHeight: 300.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: GoogleMap(
-                      onMapCreated: (GoogleMapController controller) =>
-                          _mapController.complete(controller),
-                      initialCameraPosition:
-                          CameraPosition(target: _currentP!, zoom: 13),
-                      markers: {
-                        Marker(
-                          markerId: const MarkerId('_currentLocation'),
-                          icon: BitmapDescriptor.defaultMarker,
-                          position: _currentP!,
-                        ),
-                      },
+          : NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.maxScrollExtent &&
+                    hasMore) {
+                  fetchData(page: currentPage + 1);
+                }
+                return false;
+              },
+              child: CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: 300.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: GoogleMap(
+                        onMapCreated: (GoogleMapController controller) =>
+                            _mapController.complete(controller),
+                        initialCameraPosition:
+                            CameraPosition(target: _currentP!, zoom: 13),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId('_currentLocation'),
+                            icon: BitmapDescriptor.defaultMarker,
+                            position: _currentP!,
+                          ),
+                        },
+                      ),
                     ),
                   ),
-                ),
-                SliverFillRemaining(
-                  child: Container(
-                    color: AppTheme.bgColor,
-                    child: ListView.builder(
-                      itemCount: posts.length,
-                      itemBuilder: (context, index) => feedItem(index, context),
+                  SliverFillRemaining(
+                    child: Container(
+                      color: AppTheme.bgColor,
+                      child: ListView.builder(
+                        itemCount: posts.length + (hasMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == posts.length) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: 10,
+                              itemBuilder: (context, index) => ListTile(
+                                leading: SkeletonAnimation(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey[300],
+                                  ),
+                                ),
+                                title: SkeletonAnimation(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.grey[300],
+                                  ),
+                                ),
+                                subtitle: SkeletonAnimation(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.grey[300],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return feedItem(index, context);
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 0,
@@ -199,9 +341,7 @@ class _FeedWidgetState extends State<FeedWidget> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Text(
             post.content,
             style: const TextStyle(color: AppTheme.lightGreyColor),
@@ -210,10 +350,15 @@ class _FeedWidgetState extends State<FeedWidget> {
           if (post.images.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
-              child: Image.network(
-                post.images[0],
+              child: CachedNetworkImage(
+                imageUrl: post.images[0],
                 fit: BoxFit.cover,
                 width: double.infinity,
+                placeholder: (context, url) => Container(
+                  height: 200,
+                  color: Colors.grey[300],
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           Padding(
@@ -223,7 +368,10 @@ class _FeedWidgetState extends State<FeedWidget> {
               children: [
                 Row(
                   children: [
-                    const AnimatedLikeButton(),
+                    AnimatedLikeButton(
+                      isLiked: post.isLikedByUser,
+                      onLikePressed: () => toggleLike(post),
+                    ),
                     Text(
                       '${post.likes.length} likes',
                       style: const TextStyle(color: AppTheme.lightGreyColor),
@@ -235,7 +383,8 @@ class _FeedWidgetState extends State<FeedWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CommentPage()),
+                        builder: (context) => CommentPage(postId: post.id),
+                      ),
                     );
                   },
                   child: Row(
@@ -270,10 +419,11 @@ class Post {
   final String content;
   final Author author;
   final List<dynamic> comments;
-  final List<dynamic> likes;
+  List<dynamic> likes;
   final List<dynamic> shares;
   final List<dynamic> images;
   final String createdAt;
+  bool isLikedByUser;
 
   Post({
     required this.id,
@@ -284,6 +434,7 @@ class Post {
     required this.shares,
     required this.images,
     required this.createdAt,
+    required this.isLikedByUser,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -291,12 +442,23 @@ class Post {
       id: json['_id'],
       content: json['content'],
       author: Author.fromJson(json['author']),
-      comments: json['comments'],
-      likes: json['likes'],
-      shares: json['shares'],
-      images: json['images'],
+      comments: json['comments'] ?? [],
+      likes: json['likes'] ?? [],
+      shares: json['shares'] ?? [],
+      images: json['images'] ?? [],
       createdAt: json['createdAt'],
+      isLikedByUser: json['isLikedByUser'] ?? false,
     );
+  }
+
+  void toggleLike() {
+    isLikedByUser = !isLikedByUser;
+    if (isLikedByUser) {
+      likes.add(
+          "new_like"); // Replace "new_like" with actual like data if available
+    } else {
+      likes.removeWhere((like) => like == "new_like");
+    }
   }
 }
 

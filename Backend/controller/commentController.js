@@ -33,10 +33,10 @@ module.exports.getCommentsByPostId = async (req, res) => {
         const post = await Post.findById(postId).populate({
             path: 'comments',
             populate: {
-              path: 'author',
-              model: 'User'
+                path: 'author',
+                model: 'User'
             }
-          });
+        });
         
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
@@ -54,12 +54,12 @@ module.exports.updateComment = async (req, res) => {
         const commentId = req.params.commentId;
         const { content } = req.body;
 
-        const comment = await Comment.findById(commentId);
+        const comment = await Comment.findById(commentId).populate('author');
         if (!comment) {
             return res.status(404).json({ message: "Comment not found" });
         }
 
-        if (comment.author.toString() !== req.user.id) {
+        if (comment.author._id.toString() !== req.user.id) {
             return res.status(403).json({ message: "You are not authorized to update this comment" });
         }
 
@@ -77,12 +77,12 @@ module.exports.deleteComment = async (req, res) => {
     try {
         const commentId = req.params.commentId;
 
-        const comment = await Comment.findById(commentId);
+        const comment = await Comment.findById(commentId).populate('author');
         if (!comment) {
             return res.status(404).json({ message: "Comment not found" });
         }
 
-        if (comment.author.toString() !== req.user.id) {
+        if (comment.author._id.toString() !== req.user.id) {
             return res.status(403).json({ message: "You are not authorized to delete this comment" });
         }
 

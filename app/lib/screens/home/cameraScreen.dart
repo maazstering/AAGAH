@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:app/widgets/appTheme.dart';
-import 'package:app/widgets/gradientButton.dart';
-import 'package:app/widgets/variables.dart';
-import 'package:app/widgets/bottomNavigationCard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:http_parser/http_parser.dart'; // Add this import for MediaType
 
 class PostingScreen extends StatefulWidget {
   const PostingScreen({super.key});
@@ -32,33 +36,66 @@ class _PostingScreenState extends State<PostingScreen> {
     }
   }
 
+  // Function to decode and print token details
+  void decodeToken(String token) {
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    print('Decoded Token: $decodedToken');
+    bool isTokenExpired = JwtDecoder.isExpired(token);
+    print('Is Token Expired: $isTokenExpired');
+  }
+
   // Function to send post request to backend
   Future<void> _createPost() async {
     try {
       setState(() {
         _isUploading = true;
       });
-      final uri = Uri.parse('${Variables.address}/social');
-      var request = http.MultipartRequest('POST', uri);
-      request.fields['content'] = _captionController.text;
 
-      // Include authorization header if needed
-      // request.headers['Authorization'] = 'Bearer hasnusecret';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
 
-      if (_image != null) {
-        request.files
-            .add(await http.MultipartFile.fromPath('image', _image!.path));
-      }
+      if (token != null) {
+        print('Token retrieved from SharedPreferences: $token');
 
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Post created successfully');
-        setState(() {
-          _captionController.clear();
-          _image = null;
-        });
+        // Decode and print token
+        decodeToken(token);
+
+        final url = Uri.parse('${Variables.address}/social');
+
+        String content = _captionController.text;
+        print('Content: $content'); // Debug print
+
+        final response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(<String, String>{
+            'content': content,
+          }),
+        );
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        if (response.statusCode == 201) {
+          print('Post created successfully');
+          setState(() {
+            _captionController.clear();
+            _image = null;
+          });
+          _showSuccessDialog(); // Show success dialog
+        } else if (response.statusCode == 401) {
+          print('Unauthorized: Token may be invalid or expired');
+          // Handle token expiration, e.g., navigate to login or refresh token
+        } else {
+          print('Error creating post: ${response.statusCode}');
+          print('Response body: ${response.body}');
+        }
       } else {
-        print('Error creating post: ${response.statusCode}');
+        print('Token is null');
+        // Handle the case where the token is null (e.g., navigate to login)
       }
     } catch (e) {
       print('Error creating post: $e');
@@ -67,6 +104,27 @@ class _PostingScreenState extends State<PostingScreen> {
         _isUploading = false;
       });
     }
+  }
+
+  // Function to show success dialog
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Your post has been created successfully.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -108,8 +166,7 @@ class _PostingScreenState extends State<PostingScreen> {
             if (_image != null)
               Image.file(_image!)
             else
-              Image.asset(
-                  'assets/images/user_placeholder.png'), // Use a placeholder if no image is selected
+              const SizedBox(), // Removed placeholder image
             GradientButton(
               text: 'Select Image',
               onPressed: _pickImage,

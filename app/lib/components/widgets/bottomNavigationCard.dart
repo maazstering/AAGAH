@@ -1,8 +1,10 @@
+import 'package:app/components/themes/appTheme.dart';
 import 'package:app/screens/home/cameraScreen.dart';
 import 'package:app/screens/home/feed.dart';
-import 'package:app/screens/news/newsScreen.dart';
+//import 'package:app/screens/news/newsScreen.dart';
 import 'package:app/screens/home/profileScreen.dart';
-import 'package:app/widgets/appTheme.dart';
+import 'package:app/screens/news/newsScreen.dart';
+import 'package:app/screens/news/tweetListScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -96,8 +98,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      const NewsScreen(), // Navigate to NewsScreen
+                  //tweetscreen
+                  builder: (context) => NewsScreen(),
                 ),
               );
             },

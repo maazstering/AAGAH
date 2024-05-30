@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'package:app/widgets/custombutton.dart';
-import 'package:app/widgets/googleSignInButton.dart';
-import 'package:app/widgets/variables.dart';
+import 'package:app/components/themes/appTheme.dart';
+import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/customTextField.dart';
+import 'package:app/components/widgets/custombutton.dart';
+import 'package:app/components/widgets/googleSignInButton.dart';
+import 'package:app/components/widgets/gradientbutton.dart';
+import 'package:app/components/widgets/orWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/screens/home/profileScreen.dart';
 import 'package:app/screens/auth/loginScreen.dart';
-import 'package:app/widgets/customTextField.dart';
-import 'package:app/widgets/gradientbutton.dart';
-import 'package:app/widgets/appTheme.dart';
-import 'package:app/widgets/orWidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupScreen extends StatelessWidget {
