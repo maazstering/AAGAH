@@ -12,7 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:flutter/foundation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
@@ -64,10 +63,6 @@ class _FeedWidgetState extends State<FeedWidget> {
     print('Is Token Expired: $isTokenExpired');
   }
 
-  Future<List<Post>> parsePostsInBackground(String responseBody) async {
-    return compute(parsePosts, responseBody);
-  }
-
   List<Post> parsePosts(String responseBody) {
     final parsed = json.decode(responseBody);
     return (parsed['posts'] as List)
@@ -100,8 +95,7 @@ class _FeedWidgetState extends State<FeedWidget> {
         print('Response body: ${response.body}');
 
         if (response.statusCode == 200) {
-          final List<Post> fetchedPosts =
-              await parsePostsInBackground(response.body);
+          final List<Post> fetchedPosts = parsePosts(response.body);
 
           setState(() {
             currentPage = json.decode(response.body)['currentPage'];
