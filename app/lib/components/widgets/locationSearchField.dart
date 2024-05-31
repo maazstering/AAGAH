@@ -8,7 +8,9 @@ import 'package:app/screens/home/constants.dart';
 import 'package:app/components/widgets/locationListTile.dart';
 
 class LocationSearchWidget extends StatefulWidget {
-  const LocationSearchWidget({Key? key}) : super(key: key);
+  final Function(AutocompletePrediction) onLocationSelected;
+
+  const LocationSearchWidget({Key? key, required this.onLocationSelected}) : super(key: key);
 
   @override
   State<LocationSearchWidget> createState() => _LocationSearchWidgetState();
@@ -16,6 +18,9 @@ class LocationSearchWidget extends StatefulWidget {
 
 class _LocationSearchWidgetState extends State<LocationSearchWidget> {
   List<AutocompletePrediction> placePredictions = [];
+  bool showListView = false;
+  TextEditingController _controller = TextEditingController();
+  FocusNode _focusNode = FocusNode();
 
   Future<void> placeAutocomplete(String query) async {
     Uri uri = Uri.https(
@@ -24,6 +29,7 @@ class _LocationSearchWidgetState extends State<LocationSearchWidget> {
       {
         "input": query,
         "key": Variables.mapsAPIkey,
+        "components": 'country:pk'
       },
     );
 
@@ -40,12 +46,34 @@ class _LocationSearchWidgetState extends State<LocationSearchWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          showListView = true;
+        });
+      } else {
+        setState(() {
+          showListView = false;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextFormField(
+          controller: _controller,
+          focusNode: _focusNode,
           onChanged: (value) {
             placeAutocomplete(value);
+            setState(() {
+              // Update the visibility flag based on search bar text
+              showListView = value.isNotEmpty; // Show list view if search bar text is not empty
+            });
           },
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
@@ -64,16 +92,37 @@ class _LocationSearchWidgetState extends State<LocationSearchWidget> {
           thickness: 4,
           color: secondaryColor5LightTheme,
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: placePredictions.length,
-            itemBuilder: (context, index) => LocationListTile(
-              press: () {},
-              location: placePredictions[index].description!,
+        if (showListView)
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: ListView.builder(
+                itemCount: placePredictions.length,
+                itemBuilder: (context, index) => LocationListTile(
+                  press: () {
+                    // Trigger the callback with the selected location
+                    widget.onLocationSelected(placePredictions[index]);
+                    // Update the text field with the selected place
+                    _controller.text = placePredictions[index].description!;
+                    // Hide the list view
+                    setState(() {
+                      showListView = false;
+                      _focusNode.unfocus();
+                    });
+                  },
+                  location: placePredictions[index].description!,
+                ),
+              ),
             ),
           ),
-        ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
   }
 }

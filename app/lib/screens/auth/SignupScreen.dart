@@ -13,9 +13,9 @@ import 'package:app/screens/auth/loginScreen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupScreen extends StatelessWidget {
-  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   SignupScreen({super.key});
 
@@ -41,13 +41,6 @@ class SignupScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 50.h),
                   CustomTextField(
-                    controller: nameController,
-                    text: "Name",
-                    icon: Icons.person,
-                    obscureText: false,
-                  ),
-                  SizedBox(height: 10.h),
-                  CustomTextField(
                     controller: emailController,
                     text: "Email",
                     icon: Icons.email,
@@ -60,21 +53,46 @@ class SignupScreen extends StatelessWidget {
                     icon: Icons.key,
                     obscureText: true,
                   ),
+                  SizedBox(height: 10.0.h),
+                  CustomTextField(
+                    controller: confirmPasswordController,
+                    text: "Confirm Password",
+                    icon: Icons.key,
+                    obscureText: true,
+                  ),
                   SizedBox(height: 14.0.h),
                   GradientButton(
                     text: "Create Account",
                     settings: false,
                     onPressed: () async {
                       final String apiUrl = Variables.address + ('/signup');
-                      String name = nameController.text.trim();
                       String email = emailController.text.trim();
                       String password = passwordController.text.trim();
+                      String confirmPassword = confirmPasswordController.text.trim();
+
+                      if (password != confirmPassword) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Signup Failed'),
+                            content: const Text('Passwords do not match.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                        return;
+                      }
 
                       try {
                         final response = await http.post(
                           Uri.parse(apiUrl),
                           body: jsonEncode({
-                            'name': name,
                             'email': email,
                             'password': password
                           }),
@@ -135,7 +153,7 @@ class SignupScreen extends StatelessWidget {
                   const OrDivider(),
                   SizedBox(height: 23.h),
                   GoogleSignInButton(onPressed: () {}),
-                  SizedBox(height: 114.h),
+                  SizedBox(height: 80.h),
                   CustomTextButton(
                     text: "I already have an Account",
                     onPressed: () {

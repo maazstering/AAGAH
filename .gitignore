@@ -6,3 +6,7 @@ node_modules/
 
 # Ignore .env files
 .env
+
+build/
+
+*.lock
