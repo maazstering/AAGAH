@@ -5,6 +5,7 @@ import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:app/components/widgets/likeButton.dart';
 import 'package:app/screens/home/comment.dart';
+import 'package:app/screens/home/mapScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -195,7 +196,7 @@ class _FeedWidgetState extends State<FeedWidget> {
         title: Row(
           children: [
             Image.asset('assets/images/logo.png', height: 30),
-            const SizedBox(width: 8)
+            const SizedBox(width: 8),
           ],
         ),
       ),
@@ -217,18 +218,36 @@ class _FeedWidgetState extends State<FeedWidget> {
                   SliverAppBar(
                     expandedHeight: 300.0,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: GoogleMap(
-                        onMapCreated: (GoogleMapController controller) =>
-                            _mapController.complete(controller),
-                        initialCameraPosition:
-                            CameraPosition(target: _currentP!, zoom: 13),
-                        markers: {
-                          Marker(
-                            markerId: const MarkerId('_currentLocation'),
-                            icon: BitmapDescriptor.defaultMarker,
-                            position: _currentP!,
-                          ),
+                      background: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MapScreen(),
+                            ),
+                          );
                         },
+                        child: GoogleMap(
+                          onMapCreated: (GoogleMapController controller) =>
+                              _mapController.complete(controller),
+                          initialCameraPosition:
+                              CameraPosition(target: _currentP!, zoom: 13),
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId('_currentLocation'),
+                              icon: BitmapDescriptor.defaultMarker,
+                              position: _currentP!,
+                            ),
+                          },
+                          onTap: (LatLng location) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MapScreen(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -341,11 +360,11 @@ class _FeedWidgetState extends State<FeedWidget> {
             style: const TextStyle(color: AppTheme.lightGreyColor),
           ),
           const SizedBox(height: 8.0),
-          if (post.images.isNotEmpty)
+          if (post.imageUrl.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: CachedNetworkImage(
-                imageUrl: post.images[0],
+                imageUrl: post.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 placeholder: (context, url) => Container(
@@ -415,7 +434,7 @@ class Post {
   final List<dynamic> comments;
   List<dynamic> likes;
   final List<dynamic> shares;
-  final List<dynamic> images;
+  final String imageUrl;
   final String createdAt;
   bool isLikedByUser;
 
@@ -426,7 +445,7 @@ class Post {
     required this.comments,
     required this.likes,
     required this.shares,
-    required this.images,
+    required this.imageUrl,
     required this.createdAt,
     required this.isLikedByUser,
   });
@@ -439,7 +458,7 @@ class Post {
       comments: json['comments'] ?? [],
       likes: json['likes'] ?? [],
       shares: json['shares'] ?? [],
-      images: json['images'] ?? [],
+      imageUrl: '${Variables.address}${json['imageUrl']}', // Construct full URL
       createdAt: json['createdAt'],
       isLikedByUser: json['isLikedByUser'] ?? false,
     );
@@ -448,8 +467,7 @@ class Post {
   void toggleLike() {
     isLikedByUser = !isLikedByUser;
     if (isLikedByUser) {
-      likes.add(
-          "new_like"); // Replace "new_like" with actual like data if available
+      likes.add("new_like");
     } else {
       likes.removeWhere((like) => like == "new_like");
     }
