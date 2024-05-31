@@ -150,10 +150,10 @@ class SignupScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 34.h),
-                  const OrDivider(),
-                  SizedBox(height: 23.h),
-                  GoogleSignInButton(onPressed: () {}),
-                  SizedBox(height: 80.h),
+                  // const OrDivider(),
+                  // SizedBox(height: 23.h),
+                  // GoogleSignInButton(onPressed: () {}),
+                  SizedBox(height: 110.h),
                   CustomTextButton(
                     text: "I already have an Account",
                     onPressed: () {
@@ -164,7 +164,7 @@ class SignupScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    textColor: AppTheme.lavenderColor,
+                    textColor: AppTheme.neonPurpleColor,
                   ),
                 ],
               ),

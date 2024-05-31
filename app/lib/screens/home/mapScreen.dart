@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/themes/variables.dart';
+import 'package:app/components/widgets/bottomNavigationCard.dart';
 import 'package:app/components/widgets/locationSearchField.dart';
 import 'package:app/models/autocomplete_prediction.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart' as geo;
@@ -28,7 +28,7 @@ class _MapScreenState extends State<MapScreen> {
   AutocompletePrediction? _selectedDestination;
   bool _shouldFocusUserLocation = true;
   bool _mapInitialized = false;
-  bool _trafficEnabled = true;  // To enable the traffic layer
+  bool _trafficEnabled = true;
 
   @override
   void initState() {
@@ -40,13 +40,20 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        automaticallyImplyLeading: false,
         backgroundColor: AppTheme.bgColor,
-        title: const Text("Map Screen"),
-        titleTextStyle: const TextStyle(color: AppTheme.periwinkleColor),
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.png', height: 30),
+            const SizedBox(width: 8)
+          ],
+        ),
         actions: [
           IconButton(
-            icon: Icon(_trafficEnabled ? Icons.traffic : Icons.traffic),
+            icon: Icon(
+              _trafficEnabled ? Icons.traffic : Icons.traffic,
+              color: _trafficEnabled ? AppTheme.lilacColor : Colors.grey,
+            ),
             onPressed: () {
               setState(() {
                 _trafficEnabled = !_trafficEnabled;
@@ -90,6 +97,12 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) {
+          // Handle navigation to different screens
+        },
       ),
     );
   }
@@ -170,9 +183,9 @@ class _MapScreenState extends State<MapScreen> {
     PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.red,
+      color: AppTheme.lilacColor,
       points: polylineCoordinates,
-      width: 8,
+      width: 3,
     );
     setState(() {
       polylines[id] = polyline;

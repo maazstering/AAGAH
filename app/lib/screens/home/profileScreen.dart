@@ -67,9 +67,10 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
+
   Future<void> _handleLogout(BuildContext context) async {
     final response = await http.get(
-      Uri.parse('http://localhost:3000/logout'), 
+      Uri.parse('https://aagah.onrender.com/logout'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -91,6 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
   }
+
   Future<void> fetchProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('jwt_token');
@@ -179,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
         automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
         title: const Text('Profile',
-            style: TextStyle(color: AppTheme.lightGreyColor)),
+            style: TextStyle(color: AppTheme.lilacColor)),
         backgroundColor: AppTheme.bgColor,
         centerTitle: true,
       ),
@@ -188,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(height: 48.0.h),
+            SizedBox(height: 20.0.h),
             Center(
               child: Stack(
                 children: [
@@ -224,23 +226,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(color: AppTheme.whiteColor, fontSize: 16.sp),
               ),
             ),
-            SizedBox(height: 60.h),
+            SizedBox(height: 40.h),
             Column(
               children: [
                 profileField(text: "Name", controller: nameController),
-                SizedBox(height: 20.0.h),
+                SizedBox(height: 10.0.h),
                 profileField(text: "Bio", controller: bioController),
-                SizedBox(height: 20.0.h),
+                SizedBox(height: 10.0.h),
                 profileField(
                   text: "Age",
-                  controller:
-                      TextEditingController(text: age?.toString() ?? ''),
+                  controller: TextEditingController(text: age?.toString() ?? ''),
                 ),
-                SizedBox(height: 20.0.h),
+                SizedBox(height: 10.0.h),
                 //for testing purposes
                 //LocationSearchWidget(),
                 const SavedRoutesButton(),
-                SizedBox(height: 100.h),
+                SizedBox(height: 60.h),
                 if (showSettingsButton)
                   GradientButton(
                     text: "Settings",
@@ -258,12 +259,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     text: "Update",
                     onPressed: updateProfile,
                   ),
-                SizedBox(height: 20.0.h),
+                SizedBox(height: 10.0.h),
                 GradientButton(
                   settings: false,
                   text: 'Logout',
-                                 onPressed: () => _handleLogout(context),
-)
+                  onPressed: () => _handleLogout(context),
+                ),
               ],
             ),
           ],
@@ -278,5 +279,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
- 

@@ -154,13 +154,13 @@ class LoginScreen extends StatelessWidget {
                   CustomTextButton(
                     text: "Forgot Password?",
                     onPressed: () {},
-                    textColor: const Color.fromARGB(255, 128, 0, 255),
+                    textColor: AppTheme.neonPurpleColor,
                   ),
                   SizedBox(height: 31.h),
-                  const OrDivider(),
-                  SizedBox(height: 24.h),
-                  GoogleSignInButton(onPressed: () {}),
-                  SizedBox(height: 80.h),
+                  // const OrDivider(),
+                  // SizedBox(height: 24.h),
+                  // GoogleSignInButton(onPressed: () {}),
+                  SizedBox(height: 110.h),
                   CustomTextButton(
                     text: "I don't have an Account",
                     onPressed: () {
@@ -171,7 +171,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    textColor: const Color.fromARGB(255, 145, 40, 250),
+                    textColor: AppTheme.neonPurpleColor,
                   ),
                 ],
               ),
