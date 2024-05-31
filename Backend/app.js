@@ -13,6 +13,7 @@ const { requireAuth, requireAdmin } = require('./middleware/authmiddleware');
 const { checkUser } = require('./middleware/authmiddleware');
 const savedRoutes = require('./routes/trafficRoutes');
 const path = require('path');
+const forgotPasswordRoutes = require('./controller/forgetPassword');
 
 
 const app = express();
@@ -46,6 +47,7 @@ app.get('*', checkUser);
 
 // API routes
 app.use('/users', userRoutes);
+app.use('/api', forgotPasswordRoutes);
 app.use(postRoutes);
 app.use(authRoutes);
 app.use(profileRoutes);

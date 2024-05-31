@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
+import 'package:app/components/widgets/likeButton.dart';
+import 'package:app/screens/home/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:app/screens/home/comment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:flutter/foundation.dart';
@@ -50,6 +51,12 @@ class _FeedWidgetState extends State<FeedWidget> {
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void decodeToken(String token) {
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     print('Decoded Token: $decodedToken');
@@ -86,12 +93,8 @@ class _FeedWidgetState extends State<FeedWidget> {
         decodeToken(token);
 
         final uri = Uri.parse('${Variables.address}/social?page=$page');
-        final response = await http.get(
-          uri,
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
-        );
+        final response =
+            await http.get(uri, headers: {'Authorization': 'Bearer $token'});
 
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
@@ -239,11 +242,12 @@ class _FeedWidgetState extends State<FeedWidget> {
                     child: Container(
                       color: AppTheme.bgColor,
                       child: ListView.builder(
-                        controller: _scrollController,
                         itemCount: posts.length + (hasMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == posts.length) {
                             return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               itemCount: 10,
                               itemBuilder: (context, index) => ListTile(
                                 leading: SkeletonAnimation(
@@ -337,9 +341,7 @@ class _FeedWidgetState extends State<FeedWidget> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Text(
             post.content,
             style: const TextStyle(color: AppTheme.lightGreyColor),
@@ -366,18 +368,9 @@ class _FeedWidgetState extends State<FeedWidget> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        post.isLikedByUser
-                            ? FontAwesomeIcons.solidHeart
-                            : FontAwesomeIcons.heart,
-                        color: post.isLikedByUser
-                            ? Colors.red
-                            : AppTheme.greyColor,
-                      ),
-                      onPressed: () {
-                        toggleLike(post);
-                      },
+                    AnimatedLikeButton(
+                      isLiked: post.isLikedByUser,
+                      onLikePressed: () => toggleLike(post),
                     ),
                     Text(
                       '${post.likes.length} likes',

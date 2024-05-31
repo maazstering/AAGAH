@@ -1,0 +1,18 @@
+POST http://localhost:3000/social HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDMzZDM4MjRiMjZjMzhmODgzMzE5YyIsImlhdCI6MTcxNzEwMDI4NiwiZXhwIjoxNzE3MzU5NDg2fQ.YnhCnPyDpatNXIttpVu3QOrPUY5FwSWvXCK0lo1PlIw
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+Content-Type: application/json
+
+Shah ra faisal par dharna
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="certificate-fullstack.png"
+Content-Type: image/jpeg
+
+< C:/Users/Shehzad/Desktop/certificate-fullstack.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+

@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AnimatedLikeButton extends StatefulWidget {
-  const AnimatedLikeButton({super.key});
+  final bool isLiked;
+  final VoidCallback onLikePressed;
+
+  const AnimatedLikeButton({
+    Key? key,
+    required this.isLiked,
+    required this.onLikePressed,
+  }) : super(key: key);
 
   @override
   _AnimatedLikeButtonState createState() => _AnimatedLikeButtonState();
@@ -13,11 +20,13 @@ class _AnimatedLikeButtonState extends State<AnimatedLikeButton>
   late AnimationController _animationController;
   late Animation<double> _animation;
 
-  bool _isLiked = false;
+  late bool _isLiked;
 
   @override
   void initState() {
     super.initState();
+
+    _isLiked = widget.isLiked;
 
     _animationController = AnimationController(
       vsync: this,
@@ -50,6 +59,7 @@ class _AnimatedLikeButtonState extends State<AnimatedLikeButton>
   void _handleLikeButtonPressed() {
     setState(() {
       _isLiked = !_isLiked;
+      widget.onLikePressed();
       if (_isLiked) {
         _animationController.forward(from: 0);
       }
