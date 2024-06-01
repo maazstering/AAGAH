@@ -1,0 +1,2 @@
+GET https://aagah.onrender.com/social HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDMzZDM4MjRiMjZjMzhmODgzMzE5YyIsImlhdCI6MTcxNzEwMDI4NiwiZXhwIjoxNzE3MzU5NDg2fQ.YnhCnPyDpatNXIttpVu3QOrPUY5FwSWvXCK0lo1PlIw

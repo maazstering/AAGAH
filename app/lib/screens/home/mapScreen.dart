@@ -19,7 +19,8 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final loc.Location _locationController = loc.Location();
-  final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
 
   LatLng? _currentP;
   Map<PolylineId, Polyline> polylines = {};
@@ -75,7 +76,8 @@ class _MapScreenState extends State<MapScreen> {
                 _mapInitialized = true;
               });
             },
-            initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 13),
+            initialCameraPosition:
+                CameraPosition(target: LatLng(0, 0), zoom: 13),
             markers: markers,
             polylines: Set<Polyline>.of(polylines.values),
             trafficEnabled: _trafficEnabled,
@@ -110,7 +112,8 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _cameraToPos(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
     CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
   }
 
   Future<void> getLocationUpdates() async {
@@ -130,10 +133,13 @@ class _MapScreenState extends State<MapScreen> {
       }
     }
 
-    _locationController.onLocationChanged.listen((loc.LocationData currentLocation) {
-      if (currentLocation.latitude != null && currentLocation.longitude != null) {
+    _locationController.onLocationChanged
+        .listen((loc.LocationData currentLocation) {
+      if (currentLocation.latitude != null &&
+          currentLocation.longitude != null) {
         setState(() {
-          _currentP = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _currentP =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
           if (_mapInitialized && _shouldFocusUserLocation) {
             _cameraToPos(_currentP!);
           }
@@ -153,7 +159,8 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  Future<List<LatLng>> getPolylinePoints(LatLng source, LatLng destination) async {
+  Future<List<LatLng>> getPolylinePoints(
+      LatLng source, LatLng destination) async {
     List<LatLng> polylineCoordinates = [];
 
     PolylinePoints polylinePoints = PolylinePoints();
@@ -194,10 +201,12 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _searchAndNavigate() async {
     if (_currentP != null && _selectedDestination != null) {
-      List<geo.Location> destinationLocations = await geo.locationFromAddress(_selectedDestination!.description!);
+      List<geo.Location> destinationLocations =
+          await geo.locationFromAddress(_selectedDestination!.description!);
 
       if (destinationLocations.isNotEmpty) {
-        LatLng destinationLatLng = LatLng(destinationLocations.first.latitude, destinationLocations.first.longitude);
+        LatLng destinationLatLng = LatLng(destinationLocations.first.latitude,
+            destinationLocations.first.longitude);
 
         markers.add(Marker(
           markerId: MarkerId('destination'),
@@ -205,7 +214,8 @@ class _MapScreenState extends State<MapScreen> {
           infoWindow: InfoWindow(title: 'Destination'),
         ));
 
-        List<LatLng> polylineCoordinates = await getPolylinePoints(_currentP!, destinationLatLng);
+        List<LatLng> polylineCoordinates =
+            await getPolylinePoints(_currentP!, destinationLatLng);
         generatePolylineFromPoints(polylineCoordinates);
 
         _cameraToPos(destinationLatLng);

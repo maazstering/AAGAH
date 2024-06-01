@@ -180,8 +180,8 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
-        title: const Text('Profile',
-            style: TextStyle(color: AppTheme.lilacColor)),
+        title:
+            const Text('Profile', style: TextStyle(color: AppTheme.lilacColor)),
         backgroundColor: AppTheme.bgColor,
         centerTitle: true,
       ),
@@ -235,7 +235,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 10.0.h),
                 profileField(
                   text: "Age",
-                  controller: TextEditingController(text: age?.toString() ?? ''),
+                  controller:
+                      TextEditingController(text: age?.toString() ?? ''),
                 ),
                 SizedBox(height: 10.0.h),
                 //for testing purposes
