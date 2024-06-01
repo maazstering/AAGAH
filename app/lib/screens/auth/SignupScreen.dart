@@ -192,7 +192,7 @@ import 'package:app/components/widgets/custombutton.dart';
 import 'package:app/components/widgets/googleSignInButton.dart';
 import 'package:app/components/widgets/gradientbutton.dart';
 import 'package:app/components/widgets/orWidget.dart';
-import 'package:app/screens/home/profileScreenWelcome.dart';
+//import 'package:app/screens/home/profileScreenWelcome.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app/screens/home/profileScreen.dart';
@@ -304,7 +304,7 @@ class SignupScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ProfilePageWelcome(),
+                              builder: (context) => const ProfilePage(),
                             ),
                           );
                           final Map<String, dynamic> data =
@@ -358,10 +358,10 @@ class SignupScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 34.h),
-                  const OrDivider(),
-                  SizedBox(height: 23.h),
-                  GoogleSignInButton(onPressed: () {}),
-                  SizedBox(height: 114.h),
+                  // const OrDivider(),
+                  // SizedBox(height: 23.h),
+                  // GoogleSignInButton(onPressed: () {}),
+                  SizedBox(height: 110.h),
                   CustomTextButton(
                     text: "I already have an Account",
                     onPressed: () {
