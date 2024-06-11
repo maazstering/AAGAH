@@ -1,9 +1,9 @@
 class Tweet {
-  final String date;
-  final String link;
-  final String text;
-  final String avatar;
-  final String username;
+  final String? date;
+  final String? link;
+  final String? text;
+  final String? avatar;
+  final String? username;
 
   Tweet({
     required this.date,
@@ -15,11 +15,11 @@ class Tweet {
 
   factory Tweet.fromJson(Map<String, dynamic> json) {
     return Tweet(
-      date: json['date'],
-      link: json['link'],
-      text: json['text'],
-      avatar: json['user']['avatar'],
-      username: json['user']['username'],
+      date: json['date'] as String?,
+      link: json['link'] as String?,
+      text: json['text'] as String?,
+      avatar: json['user']?['avatar'] as String?,
+      username: json['user']?['username'] as String?,
     );
   }
 }

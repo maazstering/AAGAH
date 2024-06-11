@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
-import 'package:app/components/widgets/tweetTile.dart';
-import 'package:app/models/tweet.dart';
+import 'package:app/models/tweet.dart'; // Ensure this import is used
 import 'package:app/screens/news/trafficIncident.dart';
 import 'package:app/screens/news/trafficInfo.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -18,27 +17,20 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   late Future<List<Tweet>> futureTweets;
 
-  Future<List<Tweet>> fetchTweets() async {
+  Future<List<Tweet>> loadTweetsFromAssets() async {
     try {
-      final response = await http.get(
-          Uri.parse('http://127.0.0.1:5000/tweets?usernames=Khitrafficpol'));
+      final String response =
+          await rootBundle.loadString('assets/response.json');
+      final List<dynamic> data = json.decode(response) as List<dynamic>;
 
-      print('Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
+      // Logging the response for debugging
+      print('Parsed JSON: $data');
 
-      if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.decode(response.body);
-
-        // Logging the response for debugging
-        print('Parsed JSON: $jsonResponse');
-
-        return jsonResponse.map((tweet) => Tweet.fromJson(tweet)).toList();
-      } else {
-        throw Exception(
-            'Failed to load tweets with status code: ${response.statusCode}');
-      }
+      return data
+          .map((tweet) => Tweet.fromJson(tweet as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      print('Error occurred while fetching tweets: $e');
+      print('Error occurred while loading tweets: $e');
       throw Exception('Failed to load tweets: $e');
     }
   }
@@ -46,7 +38,7 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
     super.initState();
-    futureTweets = fetchTweets();
+    futureTweets = loadTweetsFromAssets();
   }
 
   @override
@@ -90,23 +82,27 @@ class _NewsScreenState extends State<NewsScreen> {
             child: FutureBuilder<List<Tweet>>(
               future: futureTweets,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Failed to load tweets'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No tweets found'));
+                } else {
+                  final tweets = snapshot.data!;
                   return ListView.builder(
-                    itemCount: snapshot.data?.length ?? 0,
+                    itemCount: tweets.length,
                     itemBuilder: (context, index) {
-                      Tweet tweet = snapshot.data![index];
+                      final tweet = tweets[index];
                       return RoundedListTile(
-                        avatarUrl: tweet.avatar,
-                        text: tweet.text,
-                        date: tweet.date,
+                        avatarUrl: tweet.avatar!,
+                        text: tweet.text!,
+                        date: tweet.date!,
                         onTap: () {},
                       );
                     },
                   );
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Failed to load tweets'));
                 }
-                return const Center(child: CircularProgressIndicator());
               },
             ),
           ),
@@ -182,22 +178,6 @@ class RoundedListTile extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class Tweet {
-  final String avatar;
-  final String text;
-  final String date;
-
-  Tweet({required this.avatar, required this.text, required this.date});
-
-  factory Tweet.fromJson(Map<String, dynamic> json) {
-    return Tweet(
-      avatar: json['avatar'] as String,
-      text: json['text'] as String,
-      date: json['date'] as String,
     );
   }
 }
