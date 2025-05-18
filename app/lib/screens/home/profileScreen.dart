@@ -70,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _handleLogout(BuildContext context) async {
     final response = await http.get(
-      Uri.parse('https://aagah.onrender.com/logout'),
+      Uri.parse('${Variables.address}/auth/logout'),
       headers: {
         'Content-Type': 'application/json',
       },
