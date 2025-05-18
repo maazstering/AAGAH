@@ -124,14 +124,14 @@ class _PostingScreenState extends State<PostingScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppTheme.whiteColor),
+          icon: const Icon(Icons.arrow_back, color: AppTheme.whiteColor),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: Align(
+        title: const Align(
           alignment: Alignment.centerLeft,
-          child: const Text('Create Post',
+          child: Text('Create Post',
               style: TextStyle(color: AppTheme.whiteColor)),
         ),
         backgroundColor: AppTheme.bgColor,

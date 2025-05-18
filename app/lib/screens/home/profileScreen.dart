@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Logout failed. Please try again.'),
         ),
       );
@@ -229,12 +229,12 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 40.h),
             Column(
               children: [
-                profileField(text: "Name", controller: nameController),
+                profileField(text: "Add Name", controller: nameController),
                 SizedBox(height: 10.0.h),
-                profileField(text: "Bio", controller: bioController),
+                profileField(text: "Add Bio", controller: bioController),
                 SizedBox(height: 10.0.h),
                 profileField(
-                  text: "Age",
+                  text: "Add Age",
                   controller:
                       TextEditingController(text: age?.toString() ?? ''),
                 ),

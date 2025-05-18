@@ -30,7 +30,7 @@ class _FeedWidgetState extends State<FeedWidget> {
   bool isLoading = false;
   bool hasMore = true;
 
-  Location _locationController = Location();
+  final Location _locationController = Location();
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   LatLng? _currentP;
@@ -124,19 +124,19 @@ class _FeedWidgetState extends State<FeedWidget> {
   }
 
   Future<void> getLocationUpdates() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    _serviceEnabled = await _locationController.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await _locationController.requestService();
-      if (!_serviceEnabled) return;
+    serviceEnabled = await _locationController.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _locationController.requestService();
+      if (!serviceEnabled) return;
     }
 
-    _permissionGranted = await _locationController.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _locationController.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) return;
+    permissionGranted = await _locationController.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _locationController.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) return;
     }
 
     _locationController.onLocationChanged
@@ -223,7 +223,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MapScreen(),
+                              builder: (context) => const MapScreen(),
                             ),
                           );
                         },
@@ -243,7 +243,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MapScreen(),
+                                builder: (context) => const MapScreen(),
                               ),
                             );
                           },
@@ -260,7 +260,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                           if (index == posts.length) {
                             return ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: 10,
                               itemBuilder: (context, index) => ListTile(
                                 leading: SkeletonAnimation(
@@ -371,7 +371,7 @@ class _FeedWidgetState extends State<FeedWidget> {
                   height: 200,
                   color: Colors.grey[300],
                 ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
           Padding(

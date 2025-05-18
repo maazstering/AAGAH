@@ -12,6 +12,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
 }
 
 class TrafficInfoScreen extends StatefulWidget {
+  const TrafficInfoScreen({super.key});
+
   @override
   _TrafficInfoScreenState createState() => _TrafficInfoScreenState();
 }

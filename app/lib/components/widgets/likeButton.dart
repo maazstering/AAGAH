@@ -6,10 +6,10 @@ class AnimatedLikeButton extends StatefulWidget {
   final VoidCallback onLikePressed;
 
   const AnimatedLikeButton({
-    Key? key,
+    super.key,
     required this.isLiked,
     required this.onLikePressed,
-  }) : super(key: key);
+  });
 
   @override
   _AnimatedLikeButtonState createState() => _AnimatedLikeButtonState();

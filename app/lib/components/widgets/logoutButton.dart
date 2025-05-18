@@ -27,8 +27,8 @@ class LogOutButton extends StatelessWidget {
           size: 24.h,
         ),
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(AppTheme.magentaColor),
-          shape: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(AppTheme.magentaColor),
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0.r), // Adjust the border radius for square corners
             ),
