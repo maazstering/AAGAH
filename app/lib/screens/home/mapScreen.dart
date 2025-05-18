@@ -77,7 +77,7 @@ class _MapScreenState extends State<MapScreen> {
               });
             },
             initialCameraPosition:
-                CameraPosition(target: LatLng(0, 0), zoom: 13),
+                const CameraPosition(target: LatLng(0, 0), zoom: 13),
             markers: markers,
             polylines: Set<Polyline>.of(polylines.values),
             trafficEnabled: _trafficEnabled,
@@ -111,24 +111,24 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _cameraToPos(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
-    CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
+    CameraPosition newCameraPosition = CameraPosition(target: pos, zoom: 13);
     await controller
-        .animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+        .animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
   }
 
   Future<void> getLocationUpdates() async {
-    bool _serviceEnabled;
-    loc.PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    loc.PermissionStatus permissionGranted;
 
-    _serviceEnabled = await _locationController.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await _locationController.requestService();
+    serviceEnabled = await _locationController.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _locationController.requestService();
     }
 
-    _permissionGranted = await _locationController.hasPermission();
-    if (_permissionGranted == loc.PermissionStatus.denied) {
-      _permissionGranted = await _locationController.requestPermission();
-      if (_permissionGranted != loc.PermissionStatus.granted) {
+    permissionGranted = await _locationController.hasPermission();
+    if (permissionGranted == loc.PermissionStatus.denied) {
+      permissionGranted = await _locationController.requestPermission();
+      if (permissionGranted != loc.PermissionStatus.granted) {
         return;
       }
     }
@@ -152,9 +152,9 @@ class _MapScreenState extends State<MapScreen> {
   void _addCurrentLocationMarker() {
     if (_currentP != null) {
       markers.add(Marker(
-        markerId: MarkerId('currentLocation'),
+        markerId: const MarkerId('currentLocation'),
         position: _currentP!,
-        infoWindow: InfoWindow(title: 'Current Location'),
+        infoWindow: const InfoWindow(title: 'Current Location'),
       ));
     }
   }
@@ -176,9 +176,9 @@ class _MapScreenState extends State<MapScreen> {
     );
 
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
+      for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+      }
     } else {
       print(result.errorMessage);
     }
@@ -209,9 +209,9 @@ class _MapScreenState extends State<MapScreen> {
             destinationLocations.first.longitude);
 
         markers.add(Marker(
-          markerId: MarkerId('destination'),
+          markerId: const MarkerId('destination'),
           position: destinationLatLng,
-          infoWindow: InfoWindow(title: 'Destination'),
+          infoWindow: const InfoWindow(title: 'Destination'),
         ));
 
         List<LatLng> polylineCoordinates =

@@ -3,9 +3,7 @@ import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
 
-import '../../splashScreen.dart';
 
 class settingsPage extends StatelessWidget {
   final String email = Variables.userEmail;

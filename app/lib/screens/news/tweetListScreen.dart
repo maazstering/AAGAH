@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class TweetListScreen extends StatefulWidget {
+  const TweetListScreen({super.key});
+
   @override
   _TweetListScreenState createState() => _TweetListScreenState();
 }
@@ -52,8 +54,7 @@ class _TweetListScreenState extends State<TweetListScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: AppTheme.bgColor,
         title: const Center(
-          child: Text('News',
-              style: TextStyle(color: AppTheme.lightGreyColor)),
+          child: Text('News', style: TextStyle(color: AppTheme.lightGreyColor)),
         ),
         iconTheme: const IconThemeData(color: AppTheme.lightGreyColor),
       ),
@@ -66,9 +67,9 @@ class _TweetListScreenState extends State<TweetListScreen> {
               itemBuilder: (context, index) {
                 Tweet tweet = snapshot.data![index];
                 return RoundedListTile(
-                    avatarUrl: tweet.avatar,
-                    text: tweet.text,
-                    date: tweet.date,
+                    avatarUrl: tweet.avatar!,
+                    text: tweet.text!,
+                    date: tweet.date!,
                     onTap: () {});
               },
             );

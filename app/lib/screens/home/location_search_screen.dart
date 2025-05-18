@@ -13,7 +13,7 @@ import 'constants.dart';
 
 
 class SearchLocationScreen extends StatefulWidget {
-  const SearchLocationScreen({Key? key}) : super(key: key);
+  const SearchLocationScreen({super.key});
 
   @override
   State<SearchLocationScreen> createState() => _SearchLocationScreenState();

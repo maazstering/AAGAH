@@ -7,7 +7,7 @@ class RoundedListTile extends StatelessWidget {
   final String date;
   final VoidCallback onTap;
 
-  const RoundedListTile({
+  const RoundedListTile({super.key, 
     required this.avatarUrl,
     required this.text,
     required this.date,
@@ -39,7 +39,7 @@ class RoundedListTile extends StatelessWidget {
               backgroundImage: NetworkImage(avatarUrl),
             ),
             title: Text(
-              "${text} \n",
+              "$text \n",
               style: const TextStyle(color: AppTheme.whiteColor),
             ),
             subtitle:

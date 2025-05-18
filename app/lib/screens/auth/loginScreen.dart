@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
   Future<void> loginUser(BuildContext context) async {
-    final String apiUrl = Variables.address + '/login';
+    final String apiUrl = '${Variables.address}/login';
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
