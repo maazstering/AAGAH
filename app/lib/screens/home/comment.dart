@@ -8,7 +8,7 @@ import 'dart:convert';
 class CommentPage extends StatefulWidget {
   final String postId;
 
-  const CommentPage({Key? key, required this.postId}) : super(key: key);
+  const CommentPage({super.key, required this.postId});
 
   @override
   _CommentPageState createState() => _CommentPageState();
@@ -262,7 +262,7 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   void _showEditCommentDialog(Comment comment) {
-    final TextEditingController _editCommentController =
+    final TextEditingController editCommentController =
         TextEditingController(text: comment.content);
     showDialog(
       context: context,
@@ -270,7 +270,7 @@ class _CommentPageState extends State<CommentPage> {
         return AlertDialog(
           title: const Text('Edit Comment'),
           content: TextField(
-            controller: _editCommentController,
+            controller: editCommentController,
             decoration: const InputDecoration(
               hintText: 'Edit your comment',
             ),
@@ -286,7 +286,7 @@ class _CommentPageState extends State<CommentPage> {
             TextButton(
               child: const Text('Save'),
               onPressed: () {
-                _editComment(comment.id, _editCommentController.text);
+                _editComment(comment.id, editCommentController.text);
                 Navigator.of(context).pop();
               },
             ),

@@ -92,8 +92,8 @@ class _SplashScreenState extends State<SplashScreen>
             const SizedBox(height: 20),
             FadeTransition(
               opacity: _textAnimation,
-              child: Column(
-                children: const [
+              child: const Column(
+                children: [
                   SplashText(text: "Stay informed"),
                   SizedBox(height: 8),
                   SplashText(text: "Stay updated"),
@@ -110,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen>
 class SplashText extends StatelessWidget {
   final String text;
 
-  const SplashText({required this.text});
+  const SplashText({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

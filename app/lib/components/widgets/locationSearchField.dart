@@ -10,7 +10,7 @@ import 'package:app/components/widgets/locationListTile.dart';
 class LocationSearchWidget extends StatefulWidget {
   final Function(AutocompletePrediction) onLocationSelected;
 
-  const LocationSearchWidget({Key? key, required this.onLocationSelected}) : super(key: key);
+  const LocationSearchWidget({super.key, required this.onLocationSelected});
 
   @override
   State<LocationSearchWidget> createState() => _LocationSearchWidgetState();
@@ -19,8 +19,8 @@ class LocationSearchWidget extends StatefulWidget {
 class _LocationSearchWidgetState extends State<LocationSearchWidget> {
   List<AutocompletePrediction> placePredictions = [];
   bool showListView = false;
-  TextEditingController _controller = TextEditingController();
-  FocusNode _focusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   Future<void> placeAutocomplete(String query) async {
     Uri uri = Uri.https(

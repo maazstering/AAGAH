@@ -9,7 +9,7 @@ class LocationSearchField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
 
-  LocationSearchField({
+  const LocationSearchField({super.key, 
     required this.onLocationSelected,
     required this.hintText,
     required this.controller,
@@ -22,7 +22,7 @@ class LocationSearchField extends StatelessWidget {
       googleAPIKey: Variables.mapsAPIkey,
       inputDecoration: InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: AppTheme.greyColor),
+        hintStyle: const TextStyle(color: AppTheme.greyColor),
         filled: true,
         fillColor: AppTheme.mediumGreyColor,
         border: OutlineInputBorder(

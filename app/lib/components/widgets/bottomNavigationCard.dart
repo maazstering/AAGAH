@@ -99,7 +99,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 context,
                 MaterialPageRoute(
                   //tweetscreen
-                  builder: (context) => NewsScreen(),
+                  builder: (context) => const NewsScreen(),
                 ),
               );
             },

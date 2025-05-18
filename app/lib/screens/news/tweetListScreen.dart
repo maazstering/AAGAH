@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class TweetListScreen extends StatefulWidget {
+  const TweetListScreen({super.key});
+
   @override
   _TweetListScreenState createState() => _TweetListScreenState();
 }

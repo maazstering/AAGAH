@@ -124,7 +124,7 @@ class RoundedListTile extends StatelessWidget {
   final String date;
   final VoidCallback onTap;
 
-  const RoundedListTile({
+  const RoundedListTile({super.key, 
     required this.avatarUrl,
     required this.text,
     required this.date,
@@ -161,7 +161,7 @@ class RoundedListTile extends StatelessWidget {
                 const SizedBox(width: 10.0),
                 Text(
                   date,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppTheme.lightGreyColor,
                   ),
                 ),
@@ -170,7 +170,7 @@ class RoundedListTile extends StatelessWidget {
             const SizedBox(height: 10.0),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 color: AppTheme.whiteColor,
               ),

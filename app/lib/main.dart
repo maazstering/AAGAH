@@ -1,6 +1,3 @@
-import 'package:app/screens/home/feed.dart';
-import 'package:app/screens/home/location_search_screen.dart';
-import 'package:app/screens/home/mapScreen.dart';
 import 'package:app/splashScreen.dart';
 // import 'package:app/screens/home/map_screen.dart';
 // import 'package:app/screens/home/trail_map.dart';
