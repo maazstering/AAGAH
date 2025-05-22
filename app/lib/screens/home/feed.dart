@@ -195,7 +195,7 @@ class _FeedWidgetState extends State<FeedWidget> {
         backgroundColor: AppTheme.bgColor,
         title: Row(
           children: [
-            Image.asset('assets/images/logo.png', height: 30),
+            Image.asset('images/logo.png', height: 30),
             const SizedBox(width: 8),
           ],
         ),

@@ -15,11 +15,11 @@ class Tweet {
 
   factory Tweet.fromJson(Map<String, dynamic> json) {
     return Tweet(
-      date: json['date'] as String?,
-      link: json['link'] as String?,
-      text: json['text'] as String?,
-      avatar: json['user']?['avatar'] as String?,
-      username: json['user']?['username'] as String?,
+      date: json['date'] as String? ?? 'Date unknown',
+      link: json['link'] as String? ?? '',
+      text: json['text'] as String? ?? 'No description available',
+      avatar: json['avatar'] as String? ?? 'https://via.placeholder.com/150',
+      username: json['username'] as String? ?? 'Unknown user',
     );
   }
 }

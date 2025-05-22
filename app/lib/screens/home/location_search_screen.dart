@@ -1,4 +1,3 @@
-
 import 'package:app/components/themes/variables.dart';
 import 'package:app/components/widgets/locationSearchField.dart';
 import 'package:app/models/autocomplete_prediction.dart';
@@ -11,7 +10,6 @@ import 'package:google_places_flutter/model/prediction.dart';
 import '../../components/widgets/locationListTile.dart';
 import 'constants.dart';
 
-
 class SearchLocationScreen extends StatefulWidget {
   const SearchLocationScreen({super.key});
 
@@ -21,7 +19,6 @@ class SearchLocationScreen extends StatefulWidget {
 
 class _SearchLocationScreenState extends State<SearchLocationScreen> {
   List<AutocompletePrediction> placePredictions = [];
-
 
   Future<void> placeAutocomplete(String query) async {
     Uri uri = Uri.https(
@@ -44,8 +41,6 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
       }
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +72,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
           ),
           const SizedBox(width: defaultPadding)
         ],
-      ),  
+      ),
       body: Column(
         children: [
           Form(
@@ -111,7 +106,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
             child: ElevatedButton.icon(
               onPressed: () {},
               icon: SvgPicture.asset(
-                "assets/images/location.svg",
+                "/app/assets/images/location.svg",
                 height: 16,
               ),
               label: const Text("Use my Current Location"),
@@ -144,5 +139,4 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
       ),
     );
   }
-
 }

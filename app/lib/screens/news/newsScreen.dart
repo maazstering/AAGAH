@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:app/components/themes/appTheme.dart';
 import 'package:app/components/widgets/bottomNavigationCard.dart';
-import 'package:app/models/tweet.dart'; // Ensure this import is used
+import 'package:app/models/tweet.dart';
 import 'package:app/screens/news/trafficIncident.dart';
 import 'package:app/screens/news/trafficInfo.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,6 @@ class _NewsScreenState extends State<NewsScreen> {
           await rootBundle.loadString('assets/response.json');
       final List<dynamic> data = json.decode(response) as List<dynamic>;
 
-      // Logging the response for debugging
       print('Parsed JSON: $data');
 
       return data
@@ -85,7 +84,8 @@ class _NewsScreenState extends State<NewsScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return const Center(child: Text('Failed to load tweets'));
+                  return Center(
+                      child: Text('Failed to load tweets: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: Text('No tweets found'));
                 } else {
@@ -95,9 +95,10 @@ class _NewsScreenState extends State<NewsScreen> {
                     itemBuilder: (context, index) {
                       final tweet = tweets[index];
                       return RoundedListTile(
-                        avatarUrl: tweet.avatar!,
-                        text: tweet.text!,
-                        date: tweet.date!,
+                        avatarUrl:
+                            tweet.avatar ?? 'https://via.placeholder.com/150',
+                        text: tweet.text ?? 'No description available',
+                        date: tweet.date ?? 'Date unknown',
                         onTap: () {},
                       );
                     },
@@ -111,7 +112,7 @@ class _NewsScreenState extends State<NewsScreen> {
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 3,
         onTap: (index) {
-          // Handle navigation to different screens
+          // Handle navigation
         },
       ),
     );
@@ -124,7 +125,8 @@ class RoundedListTile extends StatelessWidget {
   final String date;
   final VoidCallback onTap;
 
-  const RoundedListTile({super.key, 
+  const RoundedListTile({
+    super.key,
     required this.avatarUrl,
     required this.text,
     required this.date,
@@ -157,6 +159,9 @@ class RoundedListTile extends StatelessWidget {
               children: [
                 CircleAvatar(
                   backgroundImage: NetworkImage(avatarUrl),
+                  onBackgroundImageError: (_, __) {
+                    // Optional: handle image loading errors here if needed
+                  },
                 ),
                 const SizedBox(width: 10.0),
                 Text(

@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(
                 width: 16), // Adjust the space between the icon and the logo
             Image.asset(
-              '../assets/images/logo.png',
+              'images/logo.png',
               height: 40,
             ),
           ],

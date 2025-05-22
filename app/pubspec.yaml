@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+    
   flutter_launcher_icons: ^0.13.1
   cupertino_icons: ^1.0.6
   flutter_screenutil: ^5.9.0
@@ -41,11 +41,11 @@ dependencies:
 flutter:
   uses-material-design: true
 
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "assets/images/app_icon.png"
-
   assets:
       - assets/images/
       - assets/response.json
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
