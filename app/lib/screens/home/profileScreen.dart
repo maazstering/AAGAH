@@ -69,6 +69,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _handleLogout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Clear the stored JWT token locally
+    await prefs.remove('jwt_token');
+
+    // Call backend logout API
     final response = await http.get(
       Uri.parse('${Variables.address}/auth/logout'),
       headers: {
@@ -77,18 +83,15 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     if (response.statusCode == 200) {
+      // Navigate to SplashScreen and remove all previous routes
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const SplashScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const SplashScreen()),
         (route) => false,
       );
     } else {
-      // Show error message
+      // Show error message if logout failed
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Logout failed. Please try again.'),
-        ),
+        const SnackBar(content: Text('Logout failed. Please try again.')),
       );
     }
   }
@@ -124,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     } else {
       print('Token is null');
-      // Handle the case where the token is null (e.g., navigate to login)
+      // Handle token null case (navigate to login if needed)
     }
   }
 
@@ -195,11 +198,9 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Stack(
                 children: [
                   CircleAvatar(
-                    radius: 40.r, // Adjust this value as needed
-                    backgroundImage:
-                        imageProvider, // Use the local variable here
-                    backgroundColor: Colors
-                        .transparent, // Ensure any default background is transparent
+                    radius: 40.r,
+                    backgroundImage: imageProvider,
+                    backgroundColor: Colors.transparent,
                   ),
                   Positioned(
                     bottom: 0,
@@ -222,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 10.h),
             Center(
               child: Text(
-                email, // change this to, actual user email to be used
+                email,
                 style: TextStyle(color: AppTheme.whiteColor, fontSize: 16.sp),
               ),
             ),
@@ -239,8 +240,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextEditingController(text: age?.toString() ?? ''),
                 ),
                 SizedBox(height: 10.0.h),
-                //for testing purposes
-                //LocationSearchWidget(),
                 const SavedRoutesButton(),
                 SizedBox(height: 60.h),
                 if (showSettingsButton)
